@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/index/index",    
+    "pages/personal/review/detail",
+    "pages/personal/info",
+    "pages/personal/review/plan",
+    "pages/doctor/info",
+    "pages/personal/review/form",
+    "pages/doctor/edit",
+    "pages/doctor/index",    
+    "pages/personal/index",
+    "pages/personal/knowledge"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "肝胆胰肿瘤随访小程序",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

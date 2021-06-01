@@ -1,0 +1,96 @@
+<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<view class="cu-card dynamic no-card margin-top">
+  <view class="cu-list menu-avatar">
+    <view class="cu-item">
+      <view class="avatar round">
+        <open-data type='userAvatarUrl' bindtap="userInfo"></open-data>
+      </view>
+      <view class="content">
+        <view class="padding-left">
+          <open-data type="userNickName"></open-data>          
+        </view>        
+      </view>
+      <view class="action" bindtap="switchUser">
+        <view class="cuIcon-order text-gray lg"></view>        
+      </view>
+    </view>    
+  </view>
+</view>
+
+<view class="cu-bar bg-white margin-top solid-bottom">
+  <view class="action">
+    <text class="cuIcon-title">我的患者</text>
+  </view>
+  <view class="action">103位</view>
+</view>
+<scroll-view scroll-x class="user-list">
+  <view class="cu-list grid col-4">
+    <view class="cu-item bg-white" wx:for="{{lists}}" wx:key="index" data-url="/pages/doctor/edit" bindtap="toUrl">
+      <view class="cuIcon-cu-image">
+        <image class="cu-avatar lg round" src="{{item.avatarUrl}}"></image>
+        <view class="cu-tag badge"></view>
+      </view>   
+      <text>{{item.nickName}}</text>
+    </view>  
+  </view>
+</scroll-view>
+<view class="cu-bar bg-white margin-top solid-bottom">
+  <view class="action">
+    <text class="cuIcon-title">收到复查结果</text>
+  </view>
+  <view class="action">103位</view>
+</view>
+
+<view class="cu-list menu-avatar comment">
+  <view class="cu-item solids-top" wx:for="{{replys}}" wx:for-item="reply" wx:for-index="index">
+    <view class="cu-avatar round" style="background-image:url({{reply.maUser.avatarUrl}});"></view>
+    <view class="content">
+      <view class="text-grey">{{reply.maUser.nickName}}</view>
+      <view class='flex flex-wrap'>
+        <view class="padding-xs" wx:for="{{reply.review.examine}}" wx:for-index='key' wx:for-item="pics">
+          <view class='cu-tag' bindtap="showpic" data-pics="{{pics}}">{{compare[key]}}</view>
+        </view>
+      </view>      
+      <view class="margin-top-sm flex justify-between">
+        <view class="text-gray text-df">{{reply.createTime}}</view>
+        <view>          
+          <text class="cuIcon-messagefill text-gray margin-left-sm" bindtap="replyModal" data-id="{{reply.id}}"></text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="cu-modal {{replyStatus ? 'show':''}}">
+  <form bindsubmit="submitForm">
+    <input name="id" value="{{id}}" hidden="true"/> 
+    <view class="cu-dialog text-left">
+      <view class="padding-lg">
+        <view class="cu-bar bg-white solid-bottom margin-top">
+          <view class="action padding-xs">
+            <text class="cuIcon-title text-orange"></text>快捷回复
+            <text class="text-xs text-gray">
+              (点击下方文本即可快捷回复)
+            </text>
+          </view>          
+        </view>
+        <view class="cu-bar bg-white solid-bottom" wx:for="{{quickReply}}" wx:key="index" data-index="{{index}}" bindtap="quickReply">
+          <view class="action padding-sm">
+             {{item}}
+          </view>          
+        </view>
+          
+        <view class="cu-form-group">
+          <textarea placeholder="回复内容" value="{{reply}}" name="reply"></textarea>
+        </view>     
+        
+      </view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" bindtap="replyModal">取消</button>
+          <button class="cu-btn bg-green margin-left" formType="submit">确定</button>
+        </view>
+      </view>
+    </view>
+  </form>
+</view>

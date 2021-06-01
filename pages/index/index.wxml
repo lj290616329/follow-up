@@ -1,0 +1,74 @@
+<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<view class="solid-bottom text-xl padding text-center margin-bottom margin-top">
+  <text class="text-blue text-bold">肝胆胰肿瘤随访小程序</text>
+</view>
+<view class="flex flex-wrap justify-center text-center text-lg text-black">
+  <view class="padding basis-df margin-top">
+    <text class="cuIcon-notice text-blue"></text>
+    <text class="margin-left">复查提醒</text>
+  </view>
+  <view class="padding basis-df margin-top">
+    <text class="cuIcon-message text-blue"></text>
+    <text class="margin-left">沟通交流</text>
+  </view>
+  <view class="padding basis-df margin-top">
+    <text class="cuIcon-cascades text-blue"></text>
+    <text class="margin-left">病历保存</text>
+  </view>
+  <view class="padding basis-df margin-top">
+    <text class="cuIcon-newshot text-blue"></text>
+    <text class="margin-left">科普知识</text>
+  </view>
+</view>
+<view class="padding margin-top">
+  <view class="padding">
+    <view class="padding">      
+      <view class="flex flex-wrap justify-between align-center">
+        <button class="cu-btn margin lines-black lg">暂不登录</button>
+        <button class="cu-btn margin lg bg-blue" bindtap="auth">授权登录</button>
+      </view>
+      <view class="text-sm text-center margin-top">
+        <text class="text-grey">授权可使用小程序获取复查信息</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+<view class="cu-modal {{informationStatus?'show':''}}">
+  <form bindsubmit="submitForm">
+    <view class="cu-dialog sm">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">请填写个人信息</view>
+        <view class="action" bindtap="informationModal">
+          <text class="cuIcon-close text-red"></text>
+        </view>
+      </view>
+      <view class="padding-xl bg-white text-left">
+        <view class="cu-form-group" wx:if="{{!ifDoctor}}">
+          <text decode='true' class="title">姓&emsp;&emsp;名</text>
+          <input placeholder="请输入姓名" name="name" value="{{name}}"></input>
+        </view>
+        <view class="cu-form-group" wx:if="{{!ifDoctor}}">
+          <text decode='true' class="title">病&ensp;历&ensp;号</text>
+          <input placeholder="请输入姓名" name="recordNo" value="{{recordNo}}"></input>
+        </view>
+        <view class="cu-form-group">
+          <text decode='true' class="title">手&ensp;机&ensp;号</text>
+          <input placeholder="请授权获取手机号" name="phone" value="{{phone}}"></input>
+          <button class='cu-btn bg-green shadow sm' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">授权获取</button>
+        </view>
+      </view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" bindtap="informationModal">取消</button>
+          <button class="cu-btn bg-green margin-left" formType="submit">确定</button>
+        </view>
+      </view>
+    </view>
+  </form>
+</view>
+
+
+
+

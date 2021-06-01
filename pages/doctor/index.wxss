@@ -1,0 +1,21 @@
+.user-list{
+  white-space: nowrap;
+}
+.cu-list.grid>.cu-item .cu-tag{
+  right:20%;
+  left:auto;
+}
+.grid{
+  display: block;
+}
+.cu-list.grid>.cu-item{
+  display: inline-block;
+}
+.avatar{
+  position: absolute;
+  left: 30rpx;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}

@@ -1,0 +1,44 @@
+<template name="formData">
+  <block wx:for="{{examine}}" wx:for-index='key'>
+    <view class="cu-bar bg-white">
+      <view class="action">
+        {{compare[key]}}
+      </view>
+      <view class="action">
+        {{item.length}}/4
+      </view>
+    </view>
+    <view class="cu-form-group">
+      <view class="grid col-4 grid-square flex-sub">
+        <view class="bg-img" wx:for="{{item}}" wx:key="pic" wx:for-item="pic">
+          <image src="{{pic}}"  mode="aspectFill" bindtap="showpic" data-urls="{{item}}" data-current="{{pic}}"></image>
+          <view class="cu-tag bg-red" bindtap="delImg" data-key="{{key}}" data-index="{{index}}">
+            <text class='cuIcon-close'></text>
+          </view>
+        </view>
+        <view class="solids" wx:if="{{item.length<4}}" data-key="{{key}}" bindtap="uploadPic">
+          <text class='cuIcon-cameraadd'></text>
+        </view>
+      </view>
+    </view>
+  </block>
+</template>
+
+<template name="detail">
+  <block wx:for="{{examine}}" wx:for-index='key'>
+    <view class="cu-bar bg-white">
+      <view class="action">
+        {{compare[key]}}
+      </view>      
+    </view>
+    <view class="cu-form-group">
+      <view class="grid col-4 grid-square flex-sub">
+        <view class="bg-img" wx:for="{{item}}" wx:key="pic" wx:for-item="pic">
+          <image src="{{pic}}"  mode="aspectFill"  bindtap="showpic" data-urls="{{item}}" data-current="{{pic}}"></image>
+        </view>        
+      </view>
+    </view>
+  </block>
+</template>
+
+

@@ -1,0 +1,24 @@
+<view class="cu-list menu-avatar comment">
+  <view class="cu-item solids-top">
+    <view class="cu-avatar round" style="background-image:url({{userInfo.avatarUrl}});"></view>
+    <view class="content">
+      <view class="text-grey">{{userInfo.nickName}}</view>
+      <view class='flex flex-wrap'>
+        <view class="padding-xs" wx:for="{{examine}}" wx:for-index='key' wx:for-item="pics">
+          <view class='cu-tag' bindtap="showpic" data-pics="{{pics}}">{{compare[key]}}</view>
+        </view>
+      </view>
+
+      <view class="bg-grey padding-sm radius margin-top-sm  text-sm">
+        <view class="flex">
+          <view>回复信息:</view>
+          <view class="flex-sub">感谢上传最新复查报告，谢谢！ 请依照复查计划按时进行复查，并上传结果。</view>
+        </view>
+      </view>
+
+      <view class="margin-top-sm flex justify-between">
+        <view class="text-gray text-df">2021-05-20 11:13:21</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,53 @@
+<import src ="/template/form.wxml"/>
+<view class="cu-bar bg-white solid-bottom  margin-top">
+  <view class="action">
+    <text class="cuIcon-titles text-orange"></text> 个人信息
+  </view>
+</view>
+<view class="cu-card dynamic no-card">
+  <view class="cu-item shadow">
+    <view class="cu-list menu-avatar">
+      <view class="cu-item">
+        <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
+        <view class="content flex-sub">
+          <view>张三 <text class="margin-left text-blue">(病历号:202105031123)</text> </view>
+          <view class="cuIcon-mobile text-gray text-df">
+            15073132755
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-list menu margin-top">
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-title text-orange"></text>
+      <text class="text-grey">病种</text>
+    </view>
+    <view class="action">
+      <text class="text-grey text-sm">肝内胆管癌</text>
+    </view>
+  </view>
+</view>
+
+<view class="cu-bar bg-white solid-bottom  margin-top">
+  <view class="action">
+    <text class="cuIcon-titles text-orange"></text> 病历
+  </view>
+</view>
+<view class="cu-bar bg-white">
+  <view class="action">
+    病历图片
+  </view>
+</view>
+<view class="cu-form-group">
+  <view class="grid col-4 grid-square flex-sub">
+    <view class="bg-img" wx:for="{{pathology}}" wx:key="index">
+      <image src="{{item}}"  mode="aspectFill" bindtap="showpic" data-urls="{{pathology}}" data-current="{{item}}"></image>
+    </view>
+  </view>
+</view>
+
+
+<template is="detail" data="{{examine,compare}}"/>
