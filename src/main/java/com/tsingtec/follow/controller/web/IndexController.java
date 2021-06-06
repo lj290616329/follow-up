@@ -14,14 +14,13 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -34,7 +33,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  *
@@ -64,36 +62,6 @@ public class IndexController {
         return "login";
     }
 
-
-    @GetMapping("index")
-    public String index(){
-        return "index";
-    }
-
-    @GetMapping("auth")
-    public String auth(@RequestParam("code") String code){
-        String clientID = "47c9980689634c7c32aa";
-        String clientSecret = "65db7b9fa8f5a6e8944c39a26607f2ad2c704c6c";
-
-        Map<String,String> res = restTemplate.postForObject("https://github.com/login/oauth/access_token?client_id=" +
-                 clientID +
-                "&client_secret=" +clientSecret +
-                "&code="+code,null,Map.class);
-
-        System.out.println(res);
-
-        String token = res.get("access_token");
-        System.out.println(token);
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("accept", "application/json");
-        requestHeaders.add("Authorization", "`token "+token);
-
-        HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
-        ResponseEntity<String> response = restTemplate.exchange("https://api.github.com/user", HttpMethod.GET, requestEntity, String.class);
-        String sttr = response.getBody();
-        System.out.println(sttr);
-        return "auth";
-    }
 
     @GetMapping("/kaptcha")
     public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response) throws Exception{
