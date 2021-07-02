@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locales>zh_CN</project.build.locales>
         <weixin-java.version>4.0.0</weixin-java.version>
-        <shiro.version>1.6.0</shiro.version>
+        <shiro.version>1.4.0</shiro.version>
         <vjkit.version>1.0.8</vjkit.version>
         <dozermapper.version>6.5.0</dozermapper.version>
         <json.version>1.2.73</json.version>

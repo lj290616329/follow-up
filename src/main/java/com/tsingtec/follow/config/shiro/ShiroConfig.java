@@ -6,20 +6,21 @@ import com.tsingtec.follow.handler.filter.RetryLimitHashedCredentialsMatcher;
 import com.tsingtec.follow.handler.filter.ShiroLoginFilter;
 import com.tsingtec.follow.handler.filter.ShiroPermissionsFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -35,8 +36,8 @@ import java.util.Map;
 @EnableTransactionManagement
 public class ShiroConfig {
 
-	/*@Resource(name="ehCacheManager")
-	private EhCacheManager ehCacheManager;*/
+	@Resource(name="ehCacheManager")
+	private EhCacheManager ehCacheManager;
 
 	/**
 	 * ShiroFilterFactoryBean 处理拦截资源文件过滤器
@@ -52,8 +53,8 @@ public class ShiroConfig {
 		// 配置shiro安全管理器 SecurityManager
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		//添加kickout认证
-		HashMap<String, Filter> hashMap=new HashMap<String, Filter>();
-		hashMap.put("kickout",kickoutSessionFilter());
+		HashMap<String, Filter> hashMap = new HashMap<String, Filter>();
+		hashMap.put("kickout", kickoutSessionFilter());
 		hashMap.put("authc", new ShiroLoginFilter());
 		hashMap.put("perms", new ShiroPermissionsFilter());
 
@@ -62,12 +63,11 @@ public class ShiroConfig {
 
 		hashMap.put("logout", logoutFilter);
 
-		// filterChainDefinitions拦截器=map必须用：LinkedHashMap，因为它必须保证有序
 		shiroFilterFactoryBean.setLoginUrl("/login");
 
-		Map<String,String> filterMap = new LinkedHashMap<String,String>();
+		Map<String, String> filterMap = new LinkedHashMap<String, String>();
 
-		filterMap.put("/logout","logout");
+		filterMap.put("/logout", "logout");
 		filterMap.put("/**", "anon");
 		filterMap.put("/manager/**", "kickout");
 		filterMap.put("/home/**", "kickout");
@@ -80,6 +80,7 @@ public class ShiroConfig {
 
 	/**
 	 * shiro安全管理器设置realm认证和ehcache缓存管理
+	 *
 	 * @return
 	 */
 	@Bean
@@ -88,7 +89,7 @@ public class ShiroConfig {
 		// 设置realm.
 		securityManager.setRealm(shiroRealm());
 		// //注入ehcache缓存管理器;
-		securityManager.setCacheManager(cacheManager());
+		securityManager.setCacheManager(ehCacheManager);
 		// //注入session管理器;
 		securityManager.setSessionManager(sessionManager());
 		return securityManager;
@@ -96,6 +97,7 @@ public class ShiroConfig {
 
 	/**
 	 * 身份认证realm; (账号密码校验；权限等)
+	 *
 	 * @return
 	 */
 	@Bean
@@ -110,8 +112,8 @@ public class ShiroConfig {
 	 * 凭证匹配器
 	 */
 	@Bean
-	public RetryLimitHashedCredentialsMatcher hashedCredentialsMatcher(){
-		RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = new RetryLimitHashedCredentialsMatcher(cacheManager());
+	public RetryLimitHashedCredentialsMatcher hashedCredentialsMatcher() {
+		RetryLimitHashedCredentialsMatcher retryLimitHashedCredentialsMatcher = new RetryLimitHashedCredentialsMatcher(ehCacheManager);
 		retryLimitHashedCredentialsMatcher.setHashAlgorithmName("SHA-256");//散列算法:MD2、MD5、SHA-1、SHA-256、SHA-384、SHA-512等。
 		retryLimitHashedCredentialsMatcher.setHashIterations(1024);//散列的次数，默认1次， 设置两次相当于 md5(md5(""));
 		retryLimitHashedCredentialsMatcher.setLimitCount(5);//账号登录重试次数
@@ -122,7 +124,7 @@ public class ShiroConfig {
 	 * 配置ShiroDialect，用于thymeleaf和shiro标签配合使用
 	 */
 	@Bean
-	public ShiroDialect shiroDialect(){
+	public ShiroDialect shiroDialect() {
 		return new ShiroDialect();
 	}
 
@@ -130,7 +132,7 @@ public class ShiroConfig {
 	 * EnterpriseCacheSessionDAO shiro sessionDao层的实现；
 	 * 提供了缓存功能的会话维护，默认情况下使用MapCache实现，内部使用ConcurrentHashMap保存缓存的会话。
 	 */
-	/*@Bean
+	@Bean
 	public SessionDAO enterCacheSessionDAO() {
 		EnterpriseCacheSessionDAO enterCacheSessionDAO = new EnterpriseCacheSessionDAO();
 		//添加缓存管理器
@@ -138,56 +140,13 @@ public class ShiroConfig {
 		//添加ehcache活跃缓存名称（必须和ehcache缓存名称一致）
 		enterCacheSessionDAO.setActiveSessionsCacheName("shiro-activeSessionCache");
 		return enterCacheSessionDAO;
-	}*/
-
-	/*@Bean
-	public SessionDAO sessionDAO() {
-		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-		redisSessionDAO.setRedisManager(redisManager());
-		//session在redis中的保存时间,最好大于session会话超时时间
-		redisSessionDAO.setExpire(12000);
-		return redisSessionDAO;
-	}*/
-	@Bean
-	public RedisSessionDAO sessionDAO() {
-
-		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-
-		redisSessionDAO.setRedisManager(redisManager());
-
-		return redisSessionDAO;
-
 	}
-
-
-	@Bean
-	public RedisManager redisManager(){
-		RedisManager redisManager = new RedisManager();
-		redisManager.setHost("127.0.0.1");
-		redisManager.setPort(6379);
-		return redisManager;
-	}
-
-	@Bean(name="redisCacheManager")
-	public RedisCacheManager cacheManager(){
-		RedisCacheManager redisCacheManager = new RedisCacheManager();
-		redisCacheManager.setRedisManager(redisManager());
-		//redis中针对不同用户缓存
-		redisCacheManager.setPrincipalIdFieldName("username");
-		//用户权限信息缓存时间
-		redisCacheManager.setExpire(200000);
-		return redisCacheManager;
-	}
-
-
-
-
 
 	@Bean
 	public DefaultWebSessionManager sessionManager() {
 		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-		sessionManager.setCacheManager(cacheManager());
-		sessionManager.setSessionDAO(sessionDAO());
+		sessionManager.setCacheManager(ehCacheManager);
+		sessionManager.setSessionDAO(enterCacheSessionDAO());
 		//是否开启删除无效的session对象  默认为true
 		sessionManager.setDeleteInvalidSessions(true);
 		sessionManager.setSessionIdUrlRewritingEnabled(false);
@@ -201,12 +160,12 @@ public class ShiroConfig {
 
 
 	@Bean
-	public KickoutSessionFilter kickoutSessionFilter(){
+	public KickoutSessionFilter kickoutSessionFilter() {
 		KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
 		//使用cacheManager获取相应的cache来缓存用户登录的会话；用于保存用户—会话之间的关系的；
 		//这里我们还是用之前shiro使用的ehcache实现的cacheManager()缓存管理
 		//也可以重新另写一个，重新配置缓存时间之类的自定义缓存属性
-		kickoutSessionFilter.setCacheManager(cacheManager());
+		kickoutSessionFilter.setCacheManager(ehCacheManager);
 		//用于根据会话ID，获取会话进行踢出操作的；
 		kickoutSessionFilter.setSessionManager(sessionManager());
 		//是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序。

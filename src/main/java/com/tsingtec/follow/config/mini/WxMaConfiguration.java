@@ -43,7 +43,7 @@ public class WxMaConfiguration {
     }
 
     public static WxMaService getMaService(){
-        return maServices.get(appid);
+        return getMaService(appid);
     }
 
     public static WxMaService getMaService(String appid) {

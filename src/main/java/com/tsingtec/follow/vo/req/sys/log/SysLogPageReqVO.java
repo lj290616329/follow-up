@@ -3,8 +3,6 @@ package com.tsingtec.follow.vo.req.sys.log;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @Author lj
  * @Date 2020/3/8 15:59
@@ -28,9 +26,4 @@ public class SysLogPageReqVO {
     @ApiModelProperty(value = "账号")
     private String username;
 
-    @ApiModelProperty(value = "开始时间")
-    private Date startTime;
-
-    @ApiModelProperty(value = "结束时间")
-    private Date endTime;
 }

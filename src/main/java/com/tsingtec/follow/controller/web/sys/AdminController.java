@@ -5,10 +5,7 @@ import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.handler.annotation.LogAnnotation;
 import com.tsingtec.follow.service.sys.AdminService;
 import com.tsingtec.follow.utils.HttpContextUtils;
-import com.tsingtec.follow.vo.req.sys.admin.AdminAddReqVO;
-import com.tsingtec.follow.vo.req.sys.admin.AdminPageReqVO;
-import com.tsingtec.follow.vo.req.sys.admin.AdminPwdReqVO;
-import com.tsingtec.follow.vo.req.sys.admin.AdminUpdateReqVO;
+import com.tsingtec.follow.vo.req.sys.admin.*;
 import com.tsingtec.follow.vo.resp.sys.admin.AdminRoleRespVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +28,7 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @GetMapping("/admins")
+    @GetMapping("/admin")
     @RequiresPermissions("sys:admin:list")
     @ApiOperation(value = "分页获取用户列表接口")
     @LogAnnotation(title = "用户管理", action = "分页获取用户列表")
@@ -78,23 +75,23 @@ public class AdminController {
         return DataResult.success();
     }
 
-    @GetMapping("/admin/roles/{aid}")
+    @GetMapping("/admin/role")
     @RequiresPermissions("sys:admin:getrole")
     @ApiOperation(value = "赋予角色-获取所有角色接口")
     @LogAnnotation(title = "用户管理",action = "赋予角色-获取所有角色接口")
-    public DataResult<AdminRoleRespVO> getUserOwnRole(@PathVariable("aid")Integer aid){
+    public DataResult<AdminRoleRespVO> getUserOwnRole(Integer id){
         DataResult<AdminRoleRespVO> result = DataResult.success();
-        result.setData(adminService.getAdminRole(aid));
+        result.setData(adminService.getAdminRole(id));
         return result;
     }
 
-    @PutMapping("/admin/roles/{userId}")
+    @PutMapping("/admin/role")
     @RequiresPermissions("sys:admin:setrole")
     @ApiOperation(value = "赋予角色-用户赋予角色接口")
     @LogAnnotation(title = "用户管理",action = "赋予角色-用户赋予角色接口")
-    public DataResult setUserOwnRole(@PathVariable("userId")Integer userId, @RequestBody List<Integer> roleIds){
+    public DataResult setUserOwnRole(@RequestBody AdminRoleOperationReqVO vo){
         DataResult result= DataResult.success();
-        adminService.setAdminRole(userId,roleIds);
+        adminService.setAdminRole(vo.getAid(),vo.getRids());
         return result;
     }
 }

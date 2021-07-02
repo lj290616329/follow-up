@@ -7,6 +7,7 @@ import com.tsingtec.follow.exception.BusinessException;
 import com.tsingtec.follow.exception.code.BaseExceptionType;
 import com.tsingtec.follow.repository.sys.AdminRepository;
 import com.tsingtec.follow.repository.sys.MenuRepository;
+import com.tsingtec.follow.utils.BeanMapper;
 import com.tsingtec.follow.vo.req.sys.menu.MenuAddReqVO;
 import com.tsingtec.follow.vo.req.sys.menu.MenuUpdateReqVO;
 import com.tsingtec.follow.vo.resp.sys.menu.MenuRespNode;
@@ -116,14 +117,9 @@ public class MenuService {
 				}
 				break;
 		}
-		/**
-		 * id 不为空表明为修改
-		 */
-		if(!StringUtils.isEmpty(vo.getId())) {
-			List<Menu> list = menuRepository.findByPid(vo.getId());
-			if (!list.isEmpty()) {
-				throw new BusinessException(BaseExceptionType.USER_ERROR,"子级菜单不为空,请重新修改");
-			}
+		List<Menu> list = menuRepository.findByPid(vo.getId());
+		if (!list.isEmpty()) {
+			throw new BusinessException(BaseExceptionType.USER_ERROR,"子级菜单不为空,请重新修改");
 		}
 
 	}
@@ -164,9 +160,8 @@ public class MenuService {
 		for(Menu menu:all){
 			if(menu.getPid().equals(0)){
 				MenuRespNode menuRespNode=new MenuRespNode();
-				BeanUtils.copyProperties(menu,menuRespNode);
+				BeanMapper.mapExcludeNull(menu,menuRespNode);
 				menuRespNode.setTitle(menu.getName());
-
 				if(type){
 					menuRespNode.setChildren(getChildExcBtn(menu.getId(),all));
 				}else {

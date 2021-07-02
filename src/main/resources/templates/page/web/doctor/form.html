@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout/header">
+</head>
+<body>
+<div class="layui-card-body">
+    <form class="layui-form">
+
+    </form>
+</div>
+<script type="text/html" id="doctor">
+    {{if obj.id}}
+    <input type="hidden" name="id" value="{{obj.id}}">
+    {{/if}}
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" value="{{obj.name}}" autocomplete="off" placeholder="请输入姓名"
+                   lay-reqtext="请输入姓名" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone" value="{{obj.phone}}" autocomplete="off" placeholder="请输入电话"
+                   lay-reqtext="请输入电话" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">头像</label>
+            <div class="layui-input-block">
+                <input id="pic"  name="pic" value="{{obj.pic}}" lay-verify="required" readonly="readonly" placeholder="头像地址" lay-reqtext="请上传头像" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline" style="width: auto;">
+                <button type="button" class="layui-btn layui-btn-primary" lay-active="addPic" id="addPic">
+                    <i class="layui-icon"></i>上传头像
+                </button>
+                <button type="button" class="layui-btn layui-btn-primary" lay-active="picPreview">查看图片</button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">擅长</label>
+        <div class="layui-input-block">
+            <input type="text" name="goodAt" value="{{obj.goodAt}}" autocomplete="off" placeholder="请输入擅长方向"
+                   lay-reqtext="请输入擅长方向" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">简介</label>
+        <div class="layui-input-block">
+            <textarea name="des" class="layui-textarea" placeholder="请输入个人简介"
+                      lay-reqtext="请输入个人简介">{{obj.des}}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" lay-active="submit">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button type="button" class="layui-btn layui-btn-primary" lay-active="back">返回</button>
+        </div>
+    </div>
+</script>
+<script src="/js/template.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+     layui.use(['form', 'laydate', 'layer', 'jquery', 'upload', 'CoreUtil','util'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , upload = layui.upload
+            , util = layui.util
+            , CoreUtil = layui.CoreUtil;
+        $ = layui.$;
+        var url = layui.url();
+        CoreUtil.sendAjax("/manager/doctor/"+url.search.id,{},"get").then(res=>{
+            let html = template("doctor",{obj:res.data})
+            $(".layui-form").html(html);
+            form.render();
+        });
+
+
+
+        util.event('lay-active', {
+            submit: function(othis){
+                alert('触发了事件1');
+            }
+            ,back: function(othis){
+                alert('触发了事件2');
+            }
+            ,addPic: function(othis){
+
+            }
+        });
+
+        console.log(url)
+    });
+</script>

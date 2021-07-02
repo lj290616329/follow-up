@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout/header">
+</head>
+<style>
+    .pic_box {
+        position: relative;
+        float: left;
+    }
+
+    .background {
+        height: 120px;
+        float: left;
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+
+    .removeImg {
+        position: absolute;
+        font-size: 28px;
+        right: 6px;
+        top: -6px;
+        color: #e85858;
+    }
+    .layui-img-form{
+        position: relative;
+        left: 0;
+        top: 0;
+        padding: 110px 0;
+        min-height: 100%;
+        box-sizing: border-box;
+        width: 375px;
+        margin: 0 auto;
+    }
+    .layui-img-form>.layui-form-item{
+        position: relative;
+    }
+    .layui-img-form>.layui-form-item>.layui-icon{
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        width: 38px;
+        line-height: 36px;
+        text-align: center;
+        color: #d2d2d2;
+    }
+    .layui-img-form>.layui-form-item>.layui-input{
+        padding-left: 38px;
+    }
+</style>
+<body>
+<div class="layui-card-body">
+    <form class="layui-form layui-img-form">
+        <div class="layui-form-item">
+            <label class="layui-user-login-icon layui-icon layui-icon-username"
+                   for="LAY-user-login-name"></label>
+            <input type="text" name="name" id="LAY-user-login-name" placeholder="用户名"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-user-login-icon layui-icon layui-icon-password"
+                   for="LAY-user-login-oldpassword"></label>
+            <input type="password" name="oldPwd" id="LAY-user-login-oldpassword" lay-verify="required"
+                   placeholder="老密码" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                   for="LAY-user-login-password"></label>
+            <input type="password" name="newPwd" id="LAY-user-login-password" lay-verify="pass" placeholder="新密码"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                   for="LAY-user-login-repass"></label>
+            <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-reg-submit">保存</button>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    layui.use(['form','Api'], function () {
+        var $ = layui.$
+            , form = layui.form,Api=layui.Api;
+        form.render();
+        //提交
+
+        form.on('submit(LAY-user-reg-submit)', async function (obj) {
+            var field = obj.field;
+            //确认密码
+            if (field.newPwd !== field.repass) {
+                return layer.msg('两次密码输入不一致');
+            }
+            let res = await Api.updatePwd(JSON.stringify(obj.field));
+            if(res.code==0){
+                top.location = "/logout"
+            }
+            return false;
+        });
+    });
+</script>
+</html>

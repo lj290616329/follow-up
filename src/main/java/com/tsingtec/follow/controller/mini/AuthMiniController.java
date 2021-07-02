@@ -9,10 +9,9 @@ import com.tsingtec.follow.service.mini.DoctorService;
 import com.tsingtec.follow.service.mini.InformationService;
 import com.tsingtec.follow.service.mini.MaUserService;
 import com.tsingtec.follow.utils.HttpContextUtils;
-import com.tsingtec.follow.vo.req.mini.PhoneReqVO;
+import com.tsingtec.follow.vo.req.mini.AuthReqVO;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +29,7 @@ import javax.validation.Valid;
 @Api("用户认证模块")
 @Slf4j
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AuthMiniController {
 
     @Autowired
@@ -45,36 +44,24 @@ public class AuthMiniController {
     @Resource(name="JwtUtil")
     private JwtUtil jwtUtil;
 
-    @PostMapping("information")
-    public DataResult information(@RequestBody @Valid Information information){
+    @PostMapping("auth")
+    public DataResult information(@RequestBody @Valid AuthReqVO vo){
         String token = HttpContextUtils.getToken();
         MaUser maUser = maUserService.get(jwtUtil.getClaim(token,"id"));
-        information.setMaUser(maUser);
-        informationService.save(information);
-        return DataResult.success();
-    }
-
-
-    @PostMapping("doctor")
-    public DataResult doctor(@RequestBody @Valid PhoneReqVO vo){
-        String token = HttpContextUtils.getToken();
-        MaUser maUser = maUserService.get(jwtUtil.getClaim(token,"id"));
-        Doctor doctor = doctorService.findByPhone(vo.getPhone());
-        if(null==doctor){
-            return DataResult.fail("医生信息不存在,请联系管理员");
+        Information information = informationService.findByPhone(vo.getPhone());
+        if(information != null){
+            information.setMaUser(maUser);
+            informationService.save(information);
+            return DataResult.success(false);
         }
-        doctor.setMaUser(maUser);
-        doctorService.save(doctor);
 
-        Information information = new Information();
-        information.setMaUser(maUser);
-        information.setPhone(doctor.getPhone());
-        information.setName(doctor.getName());
-        information.setRecordNo(RandomStringUtils.random(10, "0123456789"));
-        informationService.save(information);
+        Doctor doctor = doctorService.findByPhone(vo.getPhone());
 
-        maUser.setDid(doctor.getId());
-        maUserService.save(maUser);
-        return DataResult.success();
+        if(doctor != null){
+            doctor.setMaUser(maUser);
+            doctorService.save(doctor);
+            return DataResult.success(true);
+        }
+        return DataResult.fail("注册失败,请联系管理");
     }
 }

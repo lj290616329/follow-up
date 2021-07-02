@@ -64,7 +64,7 @@ public class UserRealm extends AuthorizingRealm {
 			throw new DisabledAccountException("帐号已经禁止登录！");
 		}else{
 			adminService.save(admin);
-			return new SimpleAuthenticationInfo(admin,	admin.getPassword(), ByteSource.Util.bytes(admin.getSalt()), getName());
+			return new SimpleAuthenticationInfo(admin,	admin.getPassword(), ByteSource.Util.bytes(admin.getSalt()), admin.getLoginName());
 		}
 	}
 }

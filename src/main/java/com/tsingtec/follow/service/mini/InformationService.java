@@ -33,6 +33,11 @@ public class InformationService {
     }
 
 
+    public Information findByPhone(String phone) {
+        return informationRepository.findByPhone(phone);
+    }
+
+
     public List<Information> getByDid(Integer did){
         return informationRepository.getByMaUser_DidOrderByPathologyAsc(did);
     }

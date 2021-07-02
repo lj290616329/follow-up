@@ -3,8 +3,6 @@ package com.tsingtec.follow.vo.req.sys.admin;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @Author lj
  * @Date 2020/3/8 15:09
@@ -27,10 +25,4 @@ public class AdminPageReqVO {
 
     @ApiModelProperty(value = "账户状态(0.正常 -1.锁定)")
     private Short status;
-
-    @ApiModelProperty(value = "开始时间")
-    private Date startTime;
-
-    @ApiModelProperty(value = "结束时间")
-    private Date endTime;
 }

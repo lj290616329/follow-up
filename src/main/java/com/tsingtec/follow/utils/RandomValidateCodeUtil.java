@@ -1,11 +1,12 @@
 package com.tsingtec.follow.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -54,7 +55,10 @@ public class RandomValidateCodeUtil {
      * 生成随机图片
      */
     public void getRandcode(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
+        Subject subject = SecurityUtils.getSubject();
+
+        System.out.println("页面登录前sessionid:"+subject.getSession().getId());
+
         // BufferedImage类是具有缓冲区的Image类,Image类是用于描述图像信息的类
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR);
         Graphics g = image.getGraphics();// 产生Image对象的Graphics对象,改对象可以在图像上进行各种绘制操作
@@ -72,8 +76,8 @@ public class RandomValidateCodeUtil {
         }
         log.info(randomString);
         //将生成的随机字符串保存到session中
-        session.removeAttribute(RANDOMCODEKEY);
-        session.setAttribute(RANDOMCODEKEY, randomString);
+        subject.getSession().removeAttribute(RANDOMCODEKEY);
+        subject.getSession().setAttribute(RANDOMCODEKEY, randomString);
         g.dispose();
         try {
             // 将内存中的图片通过流动形式输出到客户端

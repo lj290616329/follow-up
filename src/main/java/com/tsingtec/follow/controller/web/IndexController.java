@@ -15,13 +15,11 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -49,19 +47,22 @@ public class IndexController {
     @Resource
     private RedisUtil redisUtil;
 
-
-    private static RestTemplate restTemplate = new RestTemplate();
-
     @GetMapping(value = {"/","/login"})
-    public String login(Model model){
+    public String login(){
         Subject subject = SecurityUtils.getSubject();
-        System.out.println(subject.getSession().getId());
         if(subject.isAuthenticated()){
             return "redirect:/home/index";
         };
+        System.out.println("页面登录前sessionid:"+subject.getSession().getId());
         return "login";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return "login";
+    }
 
     @GetMapping("/kaptcha")
     public void defaultKaptcha(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -85,11 +86,10 @@ public class IndexController {
     @ResponseBody
     @GetMapping(value = "/qrcode")
     @ApiOperation(value = "二维码登录接口")
-    public void qrcode(HttpServletRequest request,HttpServletResponse response){
+    public void qrcode(HttpServletResponse response){
         final WxMaService wxService = WxMaConfiguration.getMaService();
         Subject subject = SecurityUtils.getSubject();
         String sessionid = subject.getSession().getId().toString();
-        System.out.println(sessionid);
         try {
             byte[] buffer = wxService.getQrcodeService().createWxaCodeUnlimitBytes(sessionid.replace("-",""),"pages/personal/index",280,false,new WxMaCodeLineColor("0","0","0"),false);
             InputStream buffin = new ByteArrayInputStream(buffer);

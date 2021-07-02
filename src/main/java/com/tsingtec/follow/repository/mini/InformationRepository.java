@@ -13,4 +13,6 @@ public interface InformationRepository extends JpaRepository<Information, Intege
     Information findByMaUser_Id(Integer uid);
 
     List<Information> getByMaUser_DidOrderByPathologyAsc(Integer did);
+
+    Information findByPhone(String phone);
 }

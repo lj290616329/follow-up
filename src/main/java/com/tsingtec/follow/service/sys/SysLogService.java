@@ -45,13 +45,6 @@ public class SysLogService {
                 predicates.add(criteriaBuilder.equal(root.get("aid"),vo.getAid()));
             }
 
-            if (null != vo.getStartTime()){
-                predicates.add(criteriaBuilder.greaterThan(root.get("createTime"),vo.getStartTime()));
-            }
-
-            if (null !=vo.getEndTime()){
-                predicates.add(criteriaBuilder.lessThan(root.get("createTime"),vo.getEndTime()));
-            }
             return criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
         },pageable);
     }

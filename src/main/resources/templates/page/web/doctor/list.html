@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout/header">
+</head>
+<body>
+<div class="layui-card-body">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="user_table_div">
+                <div id="searchParam">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input type="text" id="title" class="layui-input" autocomplete="off" placeholder="姓名/电话">
+                        </div>
+                        <div class="layui-input-inline ">
+                            <button class="layui-btn"  data-type="reload">查询</button>
+                            <button class="layui-btn"  data-type="add">新增</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="layui-hide" id="doctor_table" lay-filter="user_table"></table>
+                <div id="laypage" class="layui-laypage-btn"></div>
+                <div id="deptTree" style="display: none"></div>
+                <div id="roles" class="demo-transfer" style="display: none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    layui.use('table', function(){
+        var table = layui.table;
+        //方法级渲染
+        table.render({
+            elem: '#doctor_table'
+            ,url: '/manager/doctor'
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.totalElements, //解析数据长度
+                    "data": res.data.content //解析数据列表
+                };
+            }
+            ,request: {
+                pageName: 'pageNum' //页码的参数名称，默认：page
+                ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            ,cols: [
+                [
+                    {checkbox: true, fixed: true}
+                    ,{field:'pic', title: '头像', width:80}
+                    ,{field:'name', title: '姓名'}
+                    ,{field:'phone', title: '电话'}
+                    ,{field:'goodAt', title: '擅长'}
+                    ,{field:'des', title: '简介'}
+                    ,{
+                        field: 'maUser', title: '状态', templet: function (item) {
+                            if (item.maUser) {
+                                return '<span class="layui-badge layui-bg-orange">已认证</span>';
+                            }else{
+                                return '<span class="layui-badge  layui-bg-gray">未认证</span>'
+                            }
+                        }
+                    }
+                ]
+            ]
+            ,id: 'doctorTable'
+            ,page: true
+        });
+        var $ = layui.$, active = {
+            reload: function(){
+                //执行重载
+                table.reload('doctorTable', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        title: $('#title').val()
+                    }
+                });
+            },
+            add:function () {
+                console.log("add");
+                edit(0);
+            }
+        };
+
+        $('.layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        var edit = function (obj) {
+            var ifr = layer.open({
+                title: "编辑医生",
+                type: 2,
+                closeBtn: 1,
+                content: '/home/web/doctor/form?id='+obj,
+                area: ['300px', '300px'],
+            });
+            layer.full(ifr);
+        };
+    });
+</script>

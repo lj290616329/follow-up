@@ -6,6 +6,8 @@ import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import com.tsingtec.follow.config.jwt.JwtUtil;
 import com.tsingtec.follow.config.mini.WxMaConfiguration;
+import com.tsingtec.follow.entity.mini.Doctor;
+import com.tsingtec.follow.entity.mini.Information;
 import com.tsingtec.follow.entity.mini.MaUser;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.service.mini.DoctorService;
@@ -57,14 +59,19 @@ public class IndexMiniController {
             return DataResult.fail("授权信息不全,请重新进行授权!");
         }
         final WxMaService wxService = WxMaConfiguration.getMaService();
+
         try {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);
-            System.out.println(session.toString());
+            log.info(session.toString());
             MaUser maUser = maUserService.findByOpenId(session.getOpenid());
             if(null != maUser){
                 TokenRespVO token = jwtUtil.getToken(maUser);
                 baseUserRespVO.setToken(token);
-                baseUserRespVO.setIfInformation(informationService.findByUid(maUser.getId())==null?false:true);
+                Information information = informationService.findByUid(maUser.getId());
+                Doctor doctor = doctorService.findByUid(maUser.getId());
+                if(null==information && null==doctor){
+                    return DataResult.fail("登录失败!");
+                }
                 if(doctorService.findByUid(maUser.getId())!=null){
                     baseUserRespVO.setIfDoctor(true);
                 }

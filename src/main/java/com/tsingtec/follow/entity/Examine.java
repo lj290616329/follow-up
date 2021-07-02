@@ -27,4 +27,5 @@ public class Examine {
     private List<String> ct= Lists.newArrayList();;//ct摄影图
     @JSONField(ordinal=7)
     private List<String> mri= Lists.newArrayList();;//MRI
+
 }
