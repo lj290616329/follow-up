@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout/header">
+</head>
+<body>
+<div class="layui-card-body">
+    <form class="layui-form">
+
+    </form>
+</div>
+<script type="text/html" id="article">
+    {{if id}}
+    <input type="hidden" name="id" value="{{id}}">
+    {{/if}}
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">文章标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" value="{{title}}" lay-verify="required" autocomplete="off" placeholder="请输入文章标题" lay-reqtext="请输入文章标题" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章简介</label>
+        <div class="layui-input-block">
+            <input type="text" name="description" value="{{description}}" placeholder="请输入文章简介" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">封面图片</label>
+            <div class="layui-input-block">
+                <input id="pic"  name="pic" value="{{pic}}" lay-verify="required" readonly="readonly" placeholder="图片地址" lay-reqtext="请上传封面图片" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline" style="width: auto;">
+                <button type="button" class="layui-btn layui-btn-primary" id="picBtn">
+                    <i class="layui-icon"></i>上传图片
+                </button>
+                <button type="button" class="layui-btn layui-btn-primary" id="picPreview">查看图片</button>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">文章内容</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea" lay-verify="content" name="content" id="content">{{content}}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="back">返回</button>
+                <button class="layui-btn layui-btn-primary" id="preview" lay-filter="preview" lay-submit>预览</button>
+            </div>
+        </div>
+    </div>
+</script>
+<script src="/js/template.js"></script>
+
+</body>
+</html>
+<script charset="utf-8" src="/js/editor/kindeditor-all-min.js?v=1"></script>
+<script charset="utf-8" src="/js/editor/lang/zh-CN.js"></script>
+<script type="text/javascript">
+     layui.use(['form', 'laydate', 'layer', 'jquery', 'upload', 'CoreUtil','util','Api','ApiConfig'],async function () {
+        var form = layui.form
+            , layer = layui.layer
+            , upload = layui.upload
+            , util = layui.util
+            , Api = layui.Api
+            , ApiConfig = layui.ApiConfig;
+        $ = layui.$;
+        var url = layui.url();
+        let res = await Api.articleDetail({id:url.search.id})
+         let html = template("article",res.data||{});
+        $(".layui-form").html(html);
+         var editor;
+         editor = KindEditor.create('#content', {
+             height : "500px",
+             width : "100%",
+             resizeType : 1,
+             syncType : "form",
+             filterMode : true,
+             items : [
+                 'source', '|', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                 'removeformat', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                 'insertunorderedlist', '|', 'emoticons', 'image', 'link', , 'unlink', '|',
+                 'lineheight', 'quickformat', 'hr', 'table', 'fullscreen','preview'],
+             filePostName: "file",
+             uploadJson : '/api/upload/file/qiniu',
+             cssData : "img{max-width:100%;}"
+         });
+
+        form.render();
+        //图片上传
+        upload.render({
+            elem: '#addPic'
+            ,url: ApiConfig.uploadFileApi //改成您自己的上传接口
+            ,done: function(res){
+                if(res.code==0){
+                    $('#pic').val(res.data.src); //置空上传失败的状态
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        });
+
+         //监听提交
+         //form.on
+         form.on('submit(article)',function(data){
+             if(data.field.id){
+                 Api.updateDoctor(JSON.stringify(data.field)).then(res=>{
+                     back();
+                 });
+             }else{
+                 Api.addDoctor(JSON.stringify(data.field)).then(res=>{
+                     back();
+                 });
+             }
+
+
+             return false;
+         });
+
+        util.event('lay-active', {
+            back: function(othis){
+                back();
+            }
+            ,picPreview: function(othis){//图片预览
+                if($("#pic").val()){
+                    layer.photos({ photos: {"data": [{"src": $("#pic").val()}]} });
+                }else{
+                    layer.msg('请先上传头像');
+                }
+            }
+        });
+        //返回,关闭弹出层
+        let back = function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);
+            parent.tableReload();
+        }
+    });
+</script>

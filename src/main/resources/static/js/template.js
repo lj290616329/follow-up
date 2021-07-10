@@ -43,3 +43,21 @@ template.defaults.imports.dateFormat = function (date, format) {
     });
     return format;
 };
+template.defaults.imports.split = function (date, format) {
+    return date.split(format)
+};
+template.defaults.imports.join = function(date, format){
+    return date.join(format)
+};
+template.defaults.imports.showName = function (date) {
+    let compare = {
+        cbc:'血常规',
+        biochemistry:'生化',
+        dic:'凝血',
+        swelling:'肿标',
+        bmode:'B超',
+        ct:'CT',
+        mri:'MRI'
+    };
+    return compare[date];
+};

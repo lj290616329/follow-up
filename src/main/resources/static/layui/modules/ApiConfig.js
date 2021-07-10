@@ -1,12 +1,23 @@
-const adminApi = "/manager/admin";
-const adminRoleApi = "/manager/admin/role";
-const adminPwdApi = "/manager/admin/psd";
 layui.define(function(exports){
     let ApiConfig ={
-        adminApi,
-        adminRoleApi,
-        adminRoleApi,
-        adminPwdApi
+        pathParams:function (url, params = {}) {
+            return Object.keys(params).map(function(key) {
+                return url.replace(/(\\)?\{([^\{\}\\]+)(\\)?\}/g, params[key])
+            }).join();
+        },
+        uploadFileApi:"/api/upload/file",
+        adminApi:"/manager/admin",
+        adminRoleApi:"/manager/admin/role",
+        adminPwdApi:"/manager/admin/psd",
+        doctorApi:"/manager/doctor",
+        doctorAllApi:"/manager/doctors",
+        doctorDetailApi:"/manager/doctor/{id}",
+        informationApi:"/manager/information",
+        informationDetailApi:"/manager/information/{id}",
+        planListApi:"/manager/reviewPlan/{iid}",
+        planApi:"/manager/reviewPlan",
+        articleApi:"/manager/article",
+        articleDetailApi:"/manager/article/{id}"
     }
     exports('ApiConfig', ApiConfig);
-})
+});

@@ -1,11 +1,5 @@
 layui.define(['jquery','ApiConfig'],function(exports){
     let ApiConfig = layui.ApiConfig;
-    let pathParams = function (url, params = {}) {
-        return Object.keys(params).map(function(key) {
-            return url.replace(/(\\)?\{([^\{\}\\]+)(\\)?\}/g, params[key])
-        }).join();
-    };
-
     var request =  function(url,params,type){
         return new Promise((resolve, reject) => {
             var roleSaveLoading = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
@@ -36,7 +30,7 @@ layui.define(['jquery','ApiConfig'],function(exports){
                             offset: 't',
                             anim: 6,
                         }, function () {
-                            top.window.location.href = "/index/login"
+                            top.window.location.href = ""
                         });
                         reject(res);
                     } else if (res.code == 500) {
@@ -102,6 +96,93 @@ layui.define(['jquery','ApiConfig'],function(exports){
         },
         updatePwd:async function(data){
             let res = await request(ApiConfig.adminPwdApi,data,"PUT");
+            return res;
+        },
+        //医生
+        getDoctor:async function(data){
+            let res = await request(ApiConfig.doctorApi,data,"GET");
+            return res;
+        },
+        //医生
+        getAllDoctor:async function(data){
+            let res = await request(ApiConfig.doctorAllApi,data,"GET");
+            return res;
+        },
+        doctorDetail:async function(data){
+            let res = await request(ApiConfig.pathParams(ApiConfig.doctorDetailApi,data),"","GET");
+            return res;
+        },
+        addDoctor:async function(data){
+            console.log("come add")
+            let res = await request(ApiConfig.doctorApi,data,"POST");
+            return res;
+        },
+        updateDoctor:async function(data){
+            let res = await request(ApiConfig.doctorApi,data,"PUT");
+            return res;
+        },
+        deleteDoctor:async function(data){
+            let res = await request(ApiConfig.doctorApi,data,"DELETE");
+            return res;
+        },
+        //用户信息
+        getInformation:async function(data){
+            let res = await request(ApiConfig.informationApi,data,"GET");
+            return res;
+        },
+        informationDetail:async function(data){
+            let res = await request(ApiConfig.pathParams(ApiConfig.informationDetailApi,data),"","GET");
+            return res;
+        },
+        addInformation:async function(data){
+            console.log("come add")
+            let res = await request(ApiConfig.informationApi,data,"POST");
+            return res;
+        },
+        updateInformation:async function(data){
+            let res = await request(ApiConfig.informationApi,data,"PUT");
+            return res;
+        },
+        deleteInformation:async function(data){
+            let res = await request(ApiConfig.informationApi,data,"DELETE");
+            return res;
+        },
+        //复查计划
+        getPlan:async function(data){
+            let res  = await request(ApiConfig.planApi,data,"GET");
+            return res;
+        },
+        addPlan:async function(data){
+            let res  = await request(ApiConfig.planApi,data,"POST");
+            return res;
+        },
+        updatePlan:async function(data){
+            let res  = await request(ApiConfig.planApi,data,"PUT");
+            return res;
+        },
+        deletePlan:async function(data){
+            let res  = await request(ApiConfig.planApi,data,"DELETE");
+            return res;
+        },
+        //图文计划
+        getArticle:async function(data){
+            let res  = await request(ApiConfig.articleApi,data,"GET");
+            return res;
+        },
+        articleDetail:async function(data){
+            let res = await request(ApiConfig.pathParams(ApiConfig.articleDetailApi,data),data,"GET");
+            return res;
+        },
+        addArticle:async function(data){
+            let res  = await request(ApiConfig.planApi,data,"POST");
+            return res;
+        },
+        updateArticle:async function(data){
+            let res  = await request(ApiConfig.planApi,data,"PUT");
+            return res;
+        },
+        deleteArticle:async function(data){
+            let res  = await request(ApiConfig.planApi,data,"DELETE");
             return res;
         }
     };

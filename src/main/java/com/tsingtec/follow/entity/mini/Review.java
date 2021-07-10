@@ -9,9 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.*;
 
 /**
  * 复查信息
@@ -34,6 +34,8 @@ public class Review extends BaseEntity{
     @Type(type = "json")
     @Column(columnDefinition = "json comment '复查结果信息'")
     private Examine examine;//病历
+
+    private String other;//其他
 
     private String reply;//医生回复信息
 }

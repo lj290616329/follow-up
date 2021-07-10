@@ -1,5 +1,6 @@
 package com.tsingtec.follow.service.mini;
 
+import com.google.common.collect.Lists;
 import com.tsingtec.follow.entity.mini.Doctor;
 import com.tsingtec.follow.entity.sys.Admin;
 import com.tsingtec.follow.exception.BusinessException;
@@ -41,7 +42,7 @@ public class DoctorService {
     private DoctorRepository doctorRepository;
 
     public Doctor get(Integer id){
-        return doctorRepository.findById(id).orElse(new Doctor());
+        return doctorRepository.findById(id).orElse(null);
     }
 
     public Doctor findByUid(Integer uid){
@@ -72,9 +73,9 @@ public class DoctorService {
             Predicate Pre_And = criteriaBuilder.and(listAnd.toArray(array));
             List<Predicate> listOr = new ArrayList<Predicate>();
             //查询or 模糊查询前面相似
-            if(vo.getTitle()!=null) {
-                listOr.add(criteriaBuilder.like(root.get("name"), "%"+vo.getTitle()));
-                listOr.add(criteriaBuilder.like(root.get("phone"), "%"+vo.getTitle()));
+            if(StringUtils.isNotBlank(vo.getTitle())) {
+                listOr.add(criteriaBuilder.like(root.get("name"), vo.getTitle()+"%"));
+                listOr.add(criteriaBuilder.like(root.get("phone"), vo.getTitle()+"%"));
                 Predicate[] arrayOr = new Predicate[listOr.size()];
                 Predicate Pre_Or = criteriaBuilder.or(listOr.toArray(arrayOr));
                 return criteriaQuery.where(Pre_And,Pre_Or).getRestriction();
@@ -133,4 +134,22 @@ public class DoctorService {
     }
 
 
+    @Transactional
+    public void delete(List<Integer> ids) {
+        List<Doctor> doctors = doctorRepository.findAllById(ids);
+        List<Integer> aids = Lists.newArrayList();
+        doctors.forEach(doctor -> {
+            Admin admin = adminService.findByLoginName(doctor.getPhone());
+            if(admin!=null){
+                aids.add(admin.getId());
+            }
+        });
+        //联动删除账号
+        adminService.deleteBatch(aids);
+        doctorRepository.deleteInBatch(doctors);
+    }
+
+    public List<Doctor> getAll() {
+        return doctorRepository.findAll();
+    }
 }

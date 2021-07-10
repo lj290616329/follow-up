@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
@@ -33,9 +32,13 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Information extends BaseEntity {
 
-    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition ="integer comment '用户信息id'")
     private MaUser maUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(columnDefinition ="comment '医生id'")//指定外键名称
+    private Doctor doctor;
 
     private String name;//姓名
     private String recordNo;//病历号码
@@ -49,4 +52,6 @@ public class Information extends BaseEntity {
     @Type(type = "json")
     @Column(columnDefinition = "json comment '个人病历信息'")
     private Examine examine = new Examine();//病历
+
+    private String other;
 }

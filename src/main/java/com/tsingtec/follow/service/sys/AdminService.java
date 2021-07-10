@@ -144,7 +144,6 @@ public class AdminService {
         }
     }
 
-    @Transactional
     public void deleteBatch(List<Integer> aids) {
         adminRepository.deleteBatch(aids);
     }

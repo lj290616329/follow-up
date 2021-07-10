@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout/header">
+</head>
+<style>
+    table{
+        text-align: center;
+    }
+    .td_bold{
+        font-weight: bold;
+    }
+    .pic_box{
+        position: relative;
+        float: left;
+    }
+    .background{
+        height:120px;
+        float:left;
+        margin-right:20px;
+    }
+    .removeHead{
+        position: absolute;
+        font-size: 28px;
+        right: -5px;
+        top: 6px;
+        color: #e85858;
+    }
+    .removeImg{
+        position: absolute;
+        font-size: 28px;
+        right: 6px;
+        top: -6px;
+        color: #e85858;
+    }
+</style>
+<body>
+<div class="layui-card-body">
+    <form class="layui-form">
+    </form>
+</div>
+</body>
+<script type="text/html" id="information">
+    {{if information.id}}
+        <input type="hidden" name="id" value="{{information.id}}"/>
+    {{/if}}
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" value="{{information.name}}" autocomplete="off" placeholder="请输入姓名"
+                   lay-reqtext="请输入姓名" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">病历号</label>
+        <div class="layui-input-block">
+            <input type="text" name="recordNo" value="{{information.recordNo}}" autocomplete="off" placeholder="请输入病历号"
+                   lay-reqtext="请输入病历号" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone" value="{{information.phone}}" autocomplete="off" placeholder="请输入电话"
+                   lay-reqtext="请输入电话" class="layui-input" lay-verify="phone">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">病种</label>
+            <div class="layui-input-block">
+                <select name="type" lay-verify="required">
+                    <option value="">请选择病种</option>
+                    <optgroup label="肝脏肿瘤">
+                        <option value="1" {{if information.type==1}}selected{{/if}}>HCC</option>
+                        <option value="2" {{if information.type==2}}selected{{/if}}>ICC</option>
+                        <option value="3" {{if information.type==3}}selected{{/if}}>其他</option>
+                    </optgroup>
+                    <optgroup label="肝道肿瘤">
+                        <option value="4" {{if information.type==4}}selected{{/if}}>肝门</option>
+                        <option value="5" {{if information.type==5}}selected{{/if}}>胆囊</option>
+                        <option value="6" {{if information.type==6}}selected{{/if}}>其他</option>
+                    </optgroup>
+                    <optgroup label="胰腺肿瘤">
+                        <option value="7" {{if information.type==7}}selected{{/if}}>胰腺</option>
+                        <option value="8" {{if information.type==8}}selected{{/if}}>其他</option>
+                    </optgroup>
+                    <optgroup label="其他">
+                        <option value="9" {{if information.type==9}}selected{{/if}}>其他</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">所属医生</label>
+            <div class="layui-input-block">
+                <select name="did" lay-verify="required">
+                    <option value="">请选择所属医生</option>
+                    {{each doctors as doctor}}
+                        <option value="{{doctor.id}}" {{if information.doctor.id==doctor.id}}selected{{/if}}>{{doctor.name}}~{{doctor.phone}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">病理图片</label>
+        <div class="layui-input-block layui-upload-list">
+            {{each information.pathology as src i}}
+            <div class="pic_box">
+                <i class="layui-icon layui-icon-close-fill removeImg" data-index="{{i}}"></i>
+                <img class="background" src="{{src}}">
+            </div>
+            {{/each}}
+            <!-- 最多多少张图片 -->
+            <div class='pic-num' style="float:right;width: fit-content;"><span>{{information.pathology.length}}</span>/<span>4</span></div>
+            <img src="/image/add.png" alt="点击上传图片"  class="background addImg" {{if information.pathology.length>3}}style='display:none;'{{/if}}/>
+            <input name="pathology" class="value-input" type="hidden" value="{{information.pathology | join ','}}">
+        </div>
+    </div>
+
+    {{each information.examine as check key}}
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">{{key | showName}}</label>
+        <div class="layui-input-block layui-upload-list">
+            {{each check as src i}}
+                <div class="pic_box">
+                    <i class="layui-icon layui-icon-close-fill removeImg" data-src="{{i}}"></i>
+                    <img class="background" src="{{src}}">
+                </div>
+            {{/each}}
+            <!-- 最多多少张图片 -->
+            <div class='pic-num' style="float:right;width: fit-content;"><span>{{information.examine[key].length}}</span>/<span>4</span></div>
+            <img src="/image/add.png" alt="点击上传图片"  class="background addImg" {{if information.examine[key].length>3}}style='display:none;'{{/if}}/>
+            <input name="{{key}}" class="value-input" type="hidden" value="{{check | join ','}}">
+        </div>
+    </div>
+    {{/each}}
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">其他</label>
+        <div class="layui-input-block">
+            <textarea name="other" placeholder="请输入其他内容" class="layui-textarea">{{information.other}}</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="information">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button type="button" class="layui-btn layui-btn-primary" lay-active="back">返回</button>
+        </div>
+    </div>
+</script>
+<script src="/js/template.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+    layui.use(['form', 'laydate', 'layer','Api','ImgUpload'],async function () {
+        var form = layui.form
+            , layer = layui.layer
+            , util = layui.util
+            , Api = layui.Api
+            , ImgUpload = layui.ImgUpload;
+        $ = layui.$;
+        var url = layui.url();
+        let res = await Api.informationDetail({id:url.search.id});
+        let res1 = await Api.getAllDoctor({});
+        let information = res.data||{doctor:{},pathology:[],examine:{cbc:[],biochemistry:[],dic:[],swelling:[],bmode:[],ct:[],mri:[]}}
+        let doctors = res1.data || [];
+        let html = template("information",{information:information,doctors:doctors});
+        $(".layui-form").html(html);
+        ImgUpload();
+        form.render();
+
+        //监听提交
+        //form.on
+        form.on('submit(information)',function(data){
+            var information = data.field;
+            console.log(JSON.stringify(information));
+            var examine = {cbc:[],biochemistry:[],dic:[],swelling:[],bmode:[],ct:[],mri:[]};
+            for (let key in information){
+                if(key=='pathology'){
+                    information.pathology = information[key].split(",");
+                }
+                if(key=='did'){
+                    information.doctor = {
+                        id:information[key]
+                    }
+                }
+                if(examine[key]){
+                    if(information[key]){
+                        examine[key] = information[key].split(",");
+                    }
+                }
+            }
+            information.examine = examine;
+            if(information.id){
+                Api.updateInformation(JSON.stringify(information)).then(res=>{
+                    back();
+                });
+            }else{
+                Api.addInformation(JSON.stringify(information)).then(res=>{
+                    back();
+                });
+            }
+            return false;
+        });
+
+        util.event('lay-active', {
+            back: function(othis){
+                back();
+            }
+            ,picPreview: function(othis){//图片预览
+                if($("#pic").val()){
+                    layer.photos({ photos: {"data": [{"src": $("#pic").val()}]} });
+                }else{
+                    layer.msg('请先上传头像');
+                }
+            }
+        });
+        //返回,关闭弹出层
+        let back = function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);
+            parent.tableReload();
+        }
+    });
+</script>

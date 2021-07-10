@@ -45,7 +45,7 @@ public class AuthMiniController {
     private JwtUtil jwtUtil;
 
     @PostMapping("auth")
-    public DataResult information(@RequestBody @Valid AuthReqVO vo){
+    public DataResult auth(@RequestBody @Valid AuthReqVO vo){
         String token = HttpContextUtils.getToken();
         MaUser maUser = maUserService.get(jwtUtil.getClaim(token,"id"));
         Information information = informationService.findByPhone(vo.getPhone());

@@ -275,26 +275,32 @@
         var tipDialog = function (userIds, username) {
             layer.open({
                 content: '确定要删除[' + username + "]用户么?",
-                yes:async function (index, layero) {
-                    let res = await Api.deleteAdmin(JSON.stringify(userIds));
-                    tableReload();
-                    layer.close(index);
+                yes:function (index, layero) {
+                    Api.deleteAdmin(JSON.stringify(userIds)).then(res=>{
+                        tableReload();
+                        layer.close(index);
+                    });
                 }
             });
         };
         form.on('switch(switch)', function () {
             $(".operation_user input[name=status]").attr('type', 'hidden').val(this.checked ? 0 : -1);
         });
-        form.on('submit(submit)',async function (data) {
-            console.log(data);
-            if (data.field.id === undefined || data.field.id === null || data.field.id === "") {
-                let res = await Api.addAdmin(JSON.stringify(data.field));
+        //form.on 为异步,无法使用async await 同步
+        form.on('submit(submit)',function (data) {
+            if (data.field.id) {
+                Api.updateAdmin(JSON.stringify(data.field)).then(res=>{
+                    $(".user_table_div").show();
+                    $(".operation_user").hide();
+                    tableReload();
+                });
             } else {
-                let res =await Api.updateAdmin(JSON.stringify(data.field));
+                Api.addAdmin(JSON.stringify(data.field)).then(res=>{
+                    $(".user_table_div").show();
+                    $(".operation_user").hide();
+                    tableReload();
+                });
             }
-            $(".user_table_div").show();
-            $(".operation_user").hide();
-            tableReload();
             return false;
         });
         var initTransfer = function (data) {

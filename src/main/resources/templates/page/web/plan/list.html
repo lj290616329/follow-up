@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout/header">
+</head>
+<body>
+<div class="layui-card-body">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="user_table_div">
+                <table class="layui-hide" id="plan_table" lay-filter="planTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/html" id="toolbar">
+    <div class="layui-form-item">
+        <div class="layui-btn-container">
+            <button class="layui-btn" lay-event="add">新增</button>
+            <button class="layui-btn layui-btn-danger" lay-event="delete">删除</button>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="tool">
+    <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
+            class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+<!--头像-->
+<script type="text/html" id="imgTpl">
+    {{#  if(d.pic!=null){ }}
+    <img class="head" src="{{d.pic}}"  style="width:30px; height:30px;">
+    {{#  } }}
+</script>
+<script type="text/javascript">
+    var tableReload;
+    layui.use(['table','Api','ApiConfig','jquery'], function(){
+        var table = layui.table
+            , Api = layui.Api
+            , $ = layui.jquery
+            , url = layui.url()
+            , ApiConfig = layui.ApiConfig;
+        //方法级渲染
+        table.render({
+            elem: '#plan_table'
+            ,url: ApiConfig.pathParams(ApiConfig.planListApi,{iid:url.search.iid})
+            ,toolbar: '#toolbar'
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.length, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
+            ,cols: [
+                [
+                    {checkbox: true, fixed: true}
+                    ,{field:'reviewTime', title: '复查时间'}
+                    ,{field:'examine', title: '检查项目',templet: function(d){
+                        let html = "";
+                        d.examine.forEach(check=>{
+                            html = html + '<span class="layui-badge layui-bg-green layui-margin-right">'+check+'</span>';
+                        });
+                        return html;
+                        }
+                    }
+                    ,{field:'remark', title: '复查备注'}
+                    ,{field:'review', title: '状态',templet(d){
+                        return d.review?"已复查":"暂未复查";
+                    }}
+                    ,{title: '操作', width: 250, toolbar: '#tool'}
+                ]
+            ]
+            ,id: 'planTable'
+        });
+
+        //表格重载
+        tableReload = function () {
+            console.log(11)
+            table.reload('planTable', {});
+        };
+
+        //头工具栏事件
+        table.on('toolbar(planTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    edit(0);
+                    break;
+                case 'delete':
+                    var data = checkStatus.data;
+                    if (data.length == 0) {
+                        layer.msg("请选择要批量删除的数据");
+                    } else {
+                        var userIds = [];
+                        $(data).each(function (index, item) {
+                            userIds.push(item.id);
+                        });
+                        tipDialog(userIds, "选中的");
+                    }
+                    break;
+            };
+        });
+        /**
+         * table 列工具栏
+         */
+        table.on('tool(planTable)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'del':
+                    var userIds = [data.id];
+                    tipDialog(userIds, data.name);
+                    break;
+                case 'edit':
+                    edit(data.id);
+                    break;
+
+            }
+        });
+        //编辑
+        var edit = function (obj) {
+            layer.open({
+                title: "编辑复查计划",
+                type: 2,
+                closeBtn: 1,
+                content: '/home/web/plan/form?id='+obj+"&iid="+url.search.iid,
+                area: ['100%', '500px'],
+            });
+        };
+        //删除确认
+        var tipDialog = function (ids) {
+            console.log(ids);
+            layer.open({
+                content: '确定要删除所选复查计划吗?',
+                yes:function (index, layero) {
+                    Api.deleteInformation(JSON.stringify(ids)).then(res=>{
+                        layer.close(index);
+                        tableReload();
+                    });
+                }
+            });
+        };
+    });
+</script>

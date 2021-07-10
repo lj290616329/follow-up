@@ -1,23 +1,9 @@
 package com.tsingtec.follow.config.redis;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
@@ -37,19 +23,19 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 
 
-    @Bean
+    /*@Bean
     public RedisConnectionFactory redisConnectionFactory(){
-        /**添加对应依赖 JedisConnectionFactory,LettLettuceConnectionFactory
+        *//**添加对应依赖 JedisConnectionFactory,LettLettuceConnectionFactory
          *RedisConnectionFactory工厂又两种方式创建类 :
          　　　*　JedisConnectionFactory()
          　　　*　LettLettuceConnectionFactory　
-         　　　*/
+         　　　*//*
 
         return new JedisConnectionFactory();
     }
-    /**
+    *//**
      * 实例化RedisTemplate类
-     */
+     *//*
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         //大多数情况，都是选用<String, Object>
@@ -70,11 +56,11 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setDefaultSerializer(jackson2JsonRedisSerializer);
         return template;
     }
-    /**
+    *//**
      * 自定义缓存管理器
      * @param redisConnectionFactory
      * @return
-     */
+     *//*
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         // 创建String和JSON序列化对象，分别对key和value的数据进行类型转换
@@ -94,7 +80,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
         RedisCacheManager cacheManager = RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(config).build();
         return cacheManager;
-    }
+    }*/
 
 
 

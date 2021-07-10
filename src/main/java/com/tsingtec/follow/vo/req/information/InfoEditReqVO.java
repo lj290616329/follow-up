@@ -1,4 +1,4 @@
-package com.tsingtec.follow.vo.req.doctor;
+package com.tsingtec.follow.vo.req.information;
 
 import com.google.common.collect.Lists;
 import com.tsingtec.follow.entity.Examine;

@@ -5,7 +5,6 @@ import cn.binarywang.wx.miniapp.bean.WxMaCodeLineColor;
 import com.tsingtec.follow.config.mini.WxMaConfiguration;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.utils.RandomValidateCodeUtil;
-import com.tsingtec.follow.utils.RedisUtil;
 import com.tsingtec.follow.vo.req.sys.login.LoginReqVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -44,8 +42,8 @@ public class IndexController {
 
     //@Resource(name="ehCacheManager")
     //@Autowired
-    @Resource
-    private RedisUtil redisUtil;
+//    @Resource
+//    private RedisUtil redisUtil;
 
     @GetMapping(value = {"/","/login"})
     public String login(){
@@ -104,7 +102,7 @@ public class IndexController {
             ServletOutputStream sos;
             sos = response.getOutputStream();
             ImageIO.write(img, "JPEG", sos);
-            redisUtil.set(sessionid.replace("-",""),sessionid,1000*60*3);
+            //redisUtil.set(sessionid.replace("-",""),sessionid,1000*60*3);
             sos.close();
         } catch (IOException | WxErrorException e) {
             e.printStackTrace();

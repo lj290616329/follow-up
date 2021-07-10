@@ -1,17 +1,15 @@
 package com.tsingtec.follow.controller.mini;
 
-import com.alibaba.fastjson.JSON;
 import com.tsingtec.follow.config.jwt.JwtUtil;
 import com.tsingtec.follow.entity.mini.Doctor;
 import com.tsingtec.follow.entity.mini.Information;
-import com.tsingtec.follow.entity.mini.Review;
 import com.tsingtec.follow.entity.mini.ReviewPlan;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.service.mini.*;
 import com.tsingtec.follow.utils.BeanMapper;
 import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.doctor.DoctorAddReqVO;
-import com.tsingtec.follow.vo.req.doctor.ReplyReqVO;
+import com.tsingtec.follow.vo.req.review.ReviewReqVO;
 import com.tsingtec.follow.vo.resp.doctor.DoctorIndexRespVO;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +69,6 @@ public class DoctorMiniController {
 
     @PutMapping("info")
     private DataResult info(@RequestBody @Valid DoctorAddReqVO vo){
-        System.out.println(JSON.toJSONString(vo));
         String token = HttpContextUtils.getToken();
         Doctor doctor = doctorService.findByUid(jwtUtil.getClaim(token,"id"));
         BeanMapper.mapExcludeNull(vo,doctor);
@@ -80,12 +77,8 @@ public class DoctorMiniController {
     }
 
     @PutMapping("reply")
-    private DataResult reply(@RequestBody @Valid ReplyReqVO vo){
-        Review review = reviewService.findById(vo.getId());
-        review.setReply(vo.getReply());
-        reviewService.save(review);
+    private DataResult reply(@RequestBody @Valid ReviewReqVO vo){
+        reviewService.update(vo);
         return DataResult.success();
     }
-
-
 }

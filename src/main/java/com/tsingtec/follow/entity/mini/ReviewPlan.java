@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * 复查计划
@@ -29,11 +31,17 @@ public class ReviewPlan extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition ="comment '用户id'")//指定外键名称
-    private MaUser maUser;
+    private Information information;
+
+    @Type(type = "json")
+    @Column(columnDefinition = "json comment '需要检查的项目'")
+    private List<String> examine;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(columnDefinition ="comment '检查id'")//指定外键名称
     private Review review;
 
     private LocalDate reviewTime;//复查时间
+
+    private String remark;//备注
 }

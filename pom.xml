@@ -48,12 +48,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
-        </dependency>-->
+        </dependency>
         <!--数据库相关-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -118,20 +118,6 @@
             <version>${shiro.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.crazycake</groupId>
-            <artifactId>shiro-redis</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        <!--redis-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
 
 
         <!--thymeleaf-->
