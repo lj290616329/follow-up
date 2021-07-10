@@ -6068,9 +6068,7 @@ _plugin('core', function(K) {
 			full = start + key + '="' + src + '"' + ' data-ke-src="' + _escape(src) + '"' + end;
 			return full;
 		})
-		.replace(/(<[^>]+\s)(on\w+="[^"]*"[^>]*>)/ig, function(full, start, end) {
-			return start + 'data-ke-' + end;
-		})
+
 		.replace(/<table[^>]*\s+border="0"[^>]*>/ig, function(full) {
 			if (full.indexOf('ke-zeroborder') >= 0) {
 				return full;
