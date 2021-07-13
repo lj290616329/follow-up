@@ -4,12 +4,11 @@ import com.tsingtec.follow.entity.mini.Article;
 import com.tsingtec.follow.exception.BusinessException;
 import com.tsingtec.follow.exception.code.BaseExceptionType;
 import com.tsingtec.follow.repository.mini.ArticleRepository;
-import com.tsingtec.follow.service.sys.AdminService;
 import com.tsingtec.follow.utils.BeanMapper;
 import com.tsingtec.follow.utils.BeanUtils;
 import com.tsingtec.follow.vo.req.news.ArticleAddReqVO;
-import com.tsingtec.follow.vo.req.news.ArticleUpdateReqVO;
 import com.tsingtec.follow.vo.req.news.ArticlePageReqVO;
+import com.tsingtec.follow.vo.req.news.ArticleUpdateReqVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,10 +29,6 @@ import java.util.List;
  */
 @Service
 public class ArticleService {
-
-    @Autowired
-    private AdminService adminService;
-
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -57,7 +52,11 @@ public class ArticleService {
         Pageable pageable = PageRequest.of(vo.getPageNum()-1, vo.getPageSize(), Sort.Direction.DESC,"id");
         return articleRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<Predicate>();
-            if (!StringUtils.isEmpty(vo.getTitle())){
+            //按照权限获取
+            if(null!=vo.getUnionId()){
+                predicates.add(criteriaBuilder.equal(root.get("unionId"),vo.getUnionId()));
+            }
+            if (StringUtils.isNotBlank(vo.getTitle())){
                 predicates.add(criteriaBuilder.like(root.get("title"),"%"+vo.getTitle()+"%"));
             }
             return criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();

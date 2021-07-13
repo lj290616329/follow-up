@@ -44,6 +44,8 @@ public class Admin extends BaseEntity {
     /**盐*/
     private String salt;
 
+    private Integer unionId;
+
     /**0:有效，-1:禁止登录*/
     private Short status = VALID;
 

@@ -174,20 +174,24 @@ layui.define(['jquery','ApiConfig'],function(exports){
             return res;
         },
         addArticle:async function(data){
-            let res  = await request(ApiConfig.planApi,data,"POST");
+            let res  = await request(ApiConfig.articleApi,data,"POST");
             return res;
         },
         updateArticle:async function(data){
-            let res  = await request(ApiConfig.planApi,data,"PUT");
+            let res  = await request(ApiConfig.articleApi,data,"PUT");
             return res;
         },
         deleteArticle:async function(data){
-            let res  = await request(ApiConfig.planApi,data,"DELETE");
+            let res  = await request(ApiConfig.articleApi,data,"DELETE");
+            return res;
+        },
+        reviewDetail:async function(data){
+            let res = await request(ApiConfig.reviewApi,data,"GET");
             return res;
         }
     };
     exports('Api', api);
-})
+});
 
 
 

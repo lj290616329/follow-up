@@ -1,7 +1,9 @@
 package com.tsingtec.follow.controller.web.mini;
 
+import com.tsingtec.follow.entity.sys.Admin;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.service.mini.InformationService;
+import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.information.InformationAddReqVO;
 import com.tsingtec.follow.vo.req.information.InformationPageReqVO;
 import com.tsingtec.follow.vo.req.information.InformationUpdateReqVO;
@@ -28,6 +30,8 @@ public class InformationController {
 
     @GetMapping("information")
     public DataResult page(InformationPageReqVO vo){
+        Admin admin = HttpContextUtils.getAdmin();
+        vo.setDid(admin.getUnionId());
         return DataResult.success(informationService.findAll(vo));
     }
 

@@ -5,7 +5,7 @@ layui.define(function(exports){
                 return url.replace(/(\\)?\{([^\{\}\\]+)(\\)?\}/g, params[key])
             }).join();
         },
-        uploadFileApi:"/api/upload/file",
+        uploadFileApi:"/api/upload/file/qiniu",
         adminApi:"/manager/admin",
         adminRoleApi:"/manager/admin/role",
         adminPwdApi:"/manager/admin/psd",
@@ -17,7 +17,8 @@ layui.define(function(exports){
         planListApi:"/manager/reviewPlan/{iid}",
         planApi:"/manager/reviewPlan",
         articleApi:"/manager/article",
-        articleDetailApi:"/manager/article/{id}"
+        articleDetailApi:"/manager/article/{id}",
+        reviewApi:"/manager/review"
     }
     exports('ApiConfig', ApiConfig);
 });

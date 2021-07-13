@@ -31,4 +31,6 @@ public class AdminAddReqVO {
     @ApiModelProperty(value = "用户状态")
     @NotNull(message = "状态不能为空")
     private Short status;
+
+    private Integer unionId;
 }

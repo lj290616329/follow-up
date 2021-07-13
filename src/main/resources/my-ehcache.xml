@@ -89,7 +89,6 @@
 	<cache name="limiter"
 		   maxEntriesLocalHeap="2000"
 		   eternal="false"
-		   timeToIdleSeconds="5"
 		   timeToLiveSeconds="5"
 		   overflowToDisk="false"
 		   statistics="false">
@@ -99,7 +98,15 @@
 	<cache name="login"
 		   maxEntriesLocalHeap="2000"
 		   eternal="false"
-		   timeToIdleSeconds="180"
+		   timeToLiveSeconds="180"
+		   overflowToDisk="false"
+		   statistics="false">
+	</cache>
+
+	<!-- 二维码登录-->
+	<cache name="agree"
+		   maxEntriesLocalHeap="2000"
+		   eternal="false"
 		   timeToLiveSeconds="180"
 		   overflowToDisk="false"
 		   statistics="false">

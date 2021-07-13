@@ -103,6 +103,7 @@ public class AdminService {
         admin.setLoginName(vo.getLoginName());
         admin.setPassword(password);
         admin.setStatus(vo.getStatus());
+        admin.setUnionId(vo.getUnionId());
         adminRepository.save(admin);
     }
 

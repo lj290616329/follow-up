@@ -30,6 +30,8 @@ import java.util.List;
 @TypeDef(name = "json", typeClass = JsonStringType.class)
 public class Article extends BaseEntity {
 
+    private Integer unionId;
+
     private String title;
 
     private String pic;

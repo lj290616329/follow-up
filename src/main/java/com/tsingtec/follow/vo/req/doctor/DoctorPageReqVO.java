@@ -14,6 +14,8 @@ public class DoctorPageReqVO {
     @ApiModelProperty(value = "姓名或者电话")
     private String title;
 
+    private Integer did;
+
     @ApiModelProperty(value = "第几页")
     private int pageNum=1;
 

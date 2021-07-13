@@ -15,10 +15,7 @@ import com.tsingtec.follow.vo.req.sys.admin.AdminAddReqVO;
 import com.tsingtec.follow.vo.req.sys.admin.AdminUpdateReqVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,6 +102,7 @@ public class DoctorService {
         admin.setLoginName(doctor.getPhone());
         admin.setPassword(StringUtils.substring(vo.getPhone(),5));
         admin.setStatus((short)0);
+        admin.setUnionId(doctor.getId());
         adminService.insert(admin);
     }
 
@@ -149,7 +147,14 @@ public class DoctorService {
         doctorRepository.deleteInBatch(doctors);
     }
 
-    public List<Doctor> getAll() {
-        return doctorRepository.findAll();
+    public List<Doctor> getAll(DoctorPageReqVO vo) {
+        Doctor doctor = new Doctor();
+        if(vo.getDid()!=null){
+            doctor.setId(vo.getDid());
+        }
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withMatcher("id",ExampleMatcher.GenericPropertyMatchers.caseSensitive());
+        Example<Doctor> example = Example.of(doctor,exampleMatcher);
+        //查询
+        return doctorRepository.findAll(example);
     }
 }

@@ -1,7 +1,9 @@
 package com.tsingtec.follow.controller.web.mini;
 
+import com.tsingtec.follow.entity.sys.Admin;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.service.mini.ArticleService;
+import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.news.ArticleAddReqVO;
 import com.tsingtec.follow.vo.req.news.ArticlePageReqVO;
 import com.tsingtec.follow.vo.req.news.ArticleUpdateReqVO;
@@ -28,6 +30,8 @@ public class ArticleController {
 
     @GetMapping("article")
     public DataResult page(ArticlePageReqVO vo){
+        Admin admin = HttpContextUtils.getAdmin();
+        vo.setUnionId(admin.getUnionId());
         return DataResult.success(articleService.findAll(vo));
     }
 
@@ -38,6 +42,8 @@ public class ArticleController {
 
     @PostMapping("article")
     public DataResult add(@RequestBody ArticleAddReqVO vo){
+        Admin admin = HttpContextUtils.getAdmin();
+        vo.setUnionId(admin.getUnionId());
         articleService.insert(vo);
         return DataResult.success();
     }

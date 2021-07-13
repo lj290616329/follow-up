@@ -14,18 +14,24 @@
     <input type="hidden" name="id" value="{{id}}">
     {{/if}}
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">文章标题</label>
-            <div class="layui-input-block">
-                <input type="text" name="title" value="{{title}}" lay-verify="required" autocomplete="off" placeholder="请输入文章标题" lay-reqtext="请输入文章标题" class="layui-input">
-            </div>
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" value="{{title}}" lay-verify="required" autocomplete="off" placeholder="请输入文章标题" lay-reqtext="请输入文章标题" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">文章简介</label>
         <div class="layui-input-block">
-            <input type="text" name="description" value="{{description}}" placeholder="请输入文章简介" autocomplete="off" class="layui-input">
+            <input type="text" name="des" value="{{des}}" placeholder="请输入文章简介" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章标签</label>
+        <div class="layui-input-block tags">
+            <input type="hidden" id="tags" name="tags" value="{{tags | join ','}}" lay-verify="tags" placeholder="请输入文章标签" lay-reqtext="请输入文章标签" autocomplete="off" class="layui-input">
+            <input type="text" id="inputTags" placeholder="请输入文章标签回车确认" autocomplete="off" class="layui-input">
         </div>
     </div>
 
@@ -41,7 +47,7 @@
                 <button type="button" class="layui-btn layui-btn-primary" id="picBtn">
                     <i class="layui-icon"></i>上传图片
                 </button>
-                <button type="button" class="layui-btn layui-btn-primary" id="picPreview">查看图片</button>
+                <button type="button" class="layui-btn layui-btn-primary"  lay-active="picPreview">查看图片</button>
             </div>
         </div>
 
@@ -54,32 +60,38 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="article">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                <button type="button" class="layui-btn layui-btn-primary" id="back">返回</button>
-                <button class="layui-btn layui-btn-primary" id="preview" lay-filter="preview" lay-submit>预览</button>
+                <button type="button" class="layui-btn layui-btn-primary"  lay-active="back">返回</button>
+                <button type="submit" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="preview">预览</button>
             </div>
         </div>
     </div>
 </script>
-<script src="/js/template.js"></script>
 
+<script type="text/html" id="detail">
+    <div class="h2">{{title}}</div>
+    <div>{{#content}}</div>
+</script>
+<script src="/js/template.js"></script>
 </body>
 </html>
 <script charset="utf-8" src="/js/editor/kindeditor-all-min.js?v=1"></script>
 <script charset="utf-8" src="/js/editor/lang/zh-CN.js"></script>
 <script type="text/javascript">
-     layui.use(['form', 'laydate', 'layer', 'jquery', 'upload', 'CoreUtil','util','Api','ApiConfig'],async function () {
+     layui.use(['form', 'laydate', 'layer', 'jquery', 'upload', 'CoreUtil','util','Api','ApiConfig','inputTags'],async function () {
         var form = layui.form
             , layer = layui.layer
             , upload = layui.upload
             , util = layui.util
             , Api = layui.Api
+            , inputTags = layui.inputTags
             , ApiConfig = layui.ApiConfig;
         $ = layui.$;
         var url = layui.url();
-        let res = await Api.articleDetail({id:url.search.id})
-         let html = template("article",res.data||{});
+        let res = await Api.articleDetail({id:url.search.id});
+        let article = res.data||{};
+        let html = template("article",article);
         $(".layui-form").html(html);
          var editor;
          editor = KindEditor.create('#content', {
@@ -97,47 +109,88 @@
              uploadJson : '/api/upload/file/qiniu',
              cssData : "img{max-width:100%;}"
          });
-
-        form.render();
         //图片上传
-        upload.render({
-            elem: '#addPic'
-            ,url: ApiConfig.uploadFileApi //改成您自己的上传接口
-            ,done: function(res){
-                if(res.code==0){
-                    $('#pic').val(res.data.src); //置空上传失败的状态
-                }else{
-                    layer.msg(res.msg);
-                }
-            }
-        });
+         upload.render({
+             elem: '#picBtn'
+             ,url: ApiConfig.uploadFileApi //改成您自己的上传接口
+             ,done: function(res){
+                 if(res.code==0){
+                     $('#pic').val(res.data.src); //置空上传失败的状态
+                 }else{
+                     layer.msg(res.msg);
+                 }
+             }
+         });
 
+         inputTags.render({
+             elem:'#inputTags',//定义输入框input对象
+             valinput:'#tags',
+             content: article.tags,//默认标签
+             aldaBtn: false,//是否开启获取所有数据的按钮
+             done: function(value){ //回车后的回调
+                 console.log(value)
+             }
+         });
+
+         form.render();
+
+
+         //自定义验证规则
+         form.verify({
+             content: function(val){
+                 editor.sync();
+                 if(!$("#content").val()){
+                     return '文章内容不能为空';
+                 }
+             },
+             tags:function (val) {
+                 if(!$("#tags").val()){
+                     return '文章标签不能为空';
+                 }
+             }
+
+         });
          //监听提交
          //form.on
          form.on('submit(article)',function(data){
+             console.log(data.field);
+             data.field.tags = data.field.tags.split(",");
              if(data.field.id){
-                 Api.updateDoctor(JSON.stringify(data.field)).then(res=>{
+                 Api.updateArticle(JSON.stringify(data.field)).then(res=>{
                      back();
                  });
              }else{
-                 Api.addDoctor(JSON.stringify(data.field)).then(res=>{
+                 Api.addArticle(JSON.stringify(data.field)).then(res=>{
                      back();
                  });
              }
+             return false;
+         });
 
-
+         form.on('submit(preview)',function(data){
+             layer.open({
+                 type: 1,
+                 title: "图文预览",
+                 skin: 'layui-layer-demo', //样式类名
+                 closeBtn: 1, //不显示关闭按钮
+                 anim: 2,
+                 area: ['500px', '100%'],
+                 offset: 'rt',
+                 shadeClose: true, //开启遮罩关闭
+                 content: template("detail",data.field)
+             });
              return false;
          });
 
         util.event('lay-active', {
-            back: function(othis){
+            back(othis){
                 back();
             }
-            ,picPreview: function(othis){//图片预览
+            ,picPreview(othis){//图片预览
                 if($("#pic").val()){
                     layer.photos({ photos: {"data": [{"src": $("#pic").val()}]} });
                 }else{
-                    layer.msg('请先上传头像');
+                    layer.msg('请先上传封面图');
                 }
             }
         });

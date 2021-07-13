@@ -47,7 +47,11 @@ template.defaults.imports.split = function (date, format) {
     return date.split(format)
 };
 template.defaults.imports.join = function(date, format){
-    return date.join(format)
+    if(date){
+        return date.join(format)
+    }else{
+        return "";
+    }
 };
 template.defaults.imports.showName = function (date) {
     let compare = {

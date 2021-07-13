@@ -149,6 +149,6 @@ layui.define(['jquery','layer'],function(exports){
     inst.init();
     return thisinputTags.call(inst);
   };
-  layui.link(layui.cache.base + 'input-tags/inputTags.css');
+  layui.link(layui.cache.base + 'inputTags.css');
   exports('inputTags',inputTags);
 })

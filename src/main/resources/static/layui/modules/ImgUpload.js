@@ -7,7 +7,7 @@ layui.define(['jquery','upload'], function (exports) {
          */
         upload.render({
             elem: '.addImg'
-            ,url: '/api/upload/file'//接口url
+            ,url: '/api/upload/file/qiniu'//接口url
             ,acceptMime: 'image/*'
             ,done: function(res){
                 console.log(res);

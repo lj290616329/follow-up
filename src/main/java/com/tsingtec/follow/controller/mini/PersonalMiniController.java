@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @Author lj
@@ -25,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(tags = "小程序接口")
+@Api(tags = "用户首页接口")
 @RequestMapping("/api/personal")
 public class PersonalMiniController {
 
@@ -47,14 +46,4 @@ public class PersonalMiniController {
         ReviewPlan reply = reviewPlanService.nearReplyByIid(information.getId());
         return DataResult.success(new PersonalIndexRespVO(reviewPlan,reply));
     }
-
-
-    @GetMapping("planList")
-    public DataResult planlist(){
-        String token = HttpContextUtils.getToken();
-        Information information = informationService.findByUid(jwtUtil.getClaim(token,"id"));
-        List<ReviewPlan> reviewPlans = reviewPlanService.findByIid(information.getId());
-        return DataResult.success(reviewPlans);
-    }
-
 }

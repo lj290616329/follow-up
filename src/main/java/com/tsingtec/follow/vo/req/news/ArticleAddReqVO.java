@@ -11,6 +11,9 @@ import java.util.List;
  */
 @Data
 public class ArticleAddReqVO {
+
+    private Integer unionId;
+
     private String title;
 
     private String pic;

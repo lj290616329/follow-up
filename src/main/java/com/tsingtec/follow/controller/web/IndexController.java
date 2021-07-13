@@ -3,7 +3,9 @@ package com.tsingtec.follow.controller.web;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaCodeLineColor;
 import com.tsingtec.follow.config.mini.WxMaConfiguration;
+import com.tsingtec.follow.entity.sys.Admin;
 import com.tsingtec.follow.exception.DataResult;
+import com.tsingtec.follow.service.sys.AdminService;
 import com.tsingtec.follow.utils.RandomValidateCodeUtil;
 import com.tsingtec.follow.vo.req.sys.login.LoginReqVO;
 import io.swagger.annotations.Api;
@@ -12,7 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ThreadContext;
+import org.apache.shiro.web.subject.WebSubject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -39,11 +49,11 @@ import java.io.InputStream;
 @Api(tags = "登录模块-错误模块")
 public class IndexController {
 
+    @Autowired
+    private AdminService adminService;
 
-    //@Resource(name="ehCacheManager")
-    //@Autowired
-//    @Resource
-//    private RedisUtil redisUtil;
+    @Resource(name = "ehCacheManager")
+    private EhCacheManager mycacheManager;
 
     @GetMapping(value = {"/","/login"})
     public String login(){
@@ -51,15 +61,14 @@ public class IndexController {
         if(subject.isAuthenticated()){
             return "redirect:/home/index";
         };
-        System.out.println("页面登录前sessionid:"+subject.getSession().getId());
-        return "login";
+        return "index/login";
     }
 
     @GetMapping("/logout")
     public String logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        return "login";
+        return "index/login";
     }
 
     @GetMapping("/kaptcha")
@@ -89,7 +98,7 @@ public class IndexController {
         Subject subject = SecurityUtils.getSubject();
         String sessionid = subject.getSession().getId().toString();
         try {
-            byte[] buffer = wxService.getQrcodeService().createWxaCodeUnlimitBytes(sessionid.replace("-",""),"pages/personal/index",280,false,new WxMaCodeLineColor("0","0","0"),false);
+            byte[] buffer = wxService.getQrcodeService().createWxaCodeUnlimitBytes(sessionid.replace("-",""),"pages/auth/index",280,false,new WxMaCodeLineColor("0","0","0"),false);
             InputStream buffin = new ByteArrayInputStream(buffer);
             BufferedImage img;
             img = ImageIO.read(buffin);
@@ -102,10 +111,33 @@ public class IndexController {
             ServletOutputStream sos;
             sos = response.getOutputStream();
             ImageIO.write(img, "JPEG", sos);
-            //redisUtil.set(sessionid.replace("-",""),sessionid,1000*60*3);
+            Cache<String, String> cache = mycacheManager.getCache("login");
+            cache.put(sessionid.replace("-",""),sessionid);
             sos.close();
         } catch (IOException | WxErrorException e) {
             e.printStackTrace();
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/verify")
+    public DataResult verify(HttpServletRequest request,HttpServletResponse response){
+        Subject subject = SecurityUtils.getSubject();
+        String sessionid = subject.getSession().getId().toString();
+        Cache<String, String> cache = mycacheManager.getCache("agree");
+        String phone = cache.get(sessionid.replace("-",""));
+        if(null == phone){
+            return DataResult.getResult(1,"请使用微信扫描二维码登录");
+        }else {
+            Admin admin = adminService.findByLoginName(phone);
+            PrincipalCollection principals = new SimplePrincipalCollection(admin, admin.getLoginName());
+            WebSubject.Builder builder = new WebSubject.Builder(request,response);
+            builder.principals(principals);
+            builder.authenticated(true);
+            builder.sessionId(request.getSession().getId());
+            subject = builder.buildWebSubject();
+            ThreadContext.bind(subject);
+            return DataResult.success();
         }
     }
 

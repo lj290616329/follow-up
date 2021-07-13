@@ -26,6 +26,7 @@
 
 <script type="text/html" id="tool">
     <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-tabs"></i>详细</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i
             class="layui-icon layui-icon-delete"></i>删除</a>
 </script>
@@ -59,14 +60,14 @@
             ,cols: [
                 [
                     {checkbox: true, fixed: true}
-                    ,{field:'reviewTime', title: '复查时间'}
+                    ,{field:'reviewTime', title: '复查时间',width:150}
                     ,{field:'examine', title: '检查项目',templet: function(d){
                         let html = "";
                         d.examine.forEach(check=>{
                             html = html + '<span class="layui-badge layui-bg-green layui-margin-right">'+check+'</span>';
                         });
                         return html;
-                        }
+                        },width:600
                     }
                     ,{field:'remark', title: '复查备注'}
                     ,{field:'review', title: '状态',templet(d){
@@ -110,6 +111,7 @@
          */
         table.on('tool(planTable)', function (obj) {
             var data = obj.data;
+            console.log(data);
             switch (obj.event) {
                 case 'del':
                     var userIds = [data.id];
@@ -118,7 +120,13 @@
                 case 'edit':
                     edit(data.id);
                     break;
-
+                case 'detail':
+                    if(data.review){
+                        detail(data.review.id);
+                    }else{
+                        layer.msg("该复查计划暂为提交检测信息")
+                    }
+                    break;
             }
         });
         //编辑
@@ -131,13 +139,24 @@
                 area: ['100%', '500px'],
             });
         };
+        //详细
+        var detail = function (obj) {
+            var ifr = layer.open({
+                title: "检测详细",
+                type: 2,
+                closeBtn: 1,
+                content: '/home/web/plan/detail?id='+obj,
+                area: ['300px', '300px'],
+            });
+            layer.full(ifr);
+        };
         //删除确认
         var tipDialog = function (ids) {
             console.log(ids);
             layer.open({
                 content: '确定要删除所选复查计划吗?',
                 yes:function (index, layero) {
-                    Api.deleteInformation(JSON.stringify(ids)).then(res=>{
+                    Api.deletePlan(JSON.stringify(ids)).then(res=>{
                         layer.close(index);
                         tableReload();
                     });

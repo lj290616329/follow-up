@@ -10,8 +10,11 @@ import com.tsingtec.follow.service.mini.InformationService;
 import com.tsingtec.follow.service.mini.MaUserService;
 import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.mini.AuthReqVO;
+import com.tsingtec.follow.vo.req.mini.SceneReqVO;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,10 +29,11 @@ import javax.validation.Valid;
  * @Date 2021/5/30 13:09
  * @Version 1.0
  */
-@Api("用户认证模块")
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@Api(tags = "用户认证模块")
 public class AuthMiniController {
 
     @Autowired
@@ -43,6 +47,9 @@ public class AuthMiniController {
 
     @Resource(name="JwtUtil")
     private JwtUtil jwtUtil;
+
+    @Resource(name = "ehCacheManager")
+    private EhCacheManager mycacheManager;
 
     @PostMapping("auth")
     public DataResult auth(@RequestBody @Valid AuthReqVO vo){
@@ -63,5 +70,25 @@ public class AuthMiniController {
             return DataResult.success(true);
         }
         return DataResult.fail("注册失败,请联系管理");
+    }
+
+    @PostMapping("agree")
+    public DataResult agree(@RequestBody SceneReqVO vo){
+        String token = HttpContextUtils.getToken();
+        MaUser maUser = maUserService.get(jwtUtil.getClaim(token,"id"));
+        if(null==maUser){
+            return DataResult.fail("请先注册认证后再进行扫描登陆");
+        }
+        Doctor doctor = doctorService.findByUid(maUser.getId());
+        if(null == doctor){
+            return DataResult.fail("您不是医生用户,无法进行此操作");
+        }
+        Cache<String, String> cache1 = mycacheManager.getCache("agree");
+        if(cache1.get(vo.getScene())==null){
+            return DataResult.fail("操作过期,请刷新二维码再试");
+        }
+        Cache<String, String> cache = mycacheManager.getCache("agree");
+        cache.put(vo.getScene(),doctor.getPhone());
+        return DataResult.success();
     }
 }

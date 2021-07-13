@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api("用户信息模块")
+@Api(tags="用户信息模块")
 @RequestMapping("/api")
 public class InformationMiniController {
 

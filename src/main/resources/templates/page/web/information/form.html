@@ -186,12 +186,14 @@
             var examine = {cbc:[],biochemistry:[],dic:[],swelling:[],bmode:[],ct:[],mri:[]};
             for (let key in information){
                 if(key=='pathology'){
-                    information.pathology = information[key].split(",");
+                    if(information[key]){
+                        information.pathology = information[key].split(",");
+                    }
                 }
                 if(key=='did'){
                     information.doctor = {
                         id:information[key]
-                    }
+                    };
                 }
                 if(examine[key]){
                     if(information[key]){

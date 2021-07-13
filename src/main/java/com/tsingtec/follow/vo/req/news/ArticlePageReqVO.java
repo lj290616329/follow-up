@@ -13,6 +13,8 @@ public class ArticlePageReqVO {
     @ApiModelProperty(value = "标题")
     private String title;
 
+    private Integer unionId;
+
     @ApiModelProperty(value = "第几页")
     private int pageNum=1;
 

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout/header">
+</head>
+<body>
+<div class="layui-card-body">
+
+</div>
+</body>
+<script type="text/html" id="information">
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            {{set temp0 = true}}
+            {{each examine as check key}}
+                <li class="{{if check.length>0 && temp0}} layui-this {{temp0 = false}} {{/if}}" {{if check.length==0}}style='display:none;'{{/if}}>{{key | showName}}</li>
+            {{/each}}
+            {{if other}}
+                <li class="{{if temp0}} layui-this {{temp0 = false}} {{/if}}">其他</li>
+            {{/if}}
+        </ul>
+        <div class="layui-tab-content">
+            {{set temp = true}}
+            {{each examine as check key}}
+                <div class="layui-tab-item {{if check.length>0 && temp}}layui-show {{temp = false}}{{/if}}" {{if check.length==0}}style='display:none;'{{/if}}>
+                    <div class="layui-carousel carousel">
+                        <div carousel-item="" lay-active="picPreview" data-src="{{check}}">
+                            {{each check as src}}
+                                <div style="text-align: center;"><img src="{{src}}" style="height: 500px;"></div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+
+            {{if other}}
+                <div class="layui-tab-item {{if temp}}layui-show {{temp = false}}{{/if}}">
+                    {{other}}
+                </div>
+            {{/if}}
+
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-primary" lay-active="back">返回</button>
+        </div>
+    </div>
+</script>
+<script src="/js/template.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+    layui.use(['form', 'layer','Api','carousel'],async function () {
+        var form = layui.form
+            , layer = layui.layer
+            , util = layui.util
+            , Api = layui.Api
+            , carousel = layui.carousel
+            , $ = layui.$;
+        var url = layui.url();
+        let res = await Api.reviewDetail({id:url.search.id});
+        console.log(res);
+        let information = res.data;
+        let html = template("information",information);
+        $(".layui-card-body").html(html);
+        form.render();
+        $('.carousel').each(function () {
+            carousel.render({
+                elem: $(this)
+                ,width: '100%' //设置容器宽度
+                ,height:'500px'
+                ,arrow: 'always' //始终显示箭头
+            });
+        });
+
+        util.event('lay-active', {
+            back: function(othis){
+                back();
+            }
+            ,picPreview: function(othis){//图片预览
+                console.log(othis)
+                console.log()
+                let srcs = $(othis).data('src').map((item) => {
+                    return {src:item};
+                });
+                console.log(srcs);
+                layer.photos({ photos: {"data": srcs} });
+            }
+        });
+        //返回,关闭弹出层
+        let back = function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);
+            parent.tableReload();
+        }
+    });
+</script>

@@ -1,7 +1,9 @@
 package com.tsingtec.follow.controller.web.mini;
 
+import com.tsingtec.follow.entity.sys.Admin;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.service.mini.DoctorService;
+import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.doctor.DoctorAddReqVO;
 import com.tsingtec.follow.vo.req.doctor.DoctorPageReqVO;
 import com.tsingtec.follow.vo.req.doctor.DoctorUpdateReqVO;
@@ -33,7 +35,10 @@ public class DoctorController {
 
     @GetMapping("doctors")
     public DataResult all(){
-        return DataResult.success(doctorService.getAll());
+        DoctorPageReqVO vo = new DoctorPageReqVO();
+        Admin admin = HttpContextUtils.getAdmin();
+        vo.setDid(admin.getUnionId());
+        return DataResult.success(doctorService.getAll(vo));
     }
 
 

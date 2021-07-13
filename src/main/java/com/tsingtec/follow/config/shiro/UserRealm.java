@@ -31,7 +31,6 @@ public class UserRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		System.out.println("执行授权逻辑");
 		Admin admin = (Admin) principals.getPrimaryPrincipal();
 		//给资源进行授权
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();

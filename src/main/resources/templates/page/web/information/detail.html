@@ -3,37 +3,6 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:include="layout/header">
 </head>
-<style>
-    table{
-        text-align: center;
-    }
-    .td_bold{
-        font-weight: bold;
-    }
-    .pic_box{
-        position: relative;
-        float: left;
-    }
-    .background{
-        height:120px;
-        float:left;
-        margin-right:20px;
-    }
-    .removeHead{
-        position: absolute;
-        font-size: 28px;
-        right: -5px;
-        top: 6px;
-        color: #e85858;
-    }
-    .removeImg{
-        position: absolute;
-        font-size: 28px;
-        right: 6px;
-        top: -6px;
-        color: #e85858;
-    }
-</style>
 <body>
 <div class="layui-card-body">
 
@@ -46,7 +15,7 @@
             <li>医生信息</li>
             <li>病理</li>
             {{each examine as check key}}
-                <li>{{key | showName}}</li>
+                <li  {{if check.length==0}}style='display:none;'{{/if}}>{{key | showName}}</li>
             {{/each}}
         </ul>
         <div class="layui-tab-content">
@@ -126,7 +95,7 @@
                 </div>
             </div>
             {{each examine as check key}}
-                <div class="layui-tab-item">
+                <div class="layui-tab-item"  {{if check.length==0}}style='display:none;'{{/if}}>
                     <div class="layui-carousel carousel">
                         <div carousel-item="" lay-active="picPreview" data-src="{{check}}">
                             {{each check as src}}
