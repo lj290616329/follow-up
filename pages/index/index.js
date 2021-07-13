@@ -2,79 +2,51 @@
 import WxValidate from '../../utils/WxValidate';
 var util = require('../../utils/util') ;
 var config = require('../../config/config');
-const app = getApp();
 var that; 
 Page({
   data: {
     phone:"",
     name:"",
-    recordNo:"",
-    ifDoctor:true
   },
   async onLoad(options) {
     console.log(options)
     that = this;
-    let did = options.did || wx.getStorageSync('did');
-    if(did==undefined || did==""){
-      return util.prompt(that,"请扫面二维码进入");
-    }
-    wx.setStorageSync('did', did);
-    if(did>0){
-      that.setData({
-        ifDoctor:false
-      })
-    }
-    that.initValidate();    
-    
+    that.initValidate();
     let res = await util.login();
     console.log(res);
     if(res.code==0){
-      app.globalData.ifInformation = res.data.ifInformation;
+      //医生用户
       if(res.data.ifDoctor){
-        //医生用户
         wx.reLaunch({
           url: '/pages/doctor/index',
         })
       }else{
         //个人用户已填写个人信息
-        if(res.data.ifInformation){
-          wx.reLaunch({
-            url: '/pages/personal/index',
-          })
-        }else{
-          that.informationModal();            
-        }
+        wx.reLaunch({
+          url: '/pages/personal/index',
+        })
       }          
-    }
-        
+    }          
   },
   initValidate() {
-    let rules = { 
+    let rules = {
+      name:{
+        required: true,
+        minlength:2
+      }, 
       phone:{
         required:true
       }
     };
     let messages = {      
+      name:{
+        required: '请填写姓名',
+        minlength:'请输入正确的名称'
+      },
       phone:{
         required:'请授权获取手机号'
       }
     };
-    if(!that.data.ifDoctor){
-      rules.name = {
-        required: true,
-        minlength:2
-      };
-      rules.recordNo = {
-        required: true
-      };
-      messages.name = {
-        required: '请填写姓名',
-        minlength:'请输入正确的名称'
-      };
-      messages.recordNo={
-        required: '请输入病历号'
-      };
-    }
     that.WxValidate = new WxValidate(rules, messages)
   },
   async auth(e){
@@ -107,28 +79,19 @@ Page({
       }
     }else{
       util.prompt(that,"授权失败,请重试~");
-    }   
-
-
-    // wx.getUserProfile({
-    //   desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-    //   success: (res) => {
-    //     console.log(res);
-    //     wx.setStorageSync('userInfo', res.userInfo);        
-    //     resolve(res);
-    //   }
-    // }) 
-      // let res = await util.auth();
-      // console.log(res)
-      // if(res.code==0){
-      //   that.informationModal();
-      // }
-    
+    }    
   },
   informationModal(){
     that.setData({
       informationStatus:!that.data.informationStatus
     })
+  },
+  visitor(){
+    //let res = await util.auth();
+    wx.navigateTo({
+      url: '/pages/test/personal/index',
+    })
+    
   },
   async getPhoneNumber(e){
     console.log(e)
@@ -159,15 +122,15 @@ Page({
       util.prompt(that,error.msg);
       return false
     }
-    let path = that.data.ifDoctor?config.DoctorAuth:config.InformationAuth;
-    let url = that.data.ifDoctor?'/pages/doctor/index':'/pages/personal/index';
-    let res = await util.sendAjax(path,params,"post")
+    let res = await util.sendAjax(config.InformationAuth,params,"post")
     if(res.code==0){
+      let url = res.data?'/pages/doctor/index':'/pages/personal/index';
       wx.reLaunch({
         url: url,
       })
     }else{
       util.prompt(that,res.msg);
     }
-  }
+  },
+
 })

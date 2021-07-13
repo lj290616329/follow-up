@@ -1,60 +1,67 @@
 <view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
 <view class="cu-card dynamic no-card margin-top">
   <view class="cu-list menu-avatar">
-    <view class="cu-item">
+    <view class="cu-item arrow" bindtap="userInfo">
       <view class="avatar round">
-        <open-data type='userAvatarUrl' bindtap="userInfo"></open-data>
+        <open-data type='userAvatarUrl'></open-data>
       </view>
       <view class="content">
         <view class="padding-left">
           <open-data type="userNickName"></open-data>          
         </view>        
       </view>
-      <view class="action" bindtap="switchUser">
-        <view class="cuIcon-order text-gray lg"></view>        
+      <view class="action">
+        <view class="cuIcon-right text-gray lg"></view>        
       </view>
     </view>    
   </view>
 </view>
-
-<view class="cu-bar bg-white margin-top solid-bottom">
-  <view class="action">
-    <text class="cuIcon-title">我的患者</text>
+<navigator url="/pages/doctor/patient/list" class="cu-list menu margin-top solid-bottom">
+  <view class="cu-item arrow">
+    <view class="content">
+      <text class="cuIcon-friend text-grey"></text>
+      <text class="text-black">我的患者</text>
+    </view>
+    <view class="action">
+      <text class="text-grey text-sm">{{lists.length}}位</text>
+    </view>
   </view>
-  <view class="action">103位</view>
-</view>
+</navigator>
+
 <scroll-view scroll-x class="user-list">
-  <view class="cu-list grid col-4">
-    <view class="cu-item bg-white" wx:for="{{lists}}" wx:key="index" data-url="/pages/doctor/edit" bindtap="toUrl">
+  <view class="cu-list grid col-4" style="text-align:left;">
+    <view class="grid cu-item bg-white text-center" wx:for="{{lists}}" wx:key="index" data-url="/pages/doctor/patient/edit?id={{item.id}}" bindtap="toUrl">
       <view class="cuIcon-cu-image">
-        <image class="cu-avatar lg round" src="{{item.avatarUrl}}"></image>
-        <view class="cu-tag badge"></view>
+        <image class="cu-avatar lg round" src="{{item.maUser.avatarUrl||'/images/headimg.png'}}"></image>
+        <view class="cu-tag badge" wx:if="{{!item.type}}"></view>
       </view>   
-      <text>{{item.nickName}}</text>
+      <text class="text-xs">{{item.name}}{{item.maUser?'':'(未认证)'}}</text>
     </view>  
   </view>
 </scroll-view>
-<view class="cu-bar bg-white margin-top solid-bottom">
-  <view class="action">
-    <text class="cuIcon-title">收到复查结果</text>
+<navigator url="/pages/doctor/check/list" class="cu-list menu margin-top solid-bottom">
+  <view class="cu-item arrow">
+    <view class="content">
+      <text class="cuIcon-mark text-grey"></text>
+      <text class="text-black">收到复查结果</text>
+    </view>
   </view>
-  <view class="action">103位</view>
-</view>
+</navigator>
 
-<view class="cu-list menu-avatar comment">
-  <view class="cu-item solids-top" wx:for="{{replys}}" wx:for-item="reply" wx:for-index="index">
+<view class="cu-list menu-avatar comment" style="margin-top:0;">
+  <view class="cu-item" wx:for="{{replys}}" wx:for-item="reply" wx:for-index="index">
     <view class="cu-avatar round" style="background-image:url({{reply.maUser.avatarUrl}});"></view>
     <view class="content">
       <view class="text-grey">{{reply.maUser.nickName}}</view>
       <view class='flex flex-wrap'>
         <view class="padding-xs" wx:for="{{reply.review.examine}}" wx:for-index='key' wx:for-item="pics">
-          <view class='cu-tag' bindtap="showpic" data-pics="{{pics}}">{{compare[key]}}</view>
+          <view class='cu-tag' bindtap="showpic" data-pics="{{pics}}" wx:if="{{pics.length>0}}">{{compare[key]}}</view>
         </view>
       </view>      
       <view class="margin-top-sm flex justify-between">
-        <view class="text-gray text-df">{{reply.createTime}}</view>
+        <view class="text-gray text-df">{{reply.review.updateTime}}</view>
         <view>          
-          <text class="cuIcon-messagefill text-gray margin-left-sm" bindtap="replyModal" data-id="{{reply.id}}"></text>
+          <text class="cuIcon-messagefill text-gray margin-left-sm" bindtap="replyModal" data-examine="{{reply.review.examine}}" data-id="{{reply.review.id}}" data-index="{{index}}"></text>
         </view>
       </view>
     </view>
@@ -63,7 +70,7 @@
 
 <view class="cu-modal {{replyStatus ? 'show':''}}">
   <form bindsubmit="submitForm">
-    <input name="id" value="{{id}}" hidden="true"/> 
+    <input name="id" value="{{id}}" hidden="true"/>
     <view class="cu-dialog text-left">
       <view class="padding-lg">
         <view class="cu-bar bg-white solid-bottom margin-top">

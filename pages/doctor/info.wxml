@@ -1,21 +1,27 @@
-<form>
+<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<form bindsubmit="submitForm">
   <view class="cu-form-group margin-top">
     <text decode='true' class="title">姓&emsp;&emsp;名</text>
-    <input placeholder="请输入姓名" name="name"></input>
+    <input placeholder="请输入姓名" name="name" value="{{doctor.name}}"></input>
   </view>
   <view class="cu-form-group">
     <text decode='true' class="title">头&emsp;&emsp;像</text>
-    <view class="cu-avatar radius bg-gray"></view>
+    <image class="cu-avatar" src="{{doctor.pic||'/images/headimg.png'}}" bindtap="uploadPic"></image>
+    <input value="{{doctor.pic}}" hidden="ture" name="pic"/>
+  </view>
+  <view class="cu-form-group">
+    <text decode='true' class="title">手&emsp;&emsp;机</text>
+    <input placeholder="请输入擅长" name="phone" value="{{doctor.phone}}" disabled="true"></input>
   </view>
   <view class="cu-form-group">
     <text decode='true' class="title">擅&emsp;&emsp;长</text>
-    <input placeholder="请输入擅长" name="name"></input>
+    <input placeholder="请输入擅长" name="goodAt" value="{{doctor.goodAt}}"></input>
   </view>
   <view class="cu-form-group align-start">
     <view class="title">个人简介</view>
-    <textarea placeholder="多行文本输入框"></textarea>
+    <textarea placeholder="多行文本输入框" name="des" value="{{doctor.des}}"></textarea>
   </view>
   <view class="padding flex flex-direction">
-    <button class="cu-btn bg-blue lg">保存</button>
+    <button class="cu-btn bg-blue lg" formType="submit">保存</button>
   </view>
 </form>

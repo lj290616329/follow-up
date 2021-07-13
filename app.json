@@ -1,15 +1,26 @@
 {
   "pages": [
-    "pages/index/index",    
+    "pages/auth/index",
+    "pages/index/index",
+    "pages/test/personal/index",
+    "pages/doctor/check/list",
+    "pages/doctor/patient/list",
+    "pages/news/list",
+    "pages/doctor/patient/edit",
     "pages/personal/review/detail",
     "pages/personal/info",
     "pages/personal/review/plan",
     "pages/doctor/info",
     "pages/personal/review/form",
-    "pages/doctor/edit",
-    "pages/doctor/index",    
+    "pages/doctor/index",
     "pages/personal/index",
-    "pages/personal/knowledge"
+    "pages/news/detail",
+    "pages/doctor/patient/detail",
+    "pages/test/personal/review/detail",
+    "pages/test/personal/info",
+    "pages/test/personal/review/plan",
+    "pages/test/personal/review/form",
+    "pages/doctor/check/detail"    
   ],
   "window": {
     "backgroundTextStyle": "light",

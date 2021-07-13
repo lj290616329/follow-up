@@ -35,7 +35,7 @@ function getAuthStatus(){
 /**
  * 获取token
  */
-const getToken = function(){
+const  getToken = function(){
   console.log("获取token")
   let local_token = wx.getStorageSync('token');
   let now = new Date().getTime();
@@ -48,8 +48,6 @@ const getToken = function(){
   if(local_token && local_token.expireTime < now && local_token.refreshExpireTime > now){
     console.log("刷新token")
     refreshToken(local_token).then(res=>{
-      console.log("刷新token为:")
-      console.log(res);    
       return res.token;   
     });       
   }
@@ -102,7 +100,7 @@ function sendAjax(url, data = {}, method = "GET") {
       },
       fail: function (err) {               
         console.log(err)
-        resolve({code:-2,msg:"糟糕!好像出现问题了!刷新一下试试?"})
+        resolve({code:-2,msg:"未知错误请稍后再试!"})
       }
     })
   });
@@ -116,7 +114,7 @@ function getCode() {
         resolve(res.code);
       },
       fail: function (err) {
-        reject({code:-1,msg:"您的网络好像不好,刷新试试?"});
+        reject({code:-1,msg:"未知错误请稍后再试!"});
       }
     });      
   });
@@ -132,8 +130,7 @@ function getUserInfo(){
       }
     })
   })
-} 
-
+}
 async function auth(){
   let code = await getCode();
   let useInfo = await getUserInfo();
@@ -182,6 +179,9 @@ function uploadFile(filePath){
       filePath: filePath,
       name: 'file',
       url: config.Upload,
+      header:{
+        'token':getToken()
+      },
       success:function(res){
         let data = JSON.parse(res.data);
         console.log(data)

@@ -1,66 +1,36 @@
-// pages/personal/review/plan.js
+var that;
+const util = require("../../../utils/util");
+const config = require("../../../config/config");
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    compare:{
+      'cbc':'血常规',
+      'biochemistry':'生化',
+      'dic':'凝血',
+      'swelling':'肿标',
+      'bmode':'B超',
+      'ct':'CT',
+      'mri':'MRI',
+      '其他':'其他'
+    },
+    reviewPlans:[]
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  async onLoad(options) {
+    that = this;
+    let res = await util.sendAjax(config.PersonalPlanList,{},"get");
+    console.log(res);
+    that.setData({
+      reviewPlans:res.data
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  detail(e){
+    let id = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/personal/review/detail?id=${id}`,
+    })
   },
+  prompt(){
+    util.prompt(that,"该用户暂未提交检测信息");
+  }  
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

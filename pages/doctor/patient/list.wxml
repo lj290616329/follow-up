@@ -1,0 +1,18 @@
+<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<view class="cu-bar bg-white search">
+  <view class="search-form round">
+    <text class="cuIcon-search"></text>
+    <input type="text" placeholder="输入姓名进行搜索" bindconfirm="search" confirm-type="search"></input>
+  </view>
+</view>
+<view class="cu-list menu">
+  <navigator url="/pages/doctor/patient/detail?id={{item.id}}" class="cu-item" wx:for="{{lists}}" wx:for-index="index">
+    <view class="content">
+      <text class="cuIcon-people text-green"></text>
+      <text class="text-grey">{{item.name}}</text>
+    </view>
+    <view class="action">
+      <text class="text-grey text-sm">{{item.createTime}}</text>
+    </view>
+  </navigator>
+</view>

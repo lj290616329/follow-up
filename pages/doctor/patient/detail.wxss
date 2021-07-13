@@ -1,0 +1,9 @@
+/* pages/personal/index.wxss */
+.avatar{
+  position: absolute;
+  left: 30rpx;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}

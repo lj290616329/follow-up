@@ -1,0 +1,43 @@
+<wxs src="../../../utils/Tools.wxs" module="tools"/>
+<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<view class="cu-card dynamic no-card margin-top">
+  <view class="cu-list menu-avatar">
+    <view class="cu-item">
+      <view class="cu-avatar round lg" style="background-image:url({{information.maUser.avatarUrl||'/images/headimg.png'}});"></view>
+        <view class="content">
+          <view class="text-grey">{{information.name}}</view>
+          <view class="text-gray text-sm flex">
+            <view class="text-cut">
+              <text class="cuIcon-phone text-grey margin-right-xs"></text>
+              {{information.phone}}
+            </view>
+          </view>
+        </view>
+        <view class="action">
+          <view class="text-grey text-xs">{{type[information.type]}}</view>
+        </view>
+      </view>  
+  </view>
+</view>
+
+<view class="cu-timeline padding-bottom margin-top">
+  <view class="cu-bar bg-white solid-bottom  margin-top">
+    <view class="action">
+      <text class="cuIcon-titles text-orange"></text> 病历
+    </view>
+  </view>
+
+
+
+  <view wx:for="{{reviewPlans}}" wx:for-key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}">
+    <view class="content shadow-blur {{item.review?'bg-blue':'bg-grey'}}">
+      <text>{{item.reviewTime}}</text> ({{tools.timeAfter(item.reviewTime)}})
+    </view>
+  </view>
+
+  <navigator url="/pages/doctor/patient/edit?id={{information.id}}" class="cu-item  text-blue cuIcon-roundcheckfill">
+    <view class="content bg-blue shadow-blur ">
+      <text>术后病历</text>
+    </view>
+  </navigator>  
+</view>

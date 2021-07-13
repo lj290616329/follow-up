@@ -1,17 +1,16 @@
 var that;
+const util = require('../../utils/util');
+const config = require('../../config/config');
 Page({
   data: {
     index:0
   },
-  onLoad: function (options) {
+  async onLoad(options) {
     that = this;
+    let res = await util.sendAjax(config.PersonalIndex,{},"get");
     that.setData({
-      userInfo:wx.getStorageSync('userInfo')
-    })
-  },
-  switchUser(){
-    wx.reLaunch({
-      url: '/pages/doctor/index',
+      near:res.data.near,
+      reply:res.data.reply
     })
   }
 })

@@ -1,0 +1,76 @@
+<import src ="/template/form.wxml"/>
+<view class="cu-bar bg-white solid-bottom  margin-top">
+  <view class="action">
+    <text class="cuIcon-titles text-orange"></text> 个人信息
+  </view>
+</view>
+<view class="cu-card dynamic no-card">
+  <view class="cu-item shadow">
+    <view class="cu-list menu-avatar">
+      <view class="cu-item">
+        <view class="cu-avatar round lg" style="background-image:url({{information.maUser.avatarUrl||'/images/headimg.png'}});"></view>
+        <view class="content flex-sub">
+          <view>{{information.name}} <text class="margin-left text-blue">(病历号:{{information.recordNo}})</text> </view>
+          <view class="cuIcon-mobile text-gray text-df">
+            {{information.phone}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-bar bg-white solid-bottom  margin-top">
+  <view class="action">
+    <text class="cuIcon-titles text-orange"></text> 病种
+  </view>
+  <view class="action">
+    <picker mode="multiSelector" bindchange="bindPickerChange"  bindcolumnchange="bindColumnChange" range="{{multiArray}}" range-key="name" value="{{type}}">
+      {{types[type2[type[0]][type[1]].value]}}
+      <text class="lg text-gray cuIcon-right"></text>
+    </picker>
+  </view>
+</view>
+
+<view class="cu-bar bg-white solid-bottom  margin-top">
+  <view class="action">
+    <text class="cuIcon-titles text-orange"></text> 病历
+  </view>
+</view>
+<view class="cu-bar bg-white">
+  <view class="action">
+    病理图片
+  </view>
+  <view class="action">
+    {{information.pathology.length}}/4
+  </view>
+</view>
+<view class="cu-form-group">
+  <view class="grid col-4 grid-square flex-sub">
+    <view class="bg-img" wx:for="{{information.pathology}}" wx:for-index="index">
+      <image src="{{item}}"  mode="aspectFill" bindtap="showpic" data-urls="{{information.pathology}}" data-current="{{item}}"></image>
+      <view class="cu-tag bg-red"  bindtap="delPic" data-index="{{index}}">
+        <text class='cuIcon-close'></text>
+      </view>
+    </view>
+    <view class="solids" wx:if="{{information.pathology.length<4}}" bindtap="uploadCover">
+      <text class='cuIcon-cameraadd'></text>
+    </view>
+  </view>
+</view>
+
+<template is="formData" data="{{information,compare}}"/>
+<view class="cu-modal bottom-modal {{delStatus?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white">
+      <view class="action text-grey" bindtap="delModal">取消</view>
+      <view class="action text-blue" bindtap="yes">确定</view>
+    </view>
+    <view class="padding-xl">
+      确认删除此图片吗?
+    </view>
+  </view>
+</view>
+
+<view class="padding flex flex-direction bg-white safe-bottom">
+  <button class="cu-btn bg-blue lg" bindtap="submit">保存</button>
+</view>

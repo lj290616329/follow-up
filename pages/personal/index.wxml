@@ -1,27 +1,29 @@
-<view class="flex text-center padding bg-white">
-  <navigator url="/pages/personal/knowledge" class="cu-item flex-sub border-right-sm">
+<view class="flex text-center bg-white">
+  
+  <navigator url="/pages/news/list" class="flex-sub padding solids-right">
     知识科普
   </navigator>
-  <navigator url="/pages/personal/info" class="cu-item flex-sub">
+
+  <navigator url="/pages/personal/info" class="flex-sub padding">
     我的病历
   </navigator>
 </view>
 
 <view class="cu-card dynamic no-card margin-top">
   <view class="cu-list menu-avatar">
-    <view class="cu-item">
+    <navigator url="/pages/personal/info" class="cu-item" bindtap="userInfo">
       <view class="avatar round">
-        <open-data type='userAvatarUrl' bindtap="userInfo"></open-data>
+        <open-data type='userAvatarUrl' ></open-data>
       </view>
       <view class="content">
         <view class="padding-left">
           <open-data type="userNickName"></open-data>          
         </view>        
       </view>
-      <view class="action" bindtap="switchUser">
-        <view class="cuIcon-order text-gray lg"></view>        
+      <view class="action">
+        <view class="cuIcon-right text-gray lg"></view>        
       </view>
-    </view>    
+    </navigator>    
   </view>
 </view>
 
@@ -33,26 +35,28 @@
   </view>
 </view>
 <view class="cu-list menu menuCard">
-  <navigator class="cu-item arrow" url="/pages/personal/review/form">
+  <navigator class="cu-item arrow" url="/pages/personal/review/form?id={{near.id}}">
     <view class="content">
       <text class="cuIcon-time text-grey"></text>
-      <text class="text-grey">2021-06-03</text>
+      <text class="text-grey">{{near.reviewTime}}</text>
     </view>
   </navigator>
 </view>
-
-<view class="cu-bar bg-white solid-bottom margin-top">
-  <view class="action">
-    <text class="cuIcon-title text-orange "></text>医生答复
-  </view>
-</view>
-<view class="cu-list menu">
-  <view class="cu-item">
-    <view class="content padding-bottom-xl padding-top-xl">
-      <text class="text-black">感谢上传最新复查报告，谢谢！ 如最近进入新的治疗阶段请及时反馈于个案管理师，便于调整随访计划。</text>
+<block wx:if="{{reply}}">
+  <view class="cu-bar bg-white solid-bottom margin-top">
+    <view class="action">
+      <text class="cuIcon-title text-orange "></text>医生答复
     </view>
   </view>
-</view>
+  <view class="cu-list menu">
+    <view class="cu-item">
+      <view class="content padding-bottom-xl padding-top-xl">
+        <text class="text-black">感谢上传最新复查报告，谢谢！ 如最近进入新的治疗阶段请及时反馈于个案管理师，便于调整随访计划。</text>
+      </view>
+    </view>
+  </view>
+</block>
+
 <view class="padding flex flex-direction bg-white safe-bottom">
   <navigator url="/pages/personal/review/plan" class="cu-btn bg-blue lg">查看复查计划</navigator>
 </view>

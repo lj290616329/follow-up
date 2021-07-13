@@ -1,42 +1,23 @@
+<wxs src="../../../utils/Tools.wxs" module="tools"/>
+<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
 <view class="cu-timeline padding-bottom margin-top">
   <view class="cu-bar bg-white solid-bottom  margin-top">
     <view class="action">
       <text class="cuIcon-titles text-orange"></text> 复查计划
     </view>
   </view>
-  <navigator url="/pages/personal/review/detail" class="cu-item  text-blue cuIcon-roundcheckfill">
-    <view class="content bg-blue shadow-blur ">
-      <text>2021-06-01</text> (已完成)
-    </view>
-  </navigator>
-  <view class="cu-item  text-blue cuIcon-loading">
-    <view class="content bg-blue shadow-blur">
-      <text>2021-07-01</text> (1个月后)
-    </view>
-  </view>
-  <view class="cu-item  text-grey">
-    <view class="content bg-grey shadow-blur">
-      <text>2021-08-01</text> (2个月后)
-    </view>
-  </view>
-  <view class="cu-item  text-grey">
-    <view class="content bg-grey shadow-blur">
-      <text>2021-09-01</text> (3个月后)
+  <view wx:for="{{reviewPlans}}" wx:for-key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}">
+    <view class="padding-sm {{item.review?'bg-blue':'bg-grey'}}">
+      <view class="cu-list radius">
+        <view class="cu-item">
+          <view class="content">
+            <view>{{item.reviewTime}}({{tools.timeAfter(item.reviewTime)}})</view>
+            <view class="text-gray text-sm">
+              <view class='cu-tag bg-white sm' wx:for="{{item.examine}}" wx:for-key="check">{{compare[item]}}</view>
+            </view>
+          </view>
+        </view>
+      </view>      
     </view>
   </view>
-  <view class="cu-item  text-grey">
-    <view class="content bg-grey shadow-blur">
-      <text>2021-10-01</text> (4个月后)
-    </view>
-  </view>
-  <view class="cu-item  text-grey">
-    <view class="content bg-grey shadow-blur">
-      <text>2021-11-01</text> (5个月后)
-    </view>
-  </view>
-  <view class="cu-item  text-grey">
-    <view class="content bg-grey shadow-blur">
-      <text>2021-12-01</text> (6个月后)
-    </view>
-  </view>   
 </view>
