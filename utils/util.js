@@ -114,7 +114,6 @@ function getCode() {
   return new Promise(function (resolve, reject) {
     wx.login({
       success: function (res) {
-        console.log(res);
         resolve(res.code);
       },
       fail: function (err) {
@@ -138,8 +137,6 @@ function getUserInfo(){
 async function auth(){
   let code = await getCode();
   let useInfo = await getUserInfo();
-  console.log(code);
-  console.log(useInfo);
   let res = await sendAjax(config.Auth,{
     code:code,
     encryptedData:useInfo.encryptedData,
@@ -148,7 +145,6 @@ async function auth(){
     rawData:useInfo.rawData,
     did:wx.getStorageSync('did')
   },"post");
-  console.log(res);
   if(res.code==0){
     wx.setStorageSync('token', res.data.token);
   }
@@ -170,7 +166,6 @@ const login = async function(){
 }
 async function phone(data){
   let res = await sendAjax(config.Phone,data,"post");
-  console.log(res);
   return res;
 }
 
