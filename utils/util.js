@@ -36,7 +36,7 @@ function getAuthStatus(){
 /**
  * 获取token
  */
-const  getToken = function(){
+const  getToken = async function(){
   console.log("获取token")
   let local_token = wx.getStorageSync('token');
   let now = new Date().getTime();
@@ -48,9 +48,8 @@ const  getToken = function(){
    */
   if(local_token && local_token.expireTime < now && local_token.refreshExpireTime > now){
     console.log("刷新token")
-    refreshToken(local_token).then(res=>{
-      return res.token;   
-    });       
+    let res = await refreshToken(local_token)
+    return res.token;
   }
   return local_token ? local_token.token : "";
 }
