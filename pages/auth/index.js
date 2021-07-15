@@ -28,23 +28,27 @@ Page({
     if(res.code==0){
       wx.showToast({
         title: '操作成功',//提示文字
-        duration:3000,//显示时长
+        duration:2500,//显示时长
         icon:'success', //图标，支持"success"、"loading"  
         success:function(){ 
-          wx.reLaunch({
-            url: '/pages/doctor/index',
-          })
+          setTimeout(function () { 
+            wx.reLaunch({
+              url: '/pages/doctor/index',
+            }) 
+         }, 2500)          
         }
      })
     }else{
       wx.showToast({
         title: res.msg,//提示文字
-        duration:3000,//显示时长
+        duration:2500,//显示时长
         icon:'error', //图标，支持"success"、"loading"  
         success:function(){ 
-          wx.reLaunch({
-            url: '/pages/index/index',
-          })
+          setTimeout(function () { 
+            wx.reLaunch({
+              url: '/pages/index/index',
+            }) 
+         }, 2500)
         }
      })
     }
