@@ -83,7 +83,7 @@ public class AuthMiniController {
         if(null == doctor){
             return DataResult.fail("您不是医生用户,无法进行此操作");
         }
-        Cache<String, String> cache1 = mycacheManager.getCache("agree");
+        Cache<String, String> cache1 = mycacheManager.getCache("login");
         if(cache1.get(vo.getScene())==null){
             return DataResult.fail("操作过期,请刷新二维码再试");
         }

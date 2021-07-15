@@ -121,7 +121,7 @@
             <!-- 最多多少张图片 -->
             <div class='pic-num' style="float:right;width: fit-content;"><span>{{information.pathology.length}}</span>/<span>4</span></div>
             <img src="/image/add.png" alt="点击上传图片"  class="background addImg" {{if information.pathology.length>3}}style='display:none;'{{/if}}/>
-            <input name="pathology" class="value-input" type="hidden" value="{{information.pathology | join ','}}">
+            <input name="pathology" class="value-input" type="hidden" lay-verify="required" lay-reqtext="请上传病理图片" value="{{information.pathology | join ','}}">
         </div>
     </div>
 
@@ -188,6 +188,8 @@
                 if(key=='pathology'){
                     if(information[key]){
                         information.pathology = information[key].split(",");
+                    }else{
+                        information.pathology = [];
                     }
                 }
                 if(key=='did'){
