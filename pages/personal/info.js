@@ -1,18 +1,12 @@
 var that;
 const util = require('../../utils/util');
 const config = require('../../config/config');
+const app = getApp();
 Page({
   data: {
-    compare:{
-      cbc:'血常规',
-      biochemistry:'生化',
-      dic:'凝血',
-      swelling:'肿标',
-      bmode:'B超',
-      ct:'CT',
-      mri:'MRI'
-    },
-    types:["肝脏肿瘤-HCC","肝脏肿瘤-ICC","肝脏肿瘤-其他","肝道肿瘤-肝门","肝道肿瘤-肝门","肝道肿瘤-其他","胰腺肿瘤-胰腺","胰腺肿瘤-其他","其他"],
+    code:0,
+    compare:app.globalData.compare,
+    types:app.globalData.types,
     information:{
       pathology:["http://gridpic.tsing-tec.com/3984b675-a304-4abb-a66e-6ee749934ab1.png"],
       examine:{
@@ -31,10 +25,13 @@ Page({
     let res = await util.sendAjax(config.Information,{},"get");
     console.log(res);
     that.setData({
+      code:res.code,
+      msg:res.msg,
       information:res.data
     })
   },
   showpic(e){
+    console.log(e);
     let urls = e.currentTarget.dataset.urls;
     let current = e.currentTarget.dataset.current;
     wx.previewImage({

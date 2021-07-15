@@ -1,15 +1,8 @@
 var that;
+const app = getApp();
 Page({
   data: {
-    compare:{
-      cbc:'血常规',
-      biochemistry:'生化',
-      dic:'凝血',
-      swelling:'肿标',
-      bMode:'B超',
-      ct:'CT',
-      mri:'MRI'
-    },
+    compare:app.globalData.compare,
     examine:{
       "cbc":["http://gridpic.tsing-tec.com/e0331c1c-49e4-4efd-b98c-701371a4978e.png","http://gridpic.tsing-tec.com/f6debe8d-9519-4e22-bdef-174f7d6b1b19.png"],
       "biochemistry":["http://gridpic.tsing-tec.com/7ad006fe-66ae-4386-95bb-4007fe8d9314.png","http://gridpic.tsing-tec.com/f3085581-04f4-48a4-9f84-cc72e78aa873.png","http://gridpic.tsing-tec.com/cd2d30b9-95d7-4cb3-9894-b96261036548.png"],

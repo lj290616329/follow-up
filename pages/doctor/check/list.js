@@ -2,8 +2,8 @@ var that;
 const util = require("../../../utils/util");
 const config = require("../../../config/config");
 Page({
-
   data: {
+    code:0,
     lists:[],
     title:''
   },
@@ -15,6 +15,8 @@ Page({
     let res = await util.sendAjax(config.ReviewPlanList,{pageNum:pageNo,title:that.data.title},'get');
     console.log(res);
     that.setData({
+      code:res.code,
+      msg:res.msg,
       lists:that.data.lists.concat(res.data.content),
       pageNo:pageNo,
       ifEnd:that.data.last
@@ -33,5 +35,4 @@ Page({
       that.getList((that.data.pageNo+1))
     }
   }
-
 })

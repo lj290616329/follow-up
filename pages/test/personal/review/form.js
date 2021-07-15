@@ -1,16 +1,9 @@
 // pages/personal/review/form.js
 var that;
+const app = getApp();
 Page({
   data: {
-    compare:{
-      cbc:'血常规',
-      biochemistry:'生化',
-      dic:'凝血',
-      swelling:'肿标',
-      bMode:'B超',
-      ct:'CT',
-      mri:'MRI'
-    },
+    compare:app.globalData.compare,
     information:{
       examine:{
         "cbc":[],

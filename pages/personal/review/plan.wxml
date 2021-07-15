@@ -1,5 +1,5 @@
 <wxs src="../../../utils/Tools.wxs" module="tools"/>
-<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<include src ="/template/error.wxml"/>
 <view class="cu-timeline padding-bottom margin-top">
   <view class="cu-bar bg-white solid-bottom  margin-top">
     <view class="action">

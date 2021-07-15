@@ -1,18 +1,11 @@
 var that;
 const util = require("../../../utils/util");
 const config = require("../../../config/config");
+const app = getApp();
 Page({
   data: {
-    compare:{
-      'cbc':'血常规',
-      'biochemistry':'生化',
-      'dic':'凝血',
-      'swelling':'肿标',
-      'bmode':'B超',
-      'ct':'CT',
-      'mri':'MRI',
-      '其他':'其他'
-    },
+    code:0,
+    compare:app.globalData.compare,
     reviewPlans:[]
   },
   async onLoad(options) {
@@ -20,6 +13,8 @@ Page({
     let res = await util.sendAjax(config.PersonalPlanList,{},"get");
     console.log(res);
     that.setData({
+      code:res.code,
+      msg:res.msg,
       reviewPlans:res.data
     })
   },
@@ -30,7 +25,6 @@ Page({
     })
   },
   prompt(){
-    util.prompt(that,"该用户暂未提交检测信息");
-  }  
-
+    util.prompt(that,"您暂未提交检测信息");
+  }
 })

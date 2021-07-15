@@ -4,7 +4,7 @@ const util = require("../../utils/util");
 import WxValidate from '../../utils/WxValidate';
 Page({
   data: {
-    
+    code:0,
   },
   initValidate() {
     let rules = { 
@@ -41,6 +41,8 @@ Page({
     that = this;
     let res =await util.sendAjax(config.DoctorInfo,{},"get");
     that.setData({
+      code:res.code,
+      msg:res.msg,
       doctor:res.data
     })
     that.initValidate()

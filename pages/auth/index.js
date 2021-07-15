@@ -10,8 +10,7 @@ Page({
   },
   onLoad(options) {
     that = this;
-    console.log(options);
-    if(!options){
+    if(options.scene){
       that.setData({
         options:options
       })
@@ -29,7 +28,7 @@ Page({
     if(res.code==0){
       wx.showToast({
         title: '操作成功',//提示文字
-        duration:2000,//显示时长
+        duration:3000,//显示时长
         icon:'success', //图标，支持"success"、"loading"  
         success:function(){ 
           wx.reLaunch({
@@ -40,7 +39,7 @@ Page({
     }else{
       wx.showToast({
         title: res.msg,//提示文字
-        duration:2000,//显示时长
+        duration:3000,//显示时长
         icon:'error', //图标，支持"success"、"loading"  
         success:function(){ 
           wx.reLaunch({

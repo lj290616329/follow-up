@@ -1,26 +1,24 @@
-<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<include src ="/template/error.wxml"/>
+<import src ="/template/form.wxml"/>
 <view class="cu-list menu-avatar comment">
-  <view class="cu-item solids-top">
-    <view class="cu-avatar round" style="background-image:url({{plan.maUser.avatarUrl||'/images/headimg.png'}});"></view>
+  <view class="cu-item">
+    <view class="cu-avatar round lg" style="background-image:url({{plan.information.maUser.avatarUrl||'/images/headimg.png'}});"></view>
     <view class="content">
-      <view class="text-grey">{{plan.maUser.nickName}}</view>
-      <view class='flex flex-wrap'>
-        <view class="padding-xs" wx:for="{{plan.review.examine}}" wx:for-index='key' wx:for-item="pics">
-          <view class='cu-tag' bindtap="showpic" data-pics="{{pics}}" wx:if="{{pics.length>0}}">{{compare[key]}}</view>
-        </view>
+      <view class="text-black">{{plan.information.maUser.nickName||plan.information.name}}</view>      
+      <view class="text-gray text-content text-df" wx:if="{{plan.review.other}}">
+        其他:{{plan.review.other}}
       </view>
-      <view class="text-gray" wx:if="{{plan.review.other}}">{{plan.review.reply}}</view>
-
       <view class="bg-grey padding-sm radius margin-top-sm  text-sm" wx:if="{{plan.review.reply}}">
         <view class="flex">
           <view>回复信息:</view>
           <view class="flex-sub">{{plan.review.reply}}</view>
         </view>
-      </view>
-
+      </view>      
       <view class="margin-top-sm flex justify-between">
         <view class="text-gray text-df">{{plan.updateTime}}</view>
+              
       </view>
     </view>
   </view>
 </view>
+<template is="detail" data="{{information,compare}}"/>

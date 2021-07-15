@@ -1,7 +1,4 @@
-
-  
-
-
+<include src ="/template/error.wxml"/>
 <navigator url="/pages/news/detail?id={{item.id}}" wx:for-key="index" class="cu-card article no-card  solid-bottom"  wx:for="{{lists}}">
   <view class="cu-item shadow">
     <view class="title"><view class="text-cut">{{item.title}}</view></view>

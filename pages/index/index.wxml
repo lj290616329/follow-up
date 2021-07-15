@@ -1,4 +1,4 @@
-<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<include src ="/template/error.wxml"/>
 <view class="solid-bottom text-xl padding text-center margin-bottom margin-top">
   <text class="text-blue text-bold">肝胆胰肿瘤随访小程序</text>
 </view>

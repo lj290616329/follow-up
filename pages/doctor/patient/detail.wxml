@@ -1,5 +1,5 @@
 <wxs src="../../../utils/Tools.wxs" module="tools"/>
-<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<include src ="/template/error.wxml"/>
 <view class="cu-card dynamic no-card margin-top">
   <view class="cu-list menu-avatar">
     <view class="cu-item">

@@ -1,7 +1,7 @@
 {
-  "pages": [
-    "pages/auth/index",
+  "pages": [    
     "pages/index/index",
+    "pages/auth/index",
     "pages/test/personal/index",
     "pages/doctor/check/list",
     "pages/doctor/patient/list",

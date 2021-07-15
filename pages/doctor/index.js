@@ -1,25 +1,16 @@
 var that;
 const util = require("../../utils/util");
 const config = require("../../config/config");
+const app = getApp();
 Page({
   data: {
+    code:0,
     showModal:false,
     replyStatus:false,
     lists:[],
-    compare:{
-      cbc:'血常规',
-      biochemistry:'生化',
-      dic:'凝血',
-      swelling:'肿标',
-      bMode:'B超',
-      ct:'CT',
-      mri:'MRI'
-    },
+    compare:app.globalData.compare,
     replys: [], 
-    quickReply:[
-      '感谢上传最新复查报告，谢谢！ 如最近进入新的治疗阶段请及时反馈于个案管理师，便于调整随访计划。',
-      '感谢上传最新复查报告，谢谢！ 请依照复查计划按时进行复查，并上传结果。'
-    ]
+    quickReply:app.globalData.quickReply
   },
   switchUser(){
     wx.reLaunch({
@@ -30,6 +21,8 @@ Page({
     that = this;       
     let res = await util.sendAjax(config.DoctorIndex,{},"get");
     that.setData({
+      code:res.code,
+      msg:res.msg,
       replys:res.data.reviewPlans,
       lists: res.data.informations
     })
@@ -83,6 +76,8 @@ Page({
       that.replyModal({currentTarget:{
         dataset:{}
       }});
+    }else{
+      util.prompt(that,res.msg);
     }
   },
   toUrl(e){

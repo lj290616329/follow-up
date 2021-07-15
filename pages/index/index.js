@@ -7,13 +7,13 @@ Page({
   data: {
     phone:"",
     name:"",
+    code:0,
   },
   async onLoad(options) {
-    console.log(options)
+    wx.removeStorageSync('token');
     that = this;
     that.initValidate();
-    let res = await util.login();
-    console.log(res);
+    let res = await util.login();    
     if(res.code==0){
       //医生用户
       if(res.data.ifDoctor){
@@ -50,6 +50,7 @@ Page({
     that.WxValidate = new WxValidate(rules, messages)
   },
   async auth(e){
+    wx.removeStorageSync('token');
     let res = {};
     try {
       res = await wx.getUserProfile({

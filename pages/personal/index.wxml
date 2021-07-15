@@ -1,3 +1,6 @@
+
+<include src ="/template/error.wxml"/>
+
 <view class="flex text-center bg-white">
   
   <navigator url="/pages/news/list" class="flex-sub padding solids-right">
@@ -35,12 +38,20 @@
   </view>
 </view>
 <view class="cu-list menu menuCard">
-  <navigator class="cu-item arrow" url="/pages/personal/review/form?id={{near.id}}">
+  <navigator class="cu-item arrow" url="/pages/personal/review/form?id={{near.id}}" wx:if="{{near}}">
     <view class="content">
       <text class="cuIcon-time text-grey"></text>
       <text class="text-grey">{{near.reviewTime}}</text>
     </view>
   </navigator>
+
+  <view class="cu-item" wx:else>
+    <view class="content">
+      <text class="cuIcon-info text-red"></text>
+      <text class="text-red">医生暂未为您添加复查计划,请稍后再试</text>
+    </view>
+  </view>
+
 </view>
 <block wx:if="{{reply}}">
   <view class="cu-bar bg-white solid-bottom margin-top">
@@ -51,12 +62,12 @@
   <view class="cu-list menu">
     <view class="cu-item">
       <view class="content padding-bottom-xl padding-top-xl">
-        <text class="text-black">感谢上传最新复查报告，谢谢！ 如最近进入新的治疗阶段请及时反馈于个案管理师，便于调整随访计划。</text>
+        <text class="text-black">{{reply.review.reply}}</text>
       </view>
     </view>
   </view>
 </block>
 
-<view class="padding flex flex-direction bg-white safe-bottom">
+<view class="padding flex flex-direction bg-white safe-bottom"  wx:if="{{near}}">
   <navigator url="/pages/personal/review/plan" class="cu-btn bg-blue lg">查看复查计划</navigator>
 </view>

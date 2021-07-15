@@ -1,4 +1,5 @@
 const config = require("../config/config")
+const log = require("./log")
 const formatTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -84,6 +85,7 @@ const  getToken = function(){
  */
 function sendAjax(url, data = {}, method = "GET") {
   console.log({url:url,data:data,method:method});
+  log.info({url:url,data:data,method:method});
   return new Promise(function (resolve, reject) {
     wx.request({
       url: url,
@@ -96,7 +98,10 @@ function sendAjax(url, data = {}, method = "GET") {
       dataType:"json",
       success: function (res) {
         console.log(res);
-        resolve(res.data);
+        if(res.data.code != 0){
+          log.error({param:{url:url,data:data,method:method},res:res});
+        };  
+        resolve(res.data);   
       },
       fail: function (err) {               
         console.log(err)

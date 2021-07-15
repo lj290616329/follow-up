@@ -1,4 +1,5 @@
 <import src ="/template/form.wxml"/>
+<include src ="/template/error.wxml"/>
 <view class="cu-bar bg-white solid-bottom  margin-top">
   <view class="action">
     <text class="cuIcon-titles text-orange"></text> 个人信息

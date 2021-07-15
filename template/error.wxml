@@ -1,0 +1,8 @@
+<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<view class="flex flex-direction text-center bg-gray padding-top-xl align-center errpage" wx:if="{{code!=0}}">
+  <image src="/images/error.png" class="flex" style="width:360rpx;" mode="widthFix"/>
+  <text class="margin-top-xl text-gray">{{msg}}</text>
+  <view class="padding margin-top-xl">
+    <button class="cu-btn lines-grey lg" bindtap="home">去主页</button>
+  </view>
+</view>

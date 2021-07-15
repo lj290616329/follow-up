@@ -2,17 +2,11 @@
 const util = require("../../../utils/util");
 const config = require("../../../config/config")
 var that;
+const app = getApp();
 Page({
   data: {
-    compare:{
-      cbc:'血常规',
-      biochemistry:'生化',
-      dic:'凝血',
-      swelling:'肿标',
-      bMode:'B超',
-      ct:'CT',
-      mri:'MRI'
-    },
+    code:0,
+    compare:app.globalData.compare,
     change:false,
     information:{
       other:'',
@@ -60,9 +54,9 @@ Page({
       that.setData({
         change:true,
         ['information.examine.'+key]:pics
-      })
-
-      
+      })      
+    }else{
+      util.prompt(that,res.msg);
     }
   },
   delImg(e){
@@ -94,7 +88,7 @@ Page({
       });
       wx.reLaunch({
         url: '/pages/personal/index',
-      })();
+      });
     }
   },
   draft(){

@@ -2,15 +2,19 @@
 var that;
 const config = require("../../../config/config");
 const util = require("../../../utils/util");
+const app = getApp();
 Page({
   data: {
-    types:["肝脏肿瘤-HCC","肝脏肿瘤-ICC","肝脏肿瘤-其他","肝道肿瘤-肝门","肝道肿瘤-肝门","肝道肿瘤-其他","胰腺肿瘤-胰腺","胰腺肿瘤-其他","其他"],
+    code:0,
+    types:app.globalData.types
   },
   async onLoad(options) {
     that = this;
     let res =await util.sendAjax(config.InformationById+options.id,{},"get");
     console.log(res);
     that.setData({
+      code:res.code,
+      msg:res.msg,
       information:res.data.information,
       reviewPlans:res.data.reviewPlans
     })

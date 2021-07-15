@@ -1,9 +1,12 @@
 const config = require("../../../config/config");
 const util = require("../../../utils/util");
 var that;
+const app = getApp();
 Page({
   data: {
-    types:["肝脏肿瘤-HCC","肝脏肿瘤-ICC","肝脏肿瘤-其他","肝道肿瘤-肝门","肝道肿瘤-肝门","肝道肿瘤-其他","胰腺肿瘤-胰腺","胰腺肿瘤-其他","其他"],
+    code:0,
+    types:app.globalData.types,
+    compare:app.globalData.compare,
     type1:[[0,0],[0,1],[0,2]
       ,[1,0],[1,1],[1,2] 
       ,[2,0],[2,1]
@@ -14,16 +17,7 @@ Page({
       [{name:"肝门",value:"3"},{name:"胆囊",value:"4"},{name:"其他",value:"5"}],
       [{name:"胰腺",value:"6"},{name:"其他",value:"7"}],
       [{name:"其他",value:"8"}]
-    ],
-    compare:{
-      cbc:'血常规',
-      biochemistry:'生化',
-      dic:'凝血',
-      swelling:'肿标',
-      bmode:'B超',
-      ct:'CT',
-      mri:'MRI'
-    },
+    ],    
     type:[0,0],
     delStatus:false    
   },
@@ -42,6 +36,8 @@ Page({
     ];
     multiArray.push(type2[type[0]]);
     that.setData({
+      code:res.code,
+      msg:res.msg,
       information:information,
       examine:information.examine,
       multiArray:multiArray,
@@ -58,6 +54,8 @@ Page({
       that.setData({
         ['information.examine.'+key]:pics
       })
+    }else{
+      util.prompt(that,res.msg);
     }
   },
   delImg(e){
@@ -154,6 +152,8 @@ Page({
       wx.reLaunch({
         url: '/pages/doctor/index',
       })
+    }else{
+      util.prompt(that,res.msg);
     }
   }
 })

@@ -8,7 +8,9 @@
   <view class="cu-item shadow">
     <view class="cu-list menu-avatar">
       <view class="cu-item">
-        <view class="cu-avatar round lg" style="background-image:url(information.maUser.avatarUrl||'/images/headimg.png');"></view>
+        <view class="cu-avatar round lg avatar">
+          <open-data type='userAvatarUrl' ></open-data>
+        </view>      
         <view class="content flex-sub">
           <view>{{information.name}} <text class="margin-left text-blue">(病历号:{{information.recordNo}})</text> </view>
           <view class="cuIcon-mobile text-gray text-df">
@@ -23,10 +25,58 @@
   <view class="cu-item">
     <view class="content">
       <text class="cuIcon-title text-orange"></text>
-      <text class="text-grey">病种</text>
+      <text class="text-black">病种</text>
     </view>
     <view class="action">
       <text class="text-grey text-sm">{{types[information.type]}}</text>
+    </view>
+  </view>
+</view>
+<view class="cu-bar bg-white solid-bottom  margin-top">
+  <view class="action">
+    <text class="cuIcon-titles text-orange"></text> 所属医生
+  </view>
+</view>
+
+<view class="cu-list menu">
+  <view class="cu-item">
+    <view class="content">
+      <text class="text-black">姓名</text>
+    </view>
+    <view class="action">
+      <text class="text-grey text-sm">{{information.doctor.name}}</text>
+    </view>
+  </view>
+  <view class="cu-item">
+    <view class="content">
+      <text class="text-black">头像</text>
+    </view>
+    <view class="action">
+      <image class="cu-avatar" src="{{information.doctor.pic||'/images/headimg.png'}}"></image>
+    </view>
+  </view>
+  <view class="cu-item">
+    <view class="content">
+      <text class="text-black">手机</text>
+    </view>
+    <view class="action">
+      <text class="text-grey text-sm">{{information.doctor.phone}}</text>
+    </view>
+  </view>
+  <view class="cu-item" wx:if="{{information.doctor.goodAt}}">
+    <view class="content">
+      <text class="text-black">擅长</text>
+    </view>
+    <view class="action">
+      <text class="text-grey text-sm">{{information.doctor.goodAt}}</text>
+    </view>
+  </view>
+  <view class="cu-item" wx:if="{{information.doctor.des}}">
+    <view class="content">
+      <text class="text-black">简介</text>
+    </view>
+    <view class="action">      
+        <text class="text-grey">{{information.doctor.des}}</text>     
     </view>
   </view>
 </view>
@@ -44,7 +94,7 @@
 <view class="cu-form-group">
   <view class="grid col-4 grid-square flex-sub">
     <view class="bg-img" wx:for="{{information.pathology}}" wx:key="index">
-      <image src="{{item}}"  mode="aspectFill" bindtap="showpic" data-urls="{{pathology}}" data-current="{{item}}"></image>
+      <image src="{{item}}"  mode="aspectFill" bindtap="showpic" data-urls="{{information.pathology}}" data-current="{{item}}"></image>
     </view>
   </view>
 </view>

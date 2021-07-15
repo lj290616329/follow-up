@@ -1,4 +1,4 @@
-<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<include src ="/template/error.wxml"/>
 <view class="cu-bar bg-white search">
   <view class="search-form round">
     <text class="cuIcon-search"></text>

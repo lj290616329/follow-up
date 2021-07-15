@@ -3,6 +3,7 @@ const util = require('../../utils/util');
 const config = require('../../config/config');
 Page({
   data: {
+    code:0,
     title:'',
     lists:[]
   },
@@ -12,12 +13,14 @@ Page({
   },
   async getList(pageNo){
     let res = await util.sendAjax(config.Article,{pageNum:pageNo,title:that.data.title},'get');
-    console.log(res);
+    console.log(res);    
     that.setData({
+      code:res.code,
+      msg:res.msg,
       lists:that.data.lists.concat(res.data.content),
       pageNo:pageNo,
       ifEnd:that.data.last
-    })
+    }); 
   },
   search(e){
     let value = e.detail.value;

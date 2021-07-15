@@ -1,4 +1,4 @@
-<view class="prompt" wx:if="{{prompt}}">{{promptMsg}}</view>
+<include src ="/template/error.wxml"/>
 <form bindsubmit="submitForm">
   <view class="cu-form-group margin-top">
     <text decode='true' class="title">姓&emsp;&emsp;名</text>
