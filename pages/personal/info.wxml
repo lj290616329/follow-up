@@ -60,7 +60,7 @@
       <text class="text-black">手机</text>
     </view>
     <view class="action">
-      <text class="text-grey text-sm">{{information.doctor.phone}}</text>
+      <text class="text-grey text-sm" bindtap="callPhone" data-phone="{{information.doctor.phone}}">{{information.doctor.phone}}</text>
     </view>
   </view>
   <view class="cu-item" wx:if="{{information.doctor.goodAt}}">

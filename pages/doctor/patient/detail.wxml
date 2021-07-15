@@ -7,7 +7,7 @@
         <view class="content">
           <view class="text-grey">{{information.name}}</view>
           <view class="text-gray text-sm flex">
-            <view class="text-cut">
+            <view class="text-cut" bindtap="callPhone" data-phone="{{information.phone}}">
               <text class="cuIcon-phone text-grey margin-right-xs"></text>
               {{information.phone}}
             </view>

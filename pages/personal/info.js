@@ -38,5 +38,14 @@ Page({
       urls: urls,
       current:current
     })
+  },
+  callPhone(e){
+    let phone = e.currentTarget.dataset.phone;
+    wx.makePhoneCall({
+      phoneNumber: phone, //仅为示例，并非真实的电话号码
+      fail(){
+        util.prompt(that,"调用拨号功能失败~请稍后再试!")
+      }
+    })
   }
 })
