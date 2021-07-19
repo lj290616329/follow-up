@@ -1,6 +1,6 @@
 // pages/personal/review/form.js
 const util = require("../../../utils/util");
-const config = require("../../../config/config")
+const api = require("../../../config/api")
 var that;
 const app = getApp();
 Page({
@@ -48,7 +48,7 @@ Page({
       sourceType:['album', 'camera']
     });
     console.log(res)
-    let data = await util.uploadFile(res.tempFilePaths[0]);
+    let data = await api.uploadFile(res.tempFilePaths[0]);
     if(data.code==0){
       pics = pics.concat(data.data.src);
       that.setData({
@@ -79,7 +79,7 @@ Page({
     })
   },
   async submit(){
-    let res = await util.sendAjax(config.Review,that.data.information,"post");
+    let res = await api.addReview(that.data.information);
     console.log(res);
     if(res.code==0){
       wx.removeStorageSync('formData');
@@ -89,6 +89,8 @@ Page({
       wx.reLaunch({
         url: '/pages/personal/index',
       });
+    }else{
+      util.prompt(that,res.msg);
     }
   },
   draft(){

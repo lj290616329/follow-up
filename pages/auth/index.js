@@ -1,6 +1,5 @@
 var that;
-const util = require('../../utils/util');
-const config = require('../../config/config');
+const api = require('../../config/api');
 Page({
   data: {
     msg:'扫描成功',
@@ -9,7 +8,7 @@ Page({
     authBtn:true
   },
   onLoad(options) {
-    that = this;
+    that = this;    
     if(options.scene){
       that.setData({
         options:options
@@ -24,38 +23,33 @@ Page({
     }
   },
   async submit(){
-    let res = await util.sendAjax(config.Agree,that.data.options,"post");
+    let res = await api.agree(that.data.options);
     if(res.code==0){
       wx.showToast({
         title: '操作成功',//提示文字
-        duration:2500,//显示时长
+        duration:3000,//显示时长
         icon:'success', //图标，支持"success"、"loading"  
         success:function(){ 
           setTimeout(function () { 
             wx.reLaunch({
               url: '/pages/doctor/index',
             }) 
-         }, 2500)          
+         }, 3000)          
         }
      })
     }else{
       wx.showToast({
         title: res.msg,//提示文字
-        duration:2500,//显示时长
+        duration:3000,//显示时长
         icon:'error', //图标，支持"success"、"loading"  
         success:function(){ 
           setTimeout(function () { 
             wx.reLaunch({
               url: '/pages/index/index',
             }) 
-         }, 2500)
+         }, 3000)
         }
      })
     }
-  },
-  back(){
-    wx.reLaunch({
-      url: '/pages/index/index',
-    })
   }
 })

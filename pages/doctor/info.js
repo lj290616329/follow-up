@@ -1,5 +1,5 @@
 var that;
-const config = require("../../config/config");
+const api = require("../../config/api");
 const util = require("../../utils/util");
 import WxValidate from '../../utils/WxValidate';
 Page({
@@ -39,7 +39,7 @@ Page({
   },
   async onLoad(options) {
     that = this;
-    let res =await util.sendAjax(config.DoctorInfo,{},"get");
+    let res =await api.doctorInfo({});
     that.setData({
       code:res.code,
       msg:res.msg,
@@ -62,7 +62,7 @@ Page({
       sourceType:['album', 'camera']
     });
     console.log(res)
-    let data = await util.uploadFile(res.tempFilePaths[0]);
+    let data = await api.uploadFile(res.tempFilePaths[0]);
     return data;
   },
   async submitForm(e){
@@ -73,7 +73,7 @@ Page({
       const error = that.WxValidate.errorList[0];
       return util.prompt(that,error.msg);
     }
-    let res = await util.sendAjax(config.DoctorInfo,params,"put");
+    let res = await api.doctorInfoUpdate(params);
     if(res.code==0){
       wx.navigateBack();
     }

@@ -3,7 +3,7 @@
 <view class="cu-list menu-avatar comment">
   <view class="cu-item">
     <view class="cu-avatar round lg" style="background-image:url({{plan.information.maUser.avatarUrl||'/images/headimg.png'}});"></view>
-    <view class="content">
+    <view class="content padding-left">
       <view class="text-black">{{plan.information.maUser.nickName||plan.information.name}}</view>      
       <view class="text-gray text-content text-df" wx:if="{{plan.review.other}}">
         其他:{{plan.review.other}}

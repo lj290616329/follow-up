@@ -48,7 +48,7 @@
   <view class="cu-item" wx:else>
     <view class="content">
       <text class="cuIcon-info text-red"></text>
-      <text class="text-red">医生暂未为您添加复查计划,请稍后再试</text>
+      <text class="text-red">您暂无下次检查的复查计划,请等待医生进行添加</text>
     </view>
   </view>
 
@@ -68,6 +68,6 @@
   </view>
 </block>
 
-<view class="padding flex flex-direction bg-white safe-bottom"  wx:if="{{near}}">
+<view class="padding flex flex-direction bg-white safe-bottom">
   <navigator url="/pages/personal/review/plan" class="cu-btn bg-blue lg">查看复查计划</navigator>
 </view>

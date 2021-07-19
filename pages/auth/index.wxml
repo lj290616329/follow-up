@@ -3,6 +3,6 @@
   <text class="margin-top-xl">{{msg}}</text>
   <view class="padding flex flex-direction margin-top-xl">
 			<button class="cu-btn bg-green lg" bindtap="submit" wx:if="{{authBtn}}">允许登陆</button>
-			<button class="cu-btn lines-gray margin-tb-sm lg" bindtap="back">{{backMsg}}</button>
+			<button class="cu-btn lines-gray margin-tb-sm lg" bindtap="home">{{backMsg}}</button>
 		</view>
 </view>

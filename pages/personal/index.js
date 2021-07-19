@@ -1,6 +1,5 @@
 var that;
-const util = require('../../utils/util');
-const config = require('../../config/config');
+const api = require('../../config/api');
 Page({
   data: {
     code:0,
@@ -8,7 +7,7 @@ Page({
   },
   async onLoad(options) {
     that = this;
-    let res = await util.sendAjax(config.PersonalIndex,{},"get");
+    let res = await api.personalIndex({});
     that.setData({
       code:res.code,
       msg:res.msg,

@@ -1,6 +1,6 @@
 // pages/doctor/patient/detail.js
 var that;
-const config = require("../../../config/config");
+const api = require("../../../config/api");
 const util = require("../../../utils/util");
 const app = getApp();
 Page({
@@ -10,8 +10,7 @@ Page({
   },
   async onLoad(options) {
     that = this;
-    let res =await util.sendAjax(config.InformationById+options.id,{},"get");
-    console.log(res);
+    let res =await api.informationDetail({id:options.id});
     that.setData({
       code:res.code,
       msg:res.msg,

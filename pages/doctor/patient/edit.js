@@ -1,4 +1,4 @@
-const config = require("../../../config/config");
+const api = require("../../../config/api");
 const util = require("../../../utils/util");
 var that;
 const app = getApp();
@@ -23,10 +23,9 @@ Page({
   },
   async onLoad(options) {
     that = this;
-    let res = await util.sendAjax(config.InformationById+options.id,{},'get');
+    let res = await api.informationDetail({id:options.id});
     let information = res.data.information;
     console.log(information);
-    
     let type1 = that.data.type1;
     let type = type1[information.type];
     console.log(type);
@@ -100,7 +99,7 @@ Page({
       sourceType:['album', 'camera']
     });
     console.log(res)
-    let data = await util.uploadFile(res.tempFilePaths[0]);
+    let data = await api.uploadFile(res.tempFilePaths[0]);
     return data;
   },
   async uploadCover(e){
@@ -146,7 +145,7 @@ Page({
       pathology:information.pathology,
       examine:information.examine
     }
-    let res = await util.sendAjax(config.Information,data,"put");
+    let res = await api.informationUpdata(data);
     console.log(res)
     if(res.code==0){
       wx.reLaunch({

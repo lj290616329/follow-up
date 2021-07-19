@@ -1,5 +1,5 @@
 var util = require('../../utils/util');
-var config = require('../../config/config');
+var api = require('../../config/api');
 var that;
 Page({
   data: { 
@@ -10,9 +10,7 @@ Page({
   },
   async onLoad(options) {
     that = this;
-    console.log(options)
-    let id = options.id;    
-    let res = await util.sendAjax(config.ArticleDetail+id,{},"get");
+    let res = await api.articleDetail({id:options.id});
     let article = res.data;
     article.content = article.content.replace(/\<img/gi, '<img style="max-width:100%;height:auto;display:block;margin:0 auto;"');
     that.setData({

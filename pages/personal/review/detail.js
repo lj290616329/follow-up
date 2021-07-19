@@ -1,6 +1,6 @@
 var that;
 const util = require('../../../utils/util');
-const config = require('../../../config/config');
+const api = require('../../../config/api');
 const app = getApp();
 Page({
   data: {
@@ -9,7 +9,7 @@ Page({
   },
   async onLoad(options) {
     that = this;
-    let res = await util.sendAjax(config.ReviewPlan,{id:options.id},"get");
+    let res = await api.reviewPlanDetail({id:options.id});
     console.log(res);
     that.setData({
       code:res.code,

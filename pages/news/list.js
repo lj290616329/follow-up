@@ -1,6 +1,6 @@
 var that;
 const util = require('../../utils/util');
-const config = require('../../config/config');
+const api = require('../../config/api');
 Page({
   data: {
     code:0,
@@ -12,7 +12,7 @@ Page({
     that.getList(1);
   },
   async getList(pageNo){
-    let res = await util.sendAjax(config.Article,{pageNum:pageNo,title:that.data.title},'get');
+    let res = await api.articleList({pageNum:pageNo,title:that.data.title});
     console.log(res);    
     that.setData({
       code:res.code,

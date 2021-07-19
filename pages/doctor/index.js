@@ -1,6 +1,6 @@
 var that;
 const util = require("../../utils/util");
-const config = require("../../config/config");
+const api = require("../../config/api");
 const app = getApp();
 Page({
   data: {
@@ -19,7 +19,7 @@ Page({
   },
   async onLoad(options){
     that = this;       
-    let res = await util.sendAjax(config.DoctorIndex,{},"get");
+    let res = await api.doctorIndex({});
     that.setData({
       code:res.code,
       msg:res.msg,
@@ -66,7 +66,7 @@ Page({
       return util.prompt(that,"请输入回复内容后提交");
     }
     params.examine = replys[index].review.examine;
-    let res = await util.sendAjax(config.DoctorReply,params,"put");
+    let res = await api.reply(params);
     if(res.code==0){
       util.prompt(that,"提交成功");
       replys.splice(that.data.index,1);

@@ -1,19 +1,19 @@
-
 import WxValidate from '../../utils/WxValidate';
 var util = require('../../utils/util') ;
-var config = require('../../config/config');
+var api = require('../../config/api');
 var that; 
 Page({
   data: {
     phone:"",
     name:"",
     code:0,
+    msg:''
   },
   async onLoad(options) {
-    wx.removeStorageSync('token');
-    that = this;
+    that = this; 
     that.initValidate();
-    let res = await util.login();    
+    let res = await api.login();
+    console.log(res);
     if(res.code==0){
       //医生用户
       if(res.data.ifDoctor){
@@ -26,7 +26,7 @@ Page({
           url: '/pages/personal/index',
         })
       }          
-    }          
+    }        
   },
   initValidate() {
     let rules = {
@@ -50,7 +50,7 @@ Page({
     that.WxValidate = new WxValidate(rules, messages)
   },
   async auth(e){
-    wx.removeStorageSync('token');
+    
     let res = {};
     try {
       res = await wx.getUserProfile({
@@ -59,19 +59,18 @@ Page({
     } catch (error) {
       return util.prompt(that,"授权失败,请重试~");
     }
-    let code = await util.getCode();
+    let code = await api.getCode();
     console.log(res)
     if(res.errMsg=="getUserProfile:ok"){
       let userInfo = res.userInfo
       wx.setStorageSync('userInfo', userInfo);      
-      let authRes = await util.sendAjax(config.Auth,{
+      let authRes = await api.authorize({
         code:code,
         encryptedData:res.encryptedData,
         iv:res.iv,
         signature:res.signature,
-        rawData:res.rawData,
-        did:wx.getStorageSync('did')
-      },"post");
+        rawData:res.rawData
+      });
       if(authRes.code==0){
         wx.setStorageSync('token', authRes.data.token)
         that.informationModal();
@@ -88,7 +87,6 @@ Page({
     })
   },
   visitor(){
-    //let res = await util.auth();
     wx.navigateTo({
       url: '/pages/test/personal/index',
     })
@@ -96,10 +94,10 @@ Page({
   },
   async getPhoneNumber(e){
     console.log(e)
-    let code = await util.getCode();
+    let code = await api.getCode();
     console.log(e)
     if(e.detail.errMsg=='getPhoneNumber:ok'){
-      let res = await util.phone({
+      let res = await api.phone({
         code:code,
         encryptedData:e.detail.encryptedData,
         iv:e.detail.iv,
@@ -123,7 +121,7 @@ Page({
       util.prompt(that,error.msg);
       return false
     }
-    let res = await util.sendAjax(config.InformationAuth,params,"post")
+    let res = await api.auth(params);
     if(res.code==0){
       let url = res.data?'/pages/doctor/index':'/pages/personal/index';
       wx.reLaunch({
@@ -132,6 +130,5 @@ Page({
     }else{
       util.prompt(that,res.msg);
     }
-  },
-
+  }
 })
