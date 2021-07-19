@@ -47,7 +47,7 @@
 </view>
 <view class="cu-form-group">
   <view class="grid col-4 grid-square flex-sub">
-    <view class="bg-img" wx:for="{{information.pathology}}" wx:for-index="index">
+    <view class="bg-img" wx:for="{{information.pathology}}" wx:for-index="index" wx:key="index">
       <image src="{{item}}"  mode="aspectFill" bindtap="showpic" data-urls="{{information.pathology}}" data-current="{{item}}"></image>
       <view class="cu-tag bg-red"  bindtap="delPic" data-index="{{index}}">
         <text class='cuIcon-close'></text>

@@ -29,7 +29,7 @@
 
 
 
-  <view wx:for="{{reviewPlans}}" wx:for-key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}">
+  <view wx:for="{{reviewPlans}}" wx:key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}">
     <view class="content shadow-blur {{item.review?'bg-blue':'bg-grey'}}">
       <text>{{item.reviewTime}}</text> ({{tools.timeAfter(item.reviewTime)}})
     </view>

@@ -1,5 +1,5 @@
 <template name="formData">
-  <block wx:for="{{information.examine}}" wx:for-index='key'>
+  <block wx:for="{{information.examine}}" wx:for-index='key'  wx:key="index">
     <view class="cu-bar bg-white">
       <view class="action">
         {{compare[key]}}
@@ -25,7 +25,7 @@
 </template>
 
 <template name="detail">
-  <block wx:for="{{information.examine}}" wx:for-index='key' wx:if="{{item.length>0}}">
+  <block wx:for="{{information.examine}}" wx:for-index='key' wx:if="{{item.length>0}}" wx:key="index">
     <view class="cu-bar bg-white">
       <view class="action">
         {{compare[key]}}

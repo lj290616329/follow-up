@@ -5,9 +5,9 @@ Page({
   data: {
     code:0,
     lists:[],
-    title:""
+    title:"",
+    ifEnd:false
   },
-
   onLoad: function (options) {
     that = this;
     that.getList(1);
@@ -20,7 +20,7 @@ Page({
       msg:res.msg,
       lists:that.data.lists.concat(res.data.content),
       pageNo:pageNo,
-      ifEnd:that.data.last
+      ifEnd:res.data.last
     })
   },
   search(e){

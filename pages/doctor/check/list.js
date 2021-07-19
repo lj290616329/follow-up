@@ -18,7 +18,7 @@ Page({
       msg:res.msg,
       lists:that.data.lists.concat(res.data.content),
       pageNo:pageNo,
-      ifEnd:that.data.last
+      ifEnd:res.data.last
     })
   },
   search(e){

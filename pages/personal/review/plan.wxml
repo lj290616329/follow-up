@@ -6,14 +6,14 @@
       <text class="cuIcon-titles text-orange"></text> 复查计划
     </view>
   </view>
-  <view wx:for="{{reviewPlans}}" wx:for-key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}">
+  <view wx:for="{{reviewPlans}}" wx:key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}">
     <view class="padding-sm {{item.review?'bg-blue':'bg-grey'}}">
       <view class="cu-list radius">
         <view class="cu-item">
           <view class="content">
             <view>{{item.reviewTime}}({{tools.timeAfter(item.reviewTime)}})</view>
             <view class="text-gray text-sm">
-              <view class='cu-tag bg-white sm' wx:for="{{item.examine}}" wx:for-key="check">{{compare[item]}}</view>
+              <view class='cu-tag bg-white sm' wx:for="{{item.examine}}" wx:key="check">{{compare[item]}}</view>
             </view>
           </view>
         </view>

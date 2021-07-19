@@ -6,7 +6,7 @@
   </view>
 </view>
 <view class="cu-list menu">
-  <navigator url="/pages/doctor/check/detail?id={{item.id}}" class="cu-item" wx:for="{{lists}}" wx:for-index="index" >
+  <navigator url="/pages/doctor/check/detail?id={{item.id}}" class="cu-item" wx:for="{{lists}}" wx:for-index="index" wx:key="index">
     <view class="content">      
       <text class="text-black">{{item.information.name}}</text>
       <text class="text-grey margin-left">({{item.information.recordNo}})</text>
@@ -16,4 +16,9 @@
       <text class="text-grey text-sm">{{item.updateTime}}</text>
     </view>
   </navigator>
+</view>
+<view class="wrapper" wx:if="{{ifEnd}}">
+  <text class="line"></text>
+  <text class="line-msg">我是有底线的</text>
+  <text class="line"></text>
 </view>
