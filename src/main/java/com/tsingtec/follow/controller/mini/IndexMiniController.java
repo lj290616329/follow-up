@@ -131,7 +131,6 @@ public class IndexMiniController {
             MaUser maUser = new MaUser();
 
             BeanMapper.mapExcludeNull(userInfo,maUser);
-            maUser.setDid(wxLoginVo.getDid());
             maUser.setUnionId(session.getUnionid());
             maUser.setOpenId(session.getOpenid());
             maUser = maUserService.save(maUser);

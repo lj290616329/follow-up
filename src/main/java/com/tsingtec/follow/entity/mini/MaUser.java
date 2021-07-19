@@ -49,7 +49,4 @@ public class MaUser extends BaseEntity {
     @JsonIgnore
     @Column(unique = true)
     private String unionId;
-
-    private Integer did;//医生id
-
 }

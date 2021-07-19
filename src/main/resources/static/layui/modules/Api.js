@@ -70,125 +70,39 @@ layui.define(['jquery','ApiConfig'],function(exports){
     };
 
     var api = {
-        getAdmins:async function(data){
-            let res = await request(ApiConfig.adminApi,data,"get");
-            return res
-        },
-        addAdmin:async function(data){
-            let res = await request(ApiConfig.adminApi,data,"POST");
-            return res;
-        },
-        updateAdmin:async function(data){
-            let res = await request(ApiConfig.adminApi,data,"PUT");
-            return res;
-        },
-        deleteAdmin:async function(data){
-            let res = await request(ApiConfig.adminApi,data,"DELETE");
-            return res;
-        },
-        getAdminRole:async function(data){
-            let res = await request(ApiConfig.adminRoleApi,data,"GET");
-            return res;
-        },
-        setAdminRole:async function(data){
-            let res = await request(ApiConfig.adminRoleApi,data,"PUT");
-            return res;
-        },
-        updatePwd:async function(data){
-            let res = await request(ApiConfig.adminPwdApi,data,"PUT");
-            return res;
-        },
+        getAdmins: data=>request(ApiConfig.adminApi,data,"get"),
+        addAdmin:data=>request(ApiConfig.adminApi,data,"POST"),
+        updateAdmin:data=>request(ApiConfig.adminApi,data,"PUT"),
+        deleteAdmin:data=>request(ApiConfig.adminApi,data,"DELETE"),
+        getAdminRole:data=>request(ApiConfig.adminRoleApi,data,"GET"),
+        setAdminRole:data=>request(ApiConfig.adminRoleApi,data,"PUT"),
+        updatePwd:data=>request(ApiConfig.adminPwdApi,data,"PUT"),
         //医生
-        getDoctor:async function(data){
-            let res = await request(ApiConfig.doctorApi,data,"GET");
-            return res;
-        },
+        getDoctor:data=>request(ApiConfig.doctorApi,data,"GET"),
         //医生
-        getAllDoctor:async function(data){
-            let res = await request(ApiConfig.doctorAllApi,data,"GET");
-            return res;
-        },
-        doctorDetail:async function(data){
-            let res = await request(ApiConfig.pathParams(ApiConfig.doctorDetailApi,data),"","GET");
-            return res;
-        },
-        addDoctor:async function(data){
-            console.log("come add")
-            let res = await request(ApiConfig.doctorApi,data,"POST");
-            return res;
-        },
-        updateDoctor:async function(data){
-            let res = await request(ApiConfig.doctorApi,data,"PUT");
-            return res;
-        },
-        deleteDoctor:async function(data){
-            let res = await request(ApiConfig.doctorApi,data,"DELETE");
-            return res;
-        },
+        getAllDoctor:data=>request(ApiConfig.doctorAllApi,data,"GET"),
+        doctorDetail:data=>request(ApiConfig.pathParams(ApiConfig.doctorDetailApi,data),"","GET"),
+        addDoctor:data=>request(ApiConfig.doctorApi,data,"POST"),
+        updateDoctor:data=>request(ApiConfig.doctorApi,data,"PUT"),
+        deleteDoctor:data=>request(ApiConfig.doctorApi,data,"DELETE"),
         //用户信息
-        getInformation:async function(data){
-            let res = await request(ApiConfig.informationApi,data,"GET");
-            return res;
-        },
-        informationDetail:async function(data){
-            let res = await request(ApiConfig.pathParams(ApiConfig.informationDetailApi,data),"","GET");
-            return res;
-        },
-        addInformation:async function(data){
-            console.log("come add")
-            let res = await request(ApiConfig.informationApi,data,"POST");
-            return res;
-        },
-        updateInformation:async function(data){
-            let res = await request(ApiConfig.informationApi,data,"PUT");
-            return res;
-        },
-        deleteInformation:async function(data){
-            let res = await request(ApiConfig.informationApi,data,"DELETE");
-            return res;
-        },
+        getInformation:data=>request(ApiConfig.informationApi,data,"GET"),
+        informationDetail:data=>request(ApiConfig.pathParams(ApiConfig.informationDetailApi,data),"","GET"),
+        addInformation:data=>request(ApiConfig.informationApi,data,"POST"),
+        updateInformation:data=>request(ApiConfig.informationApi,data,"PUT"),
+        deleteInformation:data=>request(ApiConfig.informationApi,data,"DELETE"),
         //复查计划
-        getPlan:async function(data){
-            let res  = await request(ApiConfig.planApi,data,"GET");
-            return res;
-        },
-        addPlan:async function(data){
-            let res  = await request(ApiConfig.planApi,data,"POST");
-            return res;
-        },
-        updatePlan:async function(data){
-            let res  = await request(ApiConfig.planApi,data,"PUT");
-            return res;
-        },
-        deletePlan:async function(data){
-            let res  = await request(ApiConfig.planApi,data,"DELETE");
-            return res;
-        },
+        getPlan:data=>request(ApiConfig.planApi,data,"GET"),
+        addPlan:data=>request(ApiConfig.planApi,data,"POST"),
+        updatePlan:data=>request(ApiConfig.planApi,data,"PUT"),
+        deletePlan:data=>request(ApiConfig.planApi,data,"DELETE"),
         //图文计划
-        getArticle:async function(data){
-            let res  = await request(ApiConfig.articleApi,data,"GET");
-            return res;
-        },
-        articleDetail:async function(data){
-            let res = await request(ApiConfig.pathParams(ApiConfig.articleDetailApi,data),data,"GET");
-            return res;
-        },
-        addArticle:async function(data){
-            let res  = await request(ApiConfig.articleApi,data,"POST");
-            return res;
-        },
-        updateArticle:async function(data){
-            let res  = await request(ApiConfig.articleApi,data,"PUT");
-            return res;
-        },
-        deleteArticle:async function(data){
-            let res  = await request(ApiConfig.articleApi,data,"DELETE");
-            return res;
-        },
-        reviewDetail:async function(data){
-            let res = await request(ApiConfig.reviewApi,data,"GET");
-            return res;
-        }
+        getArticle:data=>request(ApiConfig.articleApi,data,"GET"),
+        articleDetail:data=>request(ApiConfig.pathParams(ApiConfig.articleDetailApi,data),data,"GET"),
+        addArticle:data=>request(ApiConfig.articleApi,data,"POST"),
+        updateArticle:data=>request(ApiConfig.articleApi,data,"PUT"),
+        deleteArticle:data=>request(ApiConfig.articleApi,data,"DELETE"),
+        reviewDetail:data=>request(ApiConfig.reviewApi,data,"GET")
     };
     exports('Api', api);
 });

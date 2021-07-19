@@ -3,8 +3,6 @@ package com.tsingtec.follow.vo.req.mini;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @Author lj
  * @Date 2021/5/28 17:06
@@ -27,8 +25,4 @@ public class WxLoginReqVO {
 
     @ApiModelProperty(value = "用户基本信息")
     private String rawData;         // 用户基本信息
-
-    @NotNull(message = "医生id不能为空")
-    private Integer did;
-
 }
