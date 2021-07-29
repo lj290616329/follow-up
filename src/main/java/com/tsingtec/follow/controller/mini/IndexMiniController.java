@@ -161,7 +161,6 @@ public class IndexMiniController {
      */
     @PostMapping("/phone")
     public DataResult phone(@RequestBody WxLoginReqVO wxLoginVo) {
-        log.error(wxLoginVo.toString());
         final WxMaService wxService = WxMaConfiguration.getMaService();
         String code = wxLoginVo.getCode();
         try {
