@@ -53,7 +53,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     @SneakyThrows
     @Override
-    public ServletInputStream getInputStream() throws IOException {
+    public ServletInputStream getInputStream(){
         String str=getRequestBody(super.getInputStream());
 
         Object json = new JSONTokener(str).nextValue();
