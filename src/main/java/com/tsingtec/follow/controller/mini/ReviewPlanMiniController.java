@@ -3,13 +3,13 @@ package com.tsingtec.follow.controller.mini;
 import com.tsingtec.follow.config.jwt.JwtUtil;
 import com.tsingtec.follow.entity.mini.Doctor;
 import com.tsingtec.follow.entity.mini.Information;
-import com.tsingtec.follow.entity.mini.ReviewPlan;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.service.mini.DoctorService;
 import com.tsingtec.follow.service.mini.InformationService;
 import com.tsingtec.follow.service.mini.ReviewPlanService;
 import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.information.InformationPageReqVO;
+import com.tsingtec.follow.vo.resp.review.ReviewPlanRespVO;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class ReviewPlanMiniController {
     public DataResult planlist(){
         String token = HttpContextUtils.getToken();
         Information information = informationService.findByUid(jwtUtil.getClaim(token,"id"));
-        List<ReviewPlan> reviewPlans = reviewPlanService.findByIid(information.getId());
+        List<ReviewPlanRespVO> reviewPlans = reviewPlanService.findByIid(information.getId());
         return DataResult.success(reviewPlans);
     }
 

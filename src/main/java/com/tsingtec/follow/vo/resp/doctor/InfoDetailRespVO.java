@@ -1,7 +1,7 @@
 package com.tsingtec.follow.vo.resp.doctor;
 
 import com.tsingtec.follow.entity.mini.Information;
-import com.tsingtec.follow.entity.mini.ReviewPlan;
+import com.tsingtec.follow.vo.resp.review.ReviewPlanRespVO;
 import lombok.Data;
 
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.List;
 @Data
 public class InfoDetailRespVO {
     private Information information;
-    private List<ReviewPlan> reviewPlans;
+    private List<ReviewPlanRespVO> reviewPlans;
 
-    public InfoDetailRespVO(Information information,List<ReviewPlan> reviewPlans){
+    public InfoDetailRespVO(Information information,List<ReviewPlanRespVO> reviewPlans){
         this.information = information;
         this.reviewPlans = reviewPlans;
     }

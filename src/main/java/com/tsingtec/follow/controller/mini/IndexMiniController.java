@@ -72,7 +72,8 @@ public class IndexMiniController {
                 if(null==information && null==doctor){
                     return DataResult.fail("登录失败!");
                 }
-                if(doctorService.findByUid(maUser.getId())!=null){
+                baseUserRespVO.setIfAuth(true);
+                if(doctor!=null){
                     baseUserRespVO.setIfDoctor(true);
                 }
             }else{
@@ -123,8 +124,9 @@ public class IndexMiniController {
         }
         try {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);
+            System.out.println(session.toString());
             if (!wxService.getUserService().checkUserInfo(session.getSessionKey(), wxLoginVo.getRawData(), wxLoginVo.getSignature())) {
-                return DataResult.fail("user check failed");
+                return DataResult.fail("授权失败请重新再试!");
             }
             // 解密用户信息
             WxMaUserInfo userInfo = wxService.getUserService().getUserInfo(session.getSessionKey(), wxLoginVo.getEncryptedData(), wxLoginVo.getIv());
@@ -134,11 +136,20 @@ public class IndexMiniController {
             maUser.setUnionId(session.getUnionid());
             maUser.setOpenId(session.getOpenid());
             maUser = maUserService.save(maUser);
-
             TokenRespVO token = jwtUtil.getToken(maUser);
             baseUserRespVO.setToken(token);
+            //避免因为网络等问题出现二次认证而出现的bug
+            Information information = informationService.findByUid(maUser.getId());
+
+            Doctor doctor = doctorService.findByUid(maUser.getId());
+            if(null!=information || null!=doctor){
+                baseUserRespVO.setIfAuth(true);
+            }
+            if(doctor!=null){
+                baseUserRespVO.setIfDoctor(true);
+            }
         }catch (WxErrorException e) {
-            return DataResult.fail("授权失败,请稍后再试!");
+            return DataResult.fail("授权失败请重新再试!");
         }
         return DataResult.success(baseUserRespVO);
     }

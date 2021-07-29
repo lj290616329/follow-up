@@ -10,6 +10,7 @@ import com.tsingtec.follow.utils.BeanUtils;
 import com.tsingtec.follow.vo.req.information.InformationPageReqVO;
 import com.tsingtec.follow.vo.req.plan.ReviewPlanAddReqVO;
 import com.tsingtec.follow.vo.req.plan.ReviewPlanUpdateReqVO;
+import com.tsingtec.follow.vo.resp.review.ReviewPlanRespVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -48,8 +50,33 @@ public class ReviewPlanService {
         reviewPlanRepository.save(reviewPlan);
     }
 
-    public List<ReviewPlan> findByIid(Integer iid){
-        return reviewPlanRepository.findByInformation_IdOrderByReviewTimeDesc(iid);
+    /**
+     * 超过3个 折叠显示
+     * @param iid
+     * @return
+     */
+    public List<ReviewPlanRespVO> findByIid(Integer iid){
+        List<ReviewPlan> reviewPlans = reviewPlanRepository.findByInformation_IdOrderByReviewTimeDesc(iid);
+        ReviewPlan reviewPlan = reviewPlanRepository.getTopByInformation_IdAndReviewIsNullOrderByReviewTimeAsc(iid);
+        List<Integer> ins = Arrays.asList(0,1,2);
+        if(reviewPlans.size()>3){
+            Integer size = reviewPlans.size()-1;
+            if(null != reviewPlan){
+                Integer index = reviewPlans.indexOf(reviewPlan);
+                System.out.println(index);
+                //下次检查就是最后一个时或者第一个时,多补位一个,从而可以显示3个
+                index = index==size ? index-1:index==0?1:index;
+
+                ins = Arrays.asList(index+1,index,index-1);
+            }
+        }
+        List<ReviewPlanRespVO> vos = BeanMapper.mapList(reviewPlans,ReviewPlanRespVO.class);
+        for (int i = 0; i <vos.size() ; i++) {
+            if(ins.indexOf(i)>-1){
+                vos.get(i).setShow(true);
+            }
+        }
+        return vos;
     }
 
     /**

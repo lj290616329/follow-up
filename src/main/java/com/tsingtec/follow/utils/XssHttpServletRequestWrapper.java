@@ -1,6 +1,7 @@
 package com.tsingtec.follow.utils;
 
 import com.alibaba.fastjson.JSON;
+import lombok.SneakyThrows;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -49,11 +50,13 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         }
         return values;
     }
+
+    @SneakyThrows
     @Override
     public ServletInputStream getInputStream() throws IOException {
         String str=getRequestBody(super.getInputStream());
 
-        Object json = new JSONTokener(str);
+        Object json = new JSONTokener(str).nextValue();
         if (json instanceof JSONArray) {
             str = json.toString();
         } else if (json instanceof JSONObject) {
@@ -72,7 +75,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         final ByteArrayInputStream bais = new ByteArrayInputStream(str.getBytes());
         return new ServletInputStream() {
             @Override
-            public int read() throws IOException {
+            public int read(){
                 return bais.read();
             }
             @Override
@@ -88,16 +91,15 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
             }
         };
     }
+
     private String getRequestBody(InputStream stream) {
         String line = "";
         StringBuilder body = new StringBuilder();
-        int counter = 0;
         // 读取POST提交的数据内容
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName("UTF-8")));
         try {
             while ((line = reader.readLine()) != null) {
                 body.append(line);
-                counter++;
             }
         } catch (IOException e) {
             e.printStackTrace();
