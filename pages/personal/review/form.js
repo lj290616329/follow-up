@@ -8,6 +8,9 @@ Page({
     code:0,
     compare:app.globalData.compare,
     change:false,
+    explainStatus:false,
+    delStatus:false,
+    readEnd:wx.getStorageSync('readEnd')||0,
     information:{
       other:'',
       examine:{
@@ -15,7 +18,7 @@ Page({
         "biochemistry":[],
         "dic":[],
         "swelling":[],
-        "bMode":[],
+        "bmode":[],
         "ct":[],
         "mri":[]
       }  
@@ -32,6 +35,13 @@ Page({
     that.setData({
       ['information.id']:options.id
     });
+  },
+  checkChange(e){
+    let readEnd = e.detail.value.indexOf("1")>-1?1:0;    
+    wx.setStorageSync('readEnd', readEnd);
+    that.setData({
+      readEnd:readEnd
+    });    
   },
   otherChange(e){
     that.setData({
@@ -78,9 +88,26 @@ Page({
       delStatus:!that.data.delStatus
     })
   },
+  explainModal(){
+    that.setData({
+      explainStatus:!that.data.explainStatus
+    })
+  },
   async submit(){
+    let data = that.data.information.examine;
+    let pics = Object.values(data).some(item=>{
+      console.log(item)
+      return item.length>0;
+    });
+
+    if(!pics){
+      return util.prompt(that,'请至少在一个类目下上传检测结果!');
+    }
+    if(!that.data.readEnd){
+      return util.prompt(that,'请同意隐私协议再进行提交!');
+    }
+
     let res = await api.addReview(that.data.information);
-    console.log(res);
     if(res.code==0){
       wx.removeStorageSync('formData');
       that.setData({

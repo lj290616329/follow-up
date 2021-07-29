@@ -4,7 +4,7 @@
       <text class="cuIcon-titles text-orange"></text> 复查计划
     </view>
   </view>
-  <navigator url="/pages/personal/review/detail" class="cu-item  text-blue cuIcon-roundcheckfill">
+  <navigator url="/pages/test/personal/review/detail" class="cu-item  text-blue cuIcon-roundcheckfill">
     <view class="content bg-blue shadow-blur ">
       <text>2021-06-01</text> (已完成)
     </view>

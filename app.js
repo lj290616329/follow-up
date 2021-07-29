@@ -1,7 +1,7 @@
-require('./common')
+require('./common');
 App({
   onLaunch() {
-    
+
   },
   globalData: {
     userInfo: null,

@@ -6,7 +6,8 @@ const app = getApp();
 Page({
   data: {
     code:0,
-    types:app.globalData.types
+    types:app.globalData.types,
+    more:false
   },
   async onLoad(options) {
     that = this;
@@ -22,6 +23,11 @@ Page({
     let id = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: '/pages/doctor/check/detail?id='+id,
+    })
+  },
+  showMore(){
+    that.setData({
+      more:true
     })
   },
   prompt(){

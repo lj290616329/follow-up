@@ -36,6 +36,7 @@
 
 <view class="cu-modal {{informationStatus?'show':''}}">
   <form bindsubmit="submitForm">
+    <input name="readEnd" value="{{readEnd}}" hidden></input>
     <view class="cu-dialog sm">
       <view class="cu-bar bg-white justify-end">
         <view class="content">请填写个人信息</view>
@@ -54,7 +55,13 @@
           <button class='cu-btn bg-green shadow sm' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">授权获取</button>
         </view>
       </view>
-      <view class="cu-bar bg-white justify-end">
+      <view class="cu-bar bg-white">
+        <view class="action">
+          <checkbox-group bindchange="checkChange">
+            <checkbox class="margin-right-sm" checked="{{readEnd}}" value="1"></checkbox><text class="text-black" bindtap="explainModal">同意此<text class="text-blue">隐私协议</text></text>
+          </checkbox-group>
+          
+        </view>
         <view class="action">
           <button class="cu-btn line-green text-green" bindtap="informationModal">取消</button>
           <button class="cu-btn bg-green margin-left" formType="submit">认证</button>
@@ -62,6 +69,53 @@
       </view>
     </view>
   </form>
+</view>
+
+
+
+<view class="cu-modal {{explainStatus?'show':''}}" catchtouchmove='true'>
+  <view class="cu-dialog sm">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">隐私说明</view>
+      <view class="action" bindtap="explainModal">
+          <text class="cuIcon-close text-red"></text>
+        </view>
+    </view>
+    <view class="padding-sm bg-white">
+      <scroll-view class="content text-left" style="height:500rpx;" scroll-y="true" lower-threshold='50' bindscrolltolower="canEnd">
+        <view class="text-black text-bold text-center">肝胆全程照护隐私保护说明</view>
+<view class="text-black margin-top-sm">本指引是肝胆全程照护小程序开发者收集、使用和存储你的信息而制定。</view>
+
+<view class="text-black text-bold margin-top-sm">开发者收集的信息<text class="text-gray margin-left-lg">根据法律规定，开发者仅收集实现小程序功能所必要的信息。</text></view>
+<view class="text-black margin-top-sm">收集你的手机号码，用于用于提醒功能</view>
+<view class="text-black margin-top-sm">收集你的用户信息（微信昵称、头像、性别、地区），用于个性化展示</view>
+<view class="text-black text-bold margin-top-sm">开发者对信息的存储</view>
+<view class="text-black margin-top-sm">存储地点<text class="text-gray margin-left-lg">境内</text></view>
+<view class="text-black margin-top-sm">存储期限<text class="text-gray margin-left-lg">小程序停止运营后及时删除</text></view>
+<view class="text-black text-bold margin-top-sm">信息的使用规则</view>
+<view class="text-black margin-top-sm">开发者将会在本指引所涵盖的用途内使用收集的信息。</view>
+
+<view class="text-black margin-top-sm">如开发者使用你的信息超出本指引目的或合理范围，会及时更新本指引，同时，开发者在使用你的信息前，再次以小程序浮窗等方式告知并征得你的明示同意</view>
+
+<view class="text-black text-bold margin-top-sm">信息对外提供</view>
+<view class="text-black margin-top-sm">开发者承诺</view>
+
+<view class="text-black margin-top-sm">- 不会主动共享或转让你的信息至任何第三方，如存在确需共享或转让时，开发者应当直接或确认第三方征得你的明示同意。</view>
+
+<view class="text-black margin-top-sm">- 不会对外公开披露你的信息，如必须公开披露时，开发者应当向你告知公开披露的目的、披露信息的类型及可能涉及的信息，并征得你的明示同意</view>
+
+<view class="text-black margin-top-sm">若你认为开发者未遵守上述约定，或有其他的投诉建议、未成年人个人信息相关问题，可通过以下方式与开发者联系；或者向微信进行投诉。</view>
+
+<view class="text-black margin-top-sm padding-bottom-lg">邮箱<text class="text-gray margin-left-lg">290616329@qq.com</text></view>
+
+      </scroll-view>
+    </view>
+
+    <view class="cu-bar bg-green" wx:if="{{readEnd}}" bindtap="explainModal">
+      <view class="action margin-0 flex-sub  solid-left">我已阅读</view>
+    </view>
+
+  </view>
 </view>
 
 

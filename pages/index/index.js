@@ -7,26 +7,28 @@ Page({
     phone:"",
     name:"",
     code:0,
-    msg:''
+    msg:'',
+    explainStatus:false,
+    readEnd:wx.getStorageSync('readEnd')||0
   },
   async onLoad(options) {
     that = this; 
     that.initValidate();
     let res = await api.login();
-    console.log(res);
-    if(res.code==0){
-      //医生用户
-      if(res.data.ifDoctor){
-        wx.reLaunch({
-          url: '/pages/doctor/index',
-        })
-      }else{
-        //个人用户已填写个人信息
-        wx.reLaunch({
-          url: '/pages/personal/index',
-        })
-      }          
-    }        
+      console.log(res);
+      if(res.code==0 && res.data && res.data.ifAuth){
+        //医生用户
+        if(res.data.ifDoctor){
+          wx.reLaunch({
+            url: '/pages/doctor/index',
+          })
+        }else{
+          //个人用户已填写个人信息
+          wx.reLaunch({
+            url: '/pages/personal/index',
+          })
+        }          
+      }            
   },
   initValidate() {
     let rules = {
@@ -36,15 +38,21 @@ Page({
       }, 
       phone:{
         required:true
+      },
+      readEnd:{
+        eq:"1"
       }
     };
-    let messages = {      
+    let messages = {     
       name:{
         required: '请填写姓名',
         minlength:'请输入正确的名称'
       },
       phone:{
         required:'请授权获取手机号'
+      },
+      readEnd:{
+        eq:'请同意隐私协议'
       }
     };
     that.WxValidate = new WxValidate(rules, messages)
@@ -72,8 +80,21 @@ Page({
         rawData:res.rawData
       });
       if(authRes.code==0){
-        wx.setStorageSync('token', authRes.data.token)
-        that.informationModal();
+        wx.setStorageSync('token', authRes.data.token);
+        if(authRes.data.ifAuth){
+          if(authRes.data.ifDoctor){
+            wx.reLaunch({
+              url: '/pages/doctor/index',
+            })
+          }else{
+            //个人用户已填写个人信息
+            wx.reLaunch({
+              url: '/pages/personal/index',
+            })
+          }
+        }else{
+          that.informationModal();
+        }        
       }else{
         util.prompt(that,authRes.msg);
       }
@@ -86,11 +107,28 @@ Page({
       informationStatus:!that.data.informationStatus
     })
   },
+  explainModal(){
+    that.setData({
+      explainStatus:!that.data.explainStatus
+    })
+  },
+  canEnd(){
+    wx.setStorageSync('readEnd', 1);
+    that.setData({
+      readEnd:1
+    })
+  },
+  checkChange(e){
+    let readEnd = e.detail.value.indexOf("1")>-1?1:0;    
+    wx.setStorageSync('readEnd', readEnd);
+    that.setData({
+      readEnd:readEnd
+    });    
+  },
   visitor(){
     wx.navigateTo({
       url: '/pages/test/personal/index',
-    })
-    
+    });    
   },
   async getPhoneNumber(e){
     console.log(e)

@@ -1,15 +1,6 @@
-<view class="flex text-center padding bg-white">
-  <navigator url="/pages/news/list" class="cu-item flex-sub border-right-sm">
-    知识科普
-  </navigator>
-  <navigator url="/pages/test/personal/info" class="cu-item flex-sub">
-    我的病历
-  </navigator>
-</view>
-
 <view class="cu-card dynamic no-card margin-top">
   <view class="cu-list menu-avatar">
-    <navigator  url="/pages/test/personal/info" class="cu-item"  bindtap="userInfo">
+    <view class="cu-item" >
       <view class="avatar round">
         <open-data type='userAvatarUrl'></open-data>
       </view>
@@ -17,15 +8,10 @@
         <view class="padding-left">
           <open-data type="userNickName"></open-data>          
         </view>        
-      </view>
-      <view class="action">
-        <view class="cuIcon-right text-gray lg"></view>        
-      </view>
-    </navigator>    
+      </view>      
+    </view>    
   </view>
 </view>
-
-
 
 <view class="cu-bar bg-white solid-bottom margin-top">
   <view class="action">

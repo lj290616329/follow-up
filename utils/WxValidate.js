@@ -39,6 +39,7 @@ class WxValidate {
       this.defaults = {
           messages: {
               required: '这是必填字段。',
+              eq:'请输入相等的值',
               email: '请输入有效的电子邮件地址。',
               tel: '请输入11位的手机号码。',
               url: '请输入有效的网址。',
@@ -69,6 +70,7 @@ class WxValidate {
            * 验证必填元素
            */
           required(value, param) {
+              
               if (!that.depend(param)) {
                   return 'dependency-mismatch'
               } else if (typeof value === 'number') {
@@ -79,6 +81,15 @@ class WxValidate {
 
               return value.length > 0
           },
+          /**
+           * 
+           * 验证相等
+           */
+          eq(value, param) {              
+            return value === param;
+          },
+
+
           /**
            * 验证电子邮箱格式
            */

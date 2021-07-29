@@ -6,7 +6,8 @@ Page({
   data: {
     code:0,
     compare:app.globalData.compare,
-    reviewPlans:[]
+    reviewPlans:[],
+    more:false
   },
   async onLoad(options) {
     that = this;
@@ -16,6 +17,11 @@ Page({
       code:res.code,
       msg:res.msg,
       reviewPlans:res.data||[]
+    })
+  },
+  showMore(){
+    that.setData({
+      more:true
     })
   },
   detail(e){

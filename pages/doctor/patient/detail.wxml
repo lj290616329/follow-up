@@ -25,11 +25,14 @@
     <view class="action">
       <text class="cuIcon-titles text-orange"></text> 病历
     </view>
+    <view class="action" wx:if="{{reviewPlans.length>3 && !more}}" bindtap="showMore">
+      展示更多<text class="text-grey text-sm cuIcon-right"></text>				
+    </view>
   </view>
 
 
 
-  <view wx:for="{{reviewPlans}}" wx:key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}">
+  <view wx:for="{{reviewPlans}}" wx:key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}" wx:if="{{item.show || more}}">
     <view class="content shadow-blur {{item.review?'bg-blue':'bg-grey'}}">
       <text>{{item.reviewTime}}</text> ({{tools.timeAfter(item.reviewTime)}})
     </view>
