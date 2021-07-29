@@ -124,7 +124,6 @@ public class IndexMiniController {
         }
         try {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);
-            System.out.println(session.toString());
             if (!wxService.getUserService().checkUserInfo(session.getSessionKey(), wxLoginVo.getRawData(), wxLoginVo.getSignature())) {
                 return DataResult.fail("授权失败请重新再试!");
             }
