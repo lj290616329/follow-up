@@ -8,7 +8,7 @@ Page({
     authBtn:true
   },
   onLoad(options) {
-    that = this;    
+    that = this; 
     if(options.scene){
       that.setData({
         options:options
@@ -28,7 +28,8 @@ Page({
       wx.showToast({
         title: '操作成功',//提示文字
         duration:3000,//显示时长
-        icon:'success', //图标，支持"success"、"loading"  
+        icon:'success',
+        mask:true,
         success:function(){ 
           setTimeout(function () { 
             wx.reLaunch({
@@ -39,9 +40,10 @@ Page({
      })
     }else{
       wx.showToast({
+        mask:true,
         title: res.msg,//提示文字
         duration:3000,//显示时长
-        icon:'error', //图标，支持"success"、"loading"  
+        icon:'none', //图标，支持"success"、"loading"  
         success:function(){ 
           setTimeout(function () { 
             wx.reLaunch({
