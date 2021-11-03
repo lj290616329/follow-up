@@ -65,7 +65,7 @@ public class AdminService {
     }
 
     public Admin findById(Integer id) {
-        return adminRepository.findById(id).get();
+        return adminRepository.findById(id).orElse(null);
     }
 
     @Transactional
@@ -77,6 +77,8 @@ public class AdminService {
         Pageable pageable = PageRequest.of(vo.getPageNum()-1, vo.getPageSize(), Sort.Direction.DESC,"id");
         return adminRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<Predicate>();
+
+            predicates.add(criteriaBuilder.notEqual(root.get("loginName"),"admin"));
 
             if (!StringUtils.isEmpty(vo.getName())){
                 predicates.add(criteriaBuilder.like(root.get("name"),"%"+vo.getName()+"%"));
@@ -118,7 +120,7 @@ public class AdminService {
         if(admin!=null && !admin.getId().equals(vo.getId())){
             throw new BusinessException(BaseExceptionType.USER_ERROR,"该登录账号已存在,请修改后再保存");
         }
-        admin = adminRepository.getOne(vo.getId());
+        admin = findById(vo.getId());
         String salt = generateSalt();
         String password = encryptPassword(vo.getPassword(),salt);
         admin.setSalt(salt);
@@ -131,7 +133,7 @@ public class AdminService {
 
     @Transactional
     public void updatePwd(Integer id, AdminPwdReqVO vo) {
-        Admin admin = adminRepository.getOne(id);
+        Admin admin = findById(id);
         String salt = admin.getSalt();
         if(admin.getPassword().equals(encryptPassword(vo.getOldPwd(),salt))){
             String password = encryptPassword(vo.getNewPwd(),salt);
@@ -158,6 +160,10 @@ public class AdminService {
 
     public AdminRoleRespVO getAdminRole(Integer aid) {
         List<Role> roles = roleRepository.findAll();
+        Role superRole = roleRepository.findById(1).orElse(null);
+        if(roles.contains(superRole)){
+            roles.remove(superRole);
+        }
         List<Integer> rids = getRidsByAid(aid);
         AdminRoleRespVO adminRoleRespVO = new AdminRoleRespVO();
         adminRoleRespVO.setAllRole(roles);

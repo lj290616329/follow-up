@@ -1,11 +1,9 @@
 package com.tsingtec.follow.controller.web.sys;
 
 import com.tsingtec.follow.entity.sys.Admin;
-import com.tsingtec.follow.entity.sys.Role;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.handler.annotation.LogAnnotation;
 import com.tsingtec.follow.service.sys.AdminService;
-import com.tsingtec.follow.service.sys.RoleService;
 import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.sys.admin.*;
 import com.tsingtec.follow.vo.resp.sys.admin.AdminRoleRespVO;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @RestController
@@ -31,16 +28,13 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @Autowired
-    private RoleService roleService;
 
     @GetMapping("/admin")
     @RequiresPermissions("sys:admin:list")
     @ApiOperation(value = "分页获取用户列表接口")
     @LogAnnotation(title = "用户管理", action = "分页获取用户列表")
     public DataResult<Page<Admin>> pageInfo(AdminPageReqVO vo) {
-        Page<Admin> admins = adminService.pageInfo(vo);
-        return DataResult.success(admins);
+        return DataResult.success(adminService.pageInfo(vo));
     }
 
     @PostMapping("/admin")
@@ -59,7 +53,7 @@ public class AdminController {
     @LogAnnotation(title = "用户管理",action = "修改用户")
     public DataResult update(@RequestBody AdminUpdateReqVO vo){
         Admin admin = HttpContextUtils.getAdmin();
-        if(!admin.getId().equals(1)&& vo.getId().equals(1)){
+        if(!admin.getId().equals(1) && vo.getId().equals(1)){
             return DataResult.fail("您没有权限对此账号进行此操作");
         }
         adminService.update(vo);
@@ -75,40 +69,41 @@ public class AdminController {
         return DataResult.success();
     }
 
+    /**
+     * 不能删除admin 账号
+     * @param aids
+     * @return
+     */
     @DeleteMapping("/admin")
     @ApiOperation(value = "删除用户接口")
     @RequiresPermissions("sys:admin:delete")
     @LogAnnotation(title = "用户管理",action = "删除用户")
     public DataResult deletedUser(@RequestBody @ApiParam(value = "用户id集合") List<Integer> aids){
-        Admin admin = HttpContextUtils.getAdmin();
-        if(!admin.getId().equals(1)&&aids.contains(1)){
-            aids.remove(1);
+        if(aids.contains(1)){
+            aids.remove(aids.indexOf(1));
         }
         adminService.deleteBatch(aids);
         return DataResult.success();
     }
 
+    /**
+     * 非admin 账号无法获取到超级权限
+     * @param id
+     * @return
+     */
     @GetMapping("/admin/role")
     @RequiresPermissions("sys:admin:getrole")
     @ApiOperation(value = "赋予角色-获取所有角色接口")
     @LogAnnotation(title = "用户管理",action = "赋予角色-获取所有角色接口")
     public DataResult<AdminRoleRespVO> getUserOwnRole(Integer id){
-        AdminRoleRespVO adminRoleRespVO = adminService.getAdminRole(id);
-        Admin admin = HttpContextUtils.getAdmin();
-        Set<Role> roles = admin.getRoles();
-        final Boolean[] flag = {false};
-        roles.forEach(role -> {
-            if (role.getId().equals(1)){
-                flag[0] = true;
-                return;
-            }
-        });
-        if(!flag[0]){
-            adminRoleRespVO.getAllRole().remove(roleService.findById(1));
-        }
-        return DataResult.success(adminRoleRespVO);
+        return DataResult.success(adminService.getAdminRole(id));
     }
 
+    /**
+     * 非超级账号无法修改admin账号权限
+     * @param vo
+     * @return
+     */
     @PutMapping("/admin/role")
     @RequiresPermissions("sys:admin:setrole")
     @ApiOperation(value = "赋予角色-用户赋予角色接口")
