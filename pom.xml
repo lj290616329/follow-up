@@ -20,7 +20,7 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locales>zh_CN</project.build.locales>
-        <weixin-java.version>4.0.0</weixin-java.version>
+        <weixin-java.version>4.2.0</weixin-java.version>
         <shiro.version>1.4.0</shiro.version>
         <vjkit.version>1.0.8</vjkit.version>
         <dozermapper.version>6.5.0</dozermapper.version>
@@ -93,8 +93,8 @@
         <!--微信小程序-->
         <dependency>
             <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-miniapp</artifactId>
-            <version>${weixin-java.version}</version>
+            <artifactId>wx-java-miniapp-spring-boot-starter</artifactId>
+            <version>4.2.0</version>
         </dependency>
 
         <!-- cache -->

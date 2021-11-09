@@ -37,7 +37,7 @@ public interface ReviewPlanRepository extends JpaRepository<ReviewPlan, Integer>
     @Query("delete from ReviewPlan a where a.id in (?1)")
     void deleteBatch(@Param(value = "ids") List<Integer> ids);
 
-
+    ReviewPlan findByReview_Id(Integer id);
 
     //List<ReviewPlan> getByInformation_Doctor_IdReview_ExamineNotNullAndReview_ReplyIsNullOrderByReview_CreateTimeDesc(@Param("did") Integer did);//     MaUser_DidAndReview_ReplyIsNullOrderByCreateTimeDesc(@Param("did") Integer did);
 }

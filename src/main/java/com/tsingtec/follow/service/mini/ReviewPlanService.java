@@ -3,6 +3,7 @@ package com.tsingtec.follow.service.mini;
 import com.tsingtec.follow.entity.mini.Doctor;
 import com.tsingtec.follow.entity.mini.Information;
 import com.tsingtec.follow.entity.mini.ReviewPlan;
+import com.tsingtec.follow.handler.annotation.AddReviewAnnotation;
 import com.tsingtec.follow.repository.mini.InformationRepository;
 import com.tsingtec.follow.repository.mini.ReviewPlanRepository;
 import com.tsingtec.follow.utils.BeanMapper;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -145,6 +147,18 @@ public class ReviewPlanService {
     }
 
     @Transactional
+    @AddReviewAnnotation
+    public void insertAll(List<ReviewPlanAddReqVO> vos) {
+        vos.forEach(vo ->{
+            ReviewPlan reviewPlan = new ReviewPlan();
+            Information information = informationRepository.getOne(vo.getIid());
+            BeanMapper.mapExcludeNull(vo,reviewPlan);
+            reviewPlan.setInformation(information);
+            reviewPlanRepository.save(reviewPlan);
+        });
+    }
+
+    @Transactional
     public void update(ReviewPlanUpdateReqVO vo) {
         ReviewPlan reviewPlan = reviewPlanRepository.getOne(vo.getId());
         BeanUtils.copyPropertiesIgnoreNull(vo,reviewPlan);
@@ -160,4 +174,25 @@ public class ReviewPlanService {
     public List<ReviewPlan> findByDid(Integer did) {
         return reviewPlanRepository.getByInformation_Doctor_IdAndReview_ExamineNotNullAndReview_ReplyIsNullOrderByReview_CreateTimeDesc(did);
     }
+
+
+    public ReviewPlan findByReview_Id(Integer id){
+        return reviewPlanRepository.findByReview_Id(id);
+    }
+
+    /**
+     * 获取n天后需要复查的计划
+     * @param day
+     * @return
+     */
+    public List<ReviewPlan> findByNearDay(Integer day){
+        LocalDate date = LocalDate.now().plusDays(day);
+        return reviewPlanRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> listAnd = new ArrayList<Predicate>();
+            listAnd.add(criteriaBuilder.isNull(root.get("review")));
+            listAnd.add(criteriaBuilder.equal(root.get("reviewTime"),date));
+            return criteriaQuery.where(listAnd.toArray(new Predicate[listAnd.size()])).getRestriction();
+        });
+    }
+
 }

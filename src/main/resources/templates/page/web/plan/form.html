@@ -15,10 +15,28 @@
      {{/if}}
     <input type="hidden" name="iid" value="{{iid}}"/>
     <div class="layui-form-item">
-        <label class="layui-form-label">复查日期</label>
-        <div class="layui-input-inline">
-            <input type="text" name="reviewTime" id="reviewTime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value="{{reviewTime}}">
+        <div class="layui-inline">
+            <label class="layui-form-label">复查日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="reviewTime" id="reviewTime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value="{{reviewTime}}">
+            </div>
         </div>
+
+        {{if !id}}
+        <div class="layui-inline">
+            <label class="layui-form-label">复查周期(月)</label>
+            <div class="layui-input-inline">
+                <input type="number" id="cycle" placeholder="请输入复查周期" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">执行次数</label>
+            <div class="layui-input-inline">
+                <input type="number" id="times" placeholder="请输入执行次数" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        {{/if}}
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">检查项目</label>
@@ -30,7 +48,7 @@
             <input type="checkbox" name="examine" value="bmode" title="bmode" {{if examine.indexOf("bmode")>-1}}checked="" {{/if}} lay-filter="examine">
             <input type="checkbox" name="examine" value="ct" title="ct" {{if examine.indexOf("ct")>-1}}checked="" {{/if}} lay-filter="examine">
             <input type="checkbox" name="examine" value="mri" title="mri" {{if examine.indexOf("mri")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="其他" title="其他" {{if examine.indexOf("其他")>-1}}checked="" {{/if}} lay-filter="examine">
+            <input type="checkbox" name="examine" value="用药情况" title="用药情况" {{if examine.indexOf("用药情况")>-1}}checked="" {{/if}} lay-filter="examine">
         </div>
     </div>
     <div class="layui-form-item">
@@ -76,12 +94,23 @@
                 examine.push($(this).val());
             });
             plan.examine = examine;
+            var vos = [];
+            if($("#cycle") && $("#cycle").val()>0 && $("#times") && $("#times").val()>0){
+                for(let i=0;i<$("#times").val();i++){
+                    let plan2 = {...plan};
+                    let reviewTime = new Date(plan.reviewTime);
+                    plan2.reviewTime = util.toDateString(reviewTime.setMonth(reviewTime.getMonth()+i*$("#cycle").val()), 'yyyy-MM-dd');
+                    vos.push(plan2);
+                }
+            }else{
+                vos.push(plan);
+            }
             if(plan.id){
                 Api.updatePlan(JSON.stringify(plan)).then(res=>{
                     back();
                 });
             }else{
-                Api.addPlan(JSON.stringify(plan)).then(res=>{
+                Api.addPlan(JSON.stringify(vos)).then(res=>{
                     back();
                 });
             }

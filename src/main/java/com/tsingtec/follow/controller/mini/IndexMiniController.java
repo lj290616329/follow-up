@@ -5,7 +5,6 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import com.tsingtec.follow.config.jwt.JwtUtil;
-import com.tsingtec.follow.config.mini.WxMaConfiguration;
 import com.tsingtec.follow.entity.mini.Doctor;
 import com.tsingtec.follow.entity.mini.Information;
 import com.tsingtec.follow.entity.mini.MaUser;
@@ -48,6 +47,9 @@ public class IndexMiniController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private WxMaService wxService;
+
     /**
      * 登录接口
      */
@@ -58,7 +60,6 @@ public class IndexMiniController {
         if (StringUtils.isBlank(code)) {
             return DataResult.fail("授权信息不全,请重新进行授权!");
         }
-        final WxMaService wxService = WxMaConfiguration.getMaService();
 
         try {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);
@@ -115,7 +116,6 @@ public class IndexMiniController {
     @ApiOperation(value = "用户授权接口")
     public DataResult sign(@RequestBody WxLoginReqVO wxLoginVo){
         BaseUserRespVO baseUserRespVO = new BaseUserRespVO();
-        final WxMaService wxService = WxMaConfiguration.getMaService();
 
         log.info("登录信息为:{}",wxLoginVo);
         String code = wxLoginVo.getCode();
@@ -161,7 +161,6 @@ public class IndexMiniController {
      */
     @PostMapping("/phone")
     public DataResult phone(@RequestBody WxLoginReqVO wxLoginVo) {
-        final WxMaService wxService = WxMaConfiguration.getMaService();
         String code = wxLoginVo.getCode();
         try {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);

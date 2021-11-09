@@ -41,8 +41,8 @@ public class ReviewPlanController {
     }
 
     @PostMapping("reviewPlan")
-    public DataResult add(@RequestBody ReviewPlanAddReqVO vo){
-        reviewPlanService.insert(vo);
+    public DataResult add(@RequestBody List<ReviewPlanAddReqVO> vo){
+        reviewPlanService.insertAll(vo);
         return DataResult.success();
     }
 

@@ -2,7 +2,6 @@ package com.tsingtec.follow.controller.web;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaCodeLineColor;
-import com.tsingtec.follow.config.mini.WxMaConfiguration;
 import com.tsingtec.follow.entity.sys.Admin;
 import com.tsingtec.follow.exception.DataResult;
 import com.tsingtec.follow.service.sys.AdminService;
@@ -52,6 +51,9 @@ public class IndexController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private WxMaService wxService;
+
     @Resource(name = "ehCacheManager")
     private EhCacheManager mycacheManager;
 
@@ -94,7 +96,6 @@ public class IndexController {
     @GetMapping(value = "/qrcode")
     @ApiOperation(value = "二维码登录接口")
     public void qrcode(HttpServletResponse response){
-        final WxMaService wxService = WxMaConfiguration.getMaService();
         Subject subject = SecurityUtils.getSubject();
         String sessionid = subject.getSession().getId().toString();
         try {
