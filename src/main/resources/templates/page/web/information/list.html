@@ -77,7 +77,8 @@
                     ,{field:'phone', title: '手机号码'}
                     ,{field:'type', title: '病种',templet:function(d){
                         let otherType = d.otherType?'-'+d.otherType:'';
-                        return diseases.data.find(disease=>disease.id==d.type).title + otherType;
+                        let disease = diseases.data.find(disease=>disease.id==d.type);
+                        return disease?disease.title + otherType:"";
                         }
                     }
                     , {

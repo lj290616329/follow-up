@@ -139,9 +139,9 @@
             layer.open({
                 content: '确定要删除[' + name + "]么?",
                 yes:function (index, layero) {
-                    Api.deleteDoctor(JSON.stringify(ids)).then(res=>{
+                    Api.deleteCheck(JSON.stringify(ids)).then(res=>{
                         layer.close(index);
-                        tableReload();
+                        table.reload('data-table');
                     });
                 }
             });

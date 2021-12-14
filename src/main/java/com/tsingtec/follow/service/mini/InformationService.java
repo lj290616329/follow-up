@@ -117,7 +117,7 @@ public class InformationService {
     @Transactional
     public void update(InformationUpdateReqVO vo) {
         Information info = findByPhone(vo.getPhone());
-        if(!info.getId().equals(vo.getId()))  throw  new BusinessException(BaseExceptionType.USER_ERROR,"已存在该号码的用户,请查证后再试!");
+        if(info!=null && !info.getId().equals(vo.getId()))  throw  new BusinessException(BaseExceptionType.USER_ERROR,"已存在该号码的用户,请查证后再试!");
         Information information = informationRepository.getOne(vo.getId());
         BeanUtils.copyPropertiesIgnoreNull(vo,information);
         informationRepository.save(information);

@@ -141,7 +141,7 @@
                 yes:function (index, layero) {
                     Api.deleteDisease(JSON.stringify(ids)).then(res=>{
                         layer.close(index);
-                        tableReload();
+                        table.reload('data-table');
                     });
                 }
             });
