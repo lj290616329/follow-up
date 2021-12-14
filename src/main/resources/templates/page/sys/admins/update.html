@@ -89,16 +89,17 @@
         form.render();
         //提交
 
-        form.on('submit(LAY-user-reg-submit)', async function (obj) {
+        form.on('submit(LAY-user-reg-submit)',function (obj) {
             var field = obj.field;
             //确认密码
             if (field.newPwd !== field.repass) {
                 return layer.msg('两次密码输入不一致');
             }
-            let res = await Api.updatePwd(JSON.stringify(obj.field));
-            if(res.code==0){
-                top.location = "/logout"
-            }
+            Api.updatePwd(JSON.stringify(obj.field)).then(res=>{
+                if(res.code==0){
+                    top.location = "/logout"
+                }
+            });
             return false;
         });
     });

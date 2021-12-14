@@ -19,8 +19,8 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-@DynamicInsert(true)
-@DynamicUpdate(true)
+@DynamicInsert
+@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 @Proxy(lazy = false)

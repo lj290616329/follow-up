@@ -67,31 +67,11 @@
         </div>
     </div>
 
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">病种</label>
-            <div class="layui-input-block">
-                <select name="type" lay-verify="required">
-                    <option value="">请选择病种</option>
-                    <optgroup label="肝脏肿瘤">
-                        <option value="1" {{if information.type==1}}selected{{/if}}>HCC</option>
-                        <option value="2" {{if information.type==2}}selected{{/if}}>ICC</option>
-                        <option value="3" {{if information.type==3}}selected{{/if}}>其他</option>
-                    </optgroup>
-                    <optgroup label="肝道肿瘤">
-                        <option value="4" {{if information.type==4}}selected{{/if}}>肝门</option>
-                        <option value="5" {{if information.type==5}}selected{{/if}}>胆囊</option>
-                        <option value="6" {{if information.type==6}}selected{{/if}}>其他</option>
-                    </optgroup>
-                    <optgroup label="胰腺肿瘤">
-                        <option value="7" {{if information.type==7}}selected{{/if}}>胰腺</option>
-                        <option value="8" {{if information.type==8}}selected{{/if}}>其他</option>
-                    </optgroup>
-                    <optgroup label="其他">
-                        <option value="9" {{if information.type==9}}selected{{/if}}>其他</option>
-                    </optgroup>
-                </select>
-            </div>
+    <div class="layui-form-item" id="type-box">
+        <label class="layui-form-label">病种</label>
+        <div class="layui-input-inline">
+            <input type="text" id="type" name="type" value="{{information.type}}" autocomplete="off" placeholder="请选择病种"
+                   lay-reqtext="请选择病种" class="layui-input" lay-verify="required">
         </div>
     </div>
 
@@ -102,47 +82,40 @@
                 <select name="did" lay-verify="required">
                     <option value="">请选择所属医生</option>
                     {{each doctors as doctor}}
-                        <option value="{{doctor.id}}" {{if information.doctor.id==doctor.id}}selected{{/if}}>{{doctor.name}}~{{doctor.phone}}</option>
+                        <option value="{{doctor.id}}" {{if information.doctor && information.doctor.id==doctor.id}}selected{{/if}}>{{doctor.name}}~{{doctor.phone}}</option>
                     {{/each}}
                 </select>
             </div>
         </div>
     </div>
 
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">病理图片</label>
-        <div class="layui-input-block layui-upload-list">
-            {{each information.pathology as src i}}
-            <div class="pic_box">
-                <i class="layui-icon layui-icon-close-fill removeImg" data-index="{{i}}"></i>
-                <img class="background" src="{{src}}">
-            </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">检查项目</label>
+        <div class="layui-input-block">
+            {{each information.checks as check}}
+                <input lay-filter="checkChange" type="checkbox" name="check" lay-skin="primary" value="{{check.id}}" data-name="{{check.name}}" data-enname="{{check.enName}}" title="{{check.name}}" {{if check.checked}}checked="" {{/if}}>
             {{/each}}
-            <!-- 最多多少张图片 -->
-            <div class='pic-num' style="float:right;width: fit-content;"><span>{{information.pathology.length}}</span>/<span>4</span></div>
-            <img src="/image/add.png" alt="点击上传图片"  class="background addImg" {{if information.pathology.length>3}}style='display:none;'{{/if}}/>
-            <input name="pathology" class="value-input" type="hidden" lay-verify="required" lay-reqtext="请上传病理图片" value="{{information.pathology | join ','}}">
         </div>
     </div>
 
-    {{each information.examine as check key}}
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">{{key | showName}}</label>
+    {{each information.examination as check}}
+    <div class="layui-form-item layui-form-text" id="check-{{check.enName}}">
+        <label class="layui-form-label">{{check.name}}</label>
         <div class="layui-input-block layui-upload-list">
-            {{each check as src i}}
+            {{each check.pics as src i}}
                 <div class="pic_box">
                     <i class="layui-icon layui-icon-close-fill removeImg" data-src="{{i}}"></i>
                     <img class="background" src="{{src}}">
                 </div>
             {{/each}}
             <!-- 最多多少张图片 -->
-            <div class='pic-num' style="float:right;width: fit-content;"><span>{{information.examine[key].length}}</span>/<span>4</span></div>
-            <img src="/image/add.png" alt="点击上传图片"  class="background addImg" {{if information.examine[key].length>3}}style='display:none;'{{/if}}/>
-            <input name="{{key}}" class="value-input" type="hidden" value="{{check | join ','}}">
+            <div class='pic-num' style="float:right;width: fit-content;"><span>{{check.pics.length}}</span>/<span>4</span></div>
+            <img src="/image/add.png" alt="点击上传图片"  class="background addImg" {{if check.pics.length>3}}style='display:none;'{{/if}}/>
+            <input data-enname="{{check.enName}}" data-name="{{check.name}}" class="value-input" type="hidden" value="{{check.pics | join ','}}">
         </div>
     </div>
     {{/each}}
-    <div class="layui-form-item layui-form-text">
+    <div class="layui-form-item layui-form-text mark">
         <label class="layui-form-label">其他</label>
         <div class="layui-input-block">
             <textarea name="other" placeholder="请输入其他内容" class="layui-textarea">{{information.other}}</textarea>
@@ -157,53 +130,111 @@
         </div>
     </div>
 </script>
+<script type="text/html" id="type-other">
+    <div class="layui-inline type-other">
+        <div class="layui-input-inline">
+            <input type="text" name="otherType" lay-reqtext="请输入其他病种的名称" placeholder="请输入其他病种的名称" lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="check-html">
+    <div class="layui-form-item layui-form-text" id="check-{{enName}}">
+        <label class="layui-form-label">{{name}}</label>
+        <div class="layui-input-block layui-upload-list">
+            {{each pics as src i}}
+                <div class="pic_box">
+                    <i class="layui-icon layui-icon-close-fill removeImg" data-src="{{i}}"></i>
+                    <img class="background" src="{{src}}">
+                </div>
+            {{/each}}
+            <div class='pic-num' style="float:right;width: fit-content;"><span>{{pics.length}}</span>/<span>4</span></div>
+            <img src="/image/add.png" alt="点击上传图片"  class="background addImg{{id}}" {{if pics.length>3}}style='display:none;'{{/if}}/>
+            <input data-enname="{{enName}}" data-name="{{name}}" class="value-input" type="hidden" value="{{pics | join ','}}">
+        </div>
+    </div>
+</script>
+
+
 <script src="/js/template.js"></script>
 </body>
 </html>
 <script type="text/javascript">
-    layui.use(['form', 'laydate', 'layer','Api','ImgUpload'],async function () {
+    layui.use(['form', 'laydate', 'layer','Api','ImgUpload','cascader'],async function () {
         var form = layui.form
             , layer = layui.layer
             , util = layui.util
             , Api = layui.Api
+            , cascader = layui.cascader
             , ImgUpload = layui.ImgUpload;
         $ = layui.$;
         var url = layui.url();
         let res = await Api.informationDetail({id:url.search.id});
         let res1 = await Api.getAllDoctor({});
-        let information = res.data||{doctor:{},pathology:[],examine:{cbc:[],biochemistry:[],dic:[],swelling:[],bmode:[],ct:[],mri:[]}}
+        let diseases = await Api.diseaseTree({});
+
+        let information = res.data;
         let doctors = res1.data || [];
         let html = template("information",{information:information,doctors:doctors});
         $(".layui-form").html(html);
-        ImgUpload();
+
+        ImgUpload(".addImg");
+        var type = cascader({
+            value: information.type,
+            elem: '#type',
+            options: diseases.data||[],
+            placeholder:'请选择病种',
+            props:{
+                value:"id",
+                label:"title"
+            },
+            clearable: true
+        });
         form.render();
+        type.changeEvent(function (value, node) {
+            $(".type-other").remove();
+            if(node.data.optional){
+                let html = template("type-other",{other:res.data.other});
+                $("#type-box").append(html);
+                form.render();
+            }
+        });
+
+        form.on('checkbox(checkChange)', function(data){
+            let elem = $(data.elem);
+            let checked = data.elem.checked;
+            let id = data.value;
+            let enName = $(elem).data("enname");
+            let name = $(elem).data("name");
+            if(checked){
+                let html = template("check-html",{id:id,enName:enName,name:name,pics:[]});
+                $(".mark").before(html);
+                ImgUpload(".addImg"+id);
+            }else{
+                $("#check-"+enName).remove();
+            }
+            form.render();
+        });
 
         //监听提交
         //form.on
         form.on('submit(information)',function(data){
             var information = data.field;
-            console.log(JSON.stringify(information));
-            var examine = {cbc:[],biochemistry:[],dic:[],swelling:[],bmode:[],ct:[],mri:[]};
-            for (let key in information){
-                if(key=='pathology'){
-                    if(information[key]){
-                        information.pathology = information[key].split(",");
-                    }else{
-                        information.pathology = [];
-                    }
-                }
-                if(key=='did'){
-                    information.doctor = {
-                        id:information[key]
-                    };
-                }
-                if(examine[key]){
-                    if(information[key]){
-                        examine[key] = information[key].split(",");
-                    }
-                }
-            }
-            information.examine = examine;
+            let examination = [];
+            $(".value-input").each(function () {
+                console.log($(this));
+                let enName = $(this).data("enname");
+                let name = $(this).data("name");
+                let val = $(this).val();
+                console.log(val)
+                examination.push({
+                    enName:enName,
+                    name:name,
+                    pics:val.split(",")
+                })
+            });
+            console.log(examination);
+            information.examination = examination;
             if(information.id){
                 Api.updateInformation(JSON.stringify(information)).then(res=>{
                     back();

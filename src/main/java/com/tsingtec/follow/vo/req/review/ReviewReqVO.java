@@ -1,9 +1,10 @@
 package com.tsingtec.follow.vo.req.review;
 
-import com.tsingtec.follow.entity.Examine;
+import com.tsingtec.follow.entity.Examination;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @Author lj
@@ -16,7 +17,7 @@ public class ReviewReqVO {
     @NotNull(message = "id不能为空")
     private Integer id;
 
-    private Examine examine;
+    private List<Examination> examination;
 
     private String other;
 

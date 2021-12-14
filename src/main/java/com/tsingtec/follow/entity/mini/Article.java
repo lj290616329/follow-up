@@ -22,8 +22,8 @@ import java.util.List;
  */
 @Data
 @Entity
-@DynamicInsert(true)
-@DynamicUpdate(true)
+@DynamicInsert
+@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "app_article")

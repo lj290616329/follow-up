@@ -1,7 +1,11 @@
 package com.tsingtec.follow.service.mini;
 
+import com.tsingtec.follow.entity.mini.Check;
 import com.tsingtec.follow.entity.mini.Doctor;
 import com.tsingtec.follow.entity.mini.Information;
+import com.tsingtec.follow.exception.BusinessException;
+import com.tsingtec.follow.exception.code.BaseExceptionType;
+import com.tsingtec.follow.repository.mini.CheckRepository;
 import com.tsingtec.follow.repository.mini.InformationRepository;
 import com.tsingtec.follow.utils.BeanMapper;
 import com.tsingtec.follow.utils.BeanUtils;
@@ -22,6 +26,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author lj
@@ -34,8 +39,22 @@ public class InformationService {
     @Autowired
     private InformationRepository informationRepository;
 
+    @Autowired
+    private CheckRepository checkRepository;
+
     public Information findById(Integer id){
-        return  informationRepository.findById(id).orElse(null);
+        Information information = informationRepository.findById(id).orElse(new Information());
+        List<Check> checks = checkRepository.findAll();
+        if(information!=null && information.getExamination()!=null){
+            List<String> enNames = information.getExamination().stream().map(examination -> examination.getEnName()).collect(Collectors.toList());
+            checks.forEach(check -> {
+                if(enNames.indexOf(check.getEnName())>-1){
+                    check.setChecked(true);
+                }
+            });
+        }
+        information.setChecks(checks);
+        return information;
     }
 
     @Transactional
@@ -54,7 +73,7 @@ public class InformationService {
 
 
     public List<Information> getByDid(Integer did){
-        return informationRepository.getByDoctor_idOrderByPathologyAsc(did);
+        return informationRepository.getByDoctor_idOrderByExaminationAsc(did);
     }
 
     public Page<Information> findAll(InformationPageReqVO vo) {
@@ -89,6 +108,7 @@ public class InformationService {
 
     @Transactional
     public void insert(InformationAddReqVO vo) {
+        if(findByPhone(vo.getPhone())!=null) throw  new BusinessException(BaseExceptionType.USER_ERROR,"已存在该号码的用户,请查证后再试!");
         Information information = new Information();
         BeanMapper.mapExcludeNull(vo,information);
         informationRepository.save(information);
@@ -96,6 +116,8 @@ public class InformationService {
 
     @Transactional
     public void update(InformationUpdateReqVO vo) {
+        Information info = findByPhone(vo.getPhone());
+        if(!info.getId().equals(vo.getId()))  throw  new BusinessException(BaseExceptionType.USER_ERROR,"已存在该号码的用户,请查证后再试!");
         Information information = informationRepository.getOne(vo.getId());
         BeanUtils.copyPropertiesIgnoreNull(vo,information);
         informationRepository.save(information);

@@ -80,7 +80,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 				httpServletResponse.getWriter().write("{\"code\":-1,\"msg\":\"您的登录状态已过期,请重新登录！\"}");
 				return false;
 			}else{
-				WebUtils.issueRedirect(request, response, "/");
+				WebUtils.issueRedirect(request, response, "/",null,true, false);
 				return false;
 			}
 		}
@@ -186,7 +186,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 			httpServletResponse.getWriter().write("{\"code\":-1,\"msg\":\"您已在别处登录，请您修改密码或重新登录！\"}");
 		}else{
 			// 重定向
-			WebUtils.issueRedirect(request, response, kickoutUrl);
+			WebUtils.issueRedirect(request, response, kickoutUrl,null,true, false);
 		}
 		return false;
 	}

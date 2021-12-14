@@ -18,7 +18,14 @@ layui.define(function(exports){
         planApi:"/manager/reviewPlan",
         articleApi:"/manager/article",
         articleDetailApi:"/manager/article/{id}",
-        reviewApi:"/manager/review"
+        reviewApi:"/manager/review",
+        checkApi:"/manager/check",
+        checkDetailApi:"/manager/check/{id}",
+        diseaseApi:"/manager/disease",
+        diseaseDetailApi:"/manager/disease/{id}",
+        diseaseParentApi:"/manager/disease/parent",
+        diseaseTreeApi:"/manager/disease/tree",
+        diseaseAllApi:"/manager/disease/all",
     }
     exports('ApiConfig', ApiConfig);
 });

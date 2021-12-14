@@ -1,6 +1,7 @@
 package com.tsingtec.follow.vo.resp.review;
 
-import com.tsingtec.follow.entity.mini.Review;
+import com.tsingtec.follow.entity.Examination;
+import com.tsingtec.follow.entity.mini.Check;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -18,11 +19,12 @@ public class ReviewPlanRespVO {
 
     private Boolean show=false;
 
-    private List<String> examine;
-
-    private Review review;
+    private List<Examination> examination;//病历
 
     private LocalDate reviewTime;//复查时间
 
     private String remark;//备注
+
+    private List<Check> checks;
+
 }

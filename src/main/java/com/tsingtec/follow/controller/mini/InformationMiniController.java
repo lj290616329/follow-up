@@ -88,6 +88,7 @@ public class InformationMiniController {
     private DataResult edit(@RequestBody @Valid InfoEditReqVO vo){
         Information information = informationService.findById(vo.getId());
         BeanUtils.copyPropertiesIgnoreNull(vo,information);
+        log.info("vo:{},information:{}",vo,information);
         informationService.save(information);
         return DataResult.success();
     }

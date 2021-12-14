@@ -32,12 +32,13 @@ public class ReviewPlanController {
      */
     @GetMapping("reviewPlan/{iid}")
     public DataResult list(@PathVariable("iid")Integer iid){
-        return DataResult.success(reviewPlanService.findByIid(iid));
+        return DataResult.success(reviewPlanService.pageByIid(iid));
     }
+
 
     @GetMapping("reviewPlan")
     public DataResult detail(Integer id){
-        return DataResult.success(reviewPlanService.getById(id));
+        return DataResult.success(reviewPlanService.findCheckedById(id));
     }
 
     @PostMapping("reviewPlan")

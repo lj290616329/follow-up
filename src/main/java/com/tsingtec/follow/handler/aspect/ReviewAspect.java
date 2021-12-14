@@ -12,7 +12,7 @@ import com.tsingtec.follow.service.mini.InformationService;
 import com.tsingtec.follow.service.mini.SubscriptionService;
 import com.tsingtec.follow.utils.BeanMapper;
 import com.tsingtec.follow.utils.HttpContextUtils;
-import com.tsingtec.follow.vo.req.review.ReviewReqVO;
+import com.tsingtec.follow.vo.req.plan.ReviewPlanExaminationReqVO;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -90,8 +90,7 @@ public class ReviewAspect {
 
         Object arg = joinPoint.getArgs()[0];
 
-        ReviewReqVO vo = BeanMapper.map(arg,ReviewReqVO.class);
-
+        ReviewPlanExaminationReqVO vo = BeanMapper.map(arg, ReviewPlanExaminationReqVO.class);
 
         if(subscription!=null && subscription.getAccept()){
 

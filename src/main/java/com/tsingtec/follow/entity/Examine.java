@@ -22,10 +22,9 @@ public class Examine {
     @JSONField(ordinal=4)
     private List<String> swelling= Lists.newArrayList();;//肿标
     @JSONField(ordinal=5)
-    private List<String> bMode= Lists.newArrayList();;//b超摄影图
+    private List<String> bmode= Lists.newArrayList();;//b超摄影图
     @JSONField(ordinal=6)
     private List<String> ct= Lists.newArrayList();;//ct摄影图
     @JSONField(ordinal=7)
     private List<String> mri= Lists.newArrayList();;//MRI
-
 }

@@ -5,11 +5,12 @@ import com.tsingtec.follow.entity.mini.Doctor;
 import com.tsingtec.follow.entity.mini.Information;
 import com.tsingtec.follow.entity.mini.ReviewPlan;
 import com.tsingtec.follow.exception.DataResult;
-import com.tsingtec.follow.service.mini.*;
+import com.tsingtec.follow.service.mini.DoctorService;
+import com.tsingtec.follow.service.mini.InformationService;
+import com.tsingtec.follow.service.mini.ReviewPlanService;
 import com.tsingtec.follow.utils.BeanMapper;
 import com.tsingtec.follow.utils.HttpContextUtils;
 import com.tsingtec.follow.vo.req.doctor.DoctorAddReqVO;
-import com.tsingtec.follow.vo.req.review.ReviewReqVO;
 import com.tsingtec.follow.vo.resp.doctor.DoctorIndexRespVO;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ import java.util.List;
 @Api(tags = "小程序接口")
 @RequestMapping("/api/doctor")
 public class DoctorMiniController {
+
     @Autowired
     private DoctorService doctorService;
 
@@ -38,11 +40,6 @@ public class DoctorMiniController {
 
     @Autowired
     private ReviewPlanService reviewPlanService;
-    @Autowired
-    private ReviewService reviewService;
-
-    @Autowired
-    private MaUserService maUserService;
 
     @Resource(name="JwtUtil")
     private JwtUtil jwtUtil;
@@ -76,9 +73,4 @@ public class DoctorMiniController {
         return DataResult.success();
     }
 
-    @PutMapping("reply")
-    private DataResult reply(@RequestBody @Valid ReviewReqVO vo){
-        reviewService.update(vo);
-        return DataResult.success();
-    }
 }

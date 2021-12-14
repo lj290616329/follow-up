@@ -23,34 +23,39 @@
         </div>
 
         {{if !id}}
-        <div class="layui-inline">
-            <label class="layui-form-label">复查周期(月)</label>
-            <div class="layui-input-inline">
-                <input type="number" id="cycle" placeholder="请输入复查周期" autocomplete="off" class="layui-input">
+            <div class="layui-inline">
+                <label class="layui-form-label">周期间隔</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="space" value="0" title="周" checked="" lay-filter="spaceChange">
+                    <input type="radio" name="space" value="1" title="月" lay-filter="spaceChange">
+                </div>
             </div>
-        </div>
 
-        <div class="layui-inline">
-            <label class="layui-form-label">执行次数</label>
-            <div class="layui-input-inline">
-                <input type="number" id="times" placeholder="请输入执行次数" autocomplete="off" class="layui-input">
+            <div class="layui-inline">
+                <label class="layui-form-label">复查周期</label>
+                <div class="layui-input-inline">
+                    <input type="number" id="cycle" placeholder="请输入复查周期" autocomplete="off" class="layui-input">
+                </div>
             </div>
-        </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">执行次数</label>
+                <div class="layui-input-inline">
+                    <input type="number" id="times" placeholder="请输入执行次数" autocomplete="off" class="layui-input">
+                </div>
+            </div>
         {{/if}}
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">检查项目</label>
-        <div class="layui-input-block">
-            <input type="checkbox" name="examine" value="cbc" title="cbc" {{if examine.indexOf("cbc")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="biochemistry" title="biochemistry" {{if examine.indexOf("biochemistry")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="dic" title="dic" {{if examine.indexOf("dic")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="swelling" title="swelling" {{if examine.indexOf("swelling")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="bmode" title="bmode" {{if examine.indexOf("bmode")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="ct" title="ct" {{if examine.indexOf("ct")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="mri" title="mri" {{if examine.indexOf("mri")>-1}}checked="" {{/if}} lay-filter="examine">
-            <input type="checkbox" name="examine" value="用药情况" title="用药情况" {{if examine.indexOf("用药情况")>-1}}checked="" {{/if}} lay-filter="examine">
+    {{each checkMap as checks key}}
+        <div class="layui-form-item">
+            <label class="layui-form-label">{{key}}</label>
+            <div class="layui-input-block">
+                {{each checks as check}}
+                    <input type="checkbox" name="check" lay-skin="primary" value="{{check.enName}}" title="{{check.name}}" {{if check.checked}}checked="" {{/if}}>
+                {{/each}}
+            </div>
         </div>
-    </div>
+    {{/each}}
     <div class="layui-form-item">
         <label class="layui-form-label">复查备注</label>
         <div class="layui-input-block">
@@ -86,6 +91,8 @@
         laydate.render({
             elem: '#reviewTime'
         });
+
+
         //监听提交
         form.on('submit(plan)',function(data){
             var plan = data.field;
@@ -99,7 +106,11 @@
                 for(let i=0;i<$("#times").val();i++){
                     let plan2 = {...plan};
                     let reviewTime = new Date(plan.reviewTime);
-                    plan2.reviewTime = util.toDateString(reviewTime.setMonth(reviewTime.getMonth()+i*$("#cycle").val()), 'yyyy-MM-dd');
+                    if(plan.space===1){
+                        plan2.reviewTime = util.toDateString(reviewTime.setMonth(reviewTime.getMonth()+i*$("#cycle").val()), 'yyyy-MM-dd');
+                    }else{
+                        plan2.reviewTime = util.toDateString(reviewTime.setDate(reviewTime.getDate()+i*$("#cycle").val()*7), 'yyyy-MM-dd');
+                    }
                     vos.push(plan2);
                 }
             }else{

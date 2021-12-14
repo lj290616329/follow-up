@@ -1,12 +1,9 @@
 package com.tsingtec.follow.vo.req.information;
 
-import com.google.common.collect.Lists;
-import com.tsingtec.follow.entity.Examine;
+import com.tsingtec.follow.entity.Examination;
 import com.tsingtec.follow.entity.mini.Doctor;
 import lombok.Data;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -32,13 +29,9 @@ public class InformationUpdateReqVO {
 
     private Integer type;//病种
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json comment '病理'")
-    private List<String> pathology= Lists.newArrayList();//病理
+    private String otherType;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json comment '个人病历信息'")
-    private Examine examine = new Examine();//病历
+    private List<Examination> examination;//病历
 
     private String other;
 }

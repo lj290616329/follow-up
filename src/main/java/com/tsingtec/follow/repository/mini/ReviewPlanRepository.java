@@ -22,22 +22,20 @@ public interface ReviewPlanRepository extends JpaRepository<ReviewPlan, Integer>
     List<ReviewPlan> findByInformation_IdOrderByReviewTimeDesc(@Param("information_Id") Integer iid);
 
 
-    ReviewPlan getTopByInformation_IdAndReviewIsNullOrderByReviewTimeAsc(@Param("information_Id") Integer iid);
+    ReviewPlan getTopByInformation_IdAndExaminationIsNullOrderByReviewTimeAsc(@Param("information_Id") Integer iid);
 
-    ReviewPlan getTopByInformation_IdAndReviewIsNotNullAndReview_ReplyIsNotNullOrderByReview_UpdateTimeDesc(@Param("information_Id") Integer iid);
+    ReviewPlan getTopByInformation_IdAndExaminationIsNotNullAndReplyIsNotNullOrderByUpdateTimeDesc(@Param("information_Id") Integer iid);
 
     /**
      * 根据医生id 获取未回复的复查结果
      * @param did
      * @return
      */
-    List<ReviewPlan> getByInformation_Doctor_IdAndReview_ExamineNotNullAndReview_ReplyIsNullOrderByReview_CreateTimeDesc(@Param("did") Integer did);
+    List<ReviewPlan> getByInformation_Doctor_IdAndExaminationNotNullAndReplyIsNullOrderByCreateTimeDesc(@Param("did") Integer did);
 
     @Modifying
     @Query("delete from ReviewPlan a where a.id in (?1)")
     void deleteBatch(@Param(value = "ids") List<Integer> ids);
-
-    ReviewPlan findByReview_Id(Integer id);
 
     //List<ReviewPlan> getByInformation_Doctor_IdReview_ExamineNotNullAndReview_ReplyIsNullOrderByReview_CreateTimeDesc(@Param("did") Integer did);//     MaUser_DidAndReview_ReplyIsNullOrderByCreateTimeDesc(@Param("did") Integer did);
 }

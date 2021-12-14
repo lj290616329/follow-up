@@ -1,6 +1,8 @@
 package com.tsingtec.follow.entity.mini;
 
+import com.google.common.collect.Lists;
 import com.tsingtec.follow.entity.BaseEntity;
+import com.tsingtec.follow.entity.Examination;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 复查计划
@@ -21,8 +24,8 @@ import java.util.List;
  */
 @Data
 @Entity
-@DynamicInsert(true)
-@DynamicUpdate(true)
+@DynamicInsert
+@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 @Proxy(lazy = false)
@@ -33,15 +36,25 @@ public class ReviewPlan extends BaseEntity{
     @JoinColumn(columnDefinition ="comment '用户id'")//指定外键名称
     private Information information;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json comment '需要检查的项目'")
-    private List<String> examine;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(columnDefinition ="comment '检查id'")//指定外键名称
-    private Review review;
-
     private LocalDate reviewTime;//复查时间
 
     private String remark;//备注
+
+    @Type(type = "json")
+    @Column(columnDefinition = "json comment '需要检查的项目'")
+    private List<String> examine = Lists.newArrayList();
+
+    @Type(type = "json")
+    @Column(columnDefinition = "json comment '复查结果信息'")
+    private List<Examination> examination = Lists.newArrayList();
+
+    private String other;//其他
+
+    private String reply;//医生回复信息
+
+    @Transient
+    private List<Check> checks = Lists.newArrayList();
+
+    @Transient
+    private Map<String,List<Check>> checkMap;
 }

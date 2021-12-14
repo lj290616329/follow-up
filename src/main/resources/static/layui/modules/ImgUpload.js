@@ -1,12 +1,12 @@
 layui.define(['jquery','upload'], function (exports) {
-    var ImgUpload = function () {
+    var ImgUpload = function (elem) {
         var $ = jQuery = layui.jquery;
         var upload = layui.upload;
         /**
          * 多图上传
          */
         upload.render({
-            elem: '.addImg'
+            elem: elem
             ,url: '/api/upload/file/qiniu'//接口url
             ,acceptMime: 'image/*'
             ,done: function(res){

@@ -1,7 +1,7 @@
-package com.tsingtec.follow.controller.web.mini;
+package com.tsingtec.follow.controller.mini;
 
 import com.tsingtec.follow.exception.DataResult;
-import com.tsingtec.follow.service.mini.ReviewService;
+import com.tsingtec.follow.service.mini.CheckService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author lj
- * @Date 2021/7/6 16:07
+ * @Date 2021/7/9 15:59
  * @Version 1.0
  */
 @Slf4j
 @RestController
-@RequestMapping("/manager")
-@Api(tags = "用户模块-照护计划")
-public class ReviewController {
+@RequestMapping("/api")
+@Api(tags = "管理模块-检查项目管理")
+public class CheckMiniController {
 
     @Autowired
-    private ReviewService reviewService;
+    private CheckService diseaseService;
 
-    @GetMapping("review")
-    public DataResult detail(Integer id){
-        return DataResult.success(reviewService.findById(id));
+    @GetMapping("check")
+    public DataResult tree(){
+        return DataResult.success(diseaseService.getAll());
     }
+
 }

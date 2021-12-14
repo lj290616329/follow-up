@@ -63,9 +63,11 @@
                     ,{field:'reviewTime', title: '复查时间',width:150}
                     ,{field:'examine', title: '检查项目',templet: function(d){
                         let html = "";
-                        d.examine.forEach(check=>{
-                            html = html + '<span class="layui-badge layui-bg-green layui-margin-right">'+check+'</span>';
-                        });
+                        if(d.checks){
+                            d.checks.forEach(check=>{
+                                html = html + '<span class="layui-badge layui-bg-green layui-margin-right">'+check.name+'</span>';
+                            });
+                        }
                         return html;
                         },width:600
                     }

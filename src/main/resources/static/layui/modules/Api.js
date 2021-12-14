@@ -102,7 +102,21 @@ layui.define(['jquery','ApiConfig'],function(exports){
         addArticle:data=>request(ApiConfig.articleApi,data,"POST"),
         updateArticle:data=>request(ApiConfig.articleApi,data,"PUT"),
         deleteArticle:data=>request(ApiConfig.articleApi,data,"DELETE"),
-        reviewDetail:data=>request(ApiConfig.reviewApi,data,"GET")
+        reviewDetail:data=>request(ApiConfig.reviewApi,data,"GET"),
+        //检测项目
+        addCheck:data=>request(ApiConfig.checkApi,data,"post"),
+        updateCheck:data=>request(ApiConfig.checkApi,data,"PUT"),
+        deleteCheck:data=>request(ApiConfig.checkApi,data,"delete"),
+        checkDetail:data=>request(ApiConfig.pathParams(ApiConfig.checkDetailApi,data),"","GET"),
+        //病种
+        addDisease:data=>request(ApiConfig.diseaseApi,data,"post"),
+        updateDisease:data=>request(ApiConfig.diseaseApi,data,"put"),
+        deleteDisease:data=>request(ApiConfig.diseaseApi,data,"delete"),
+        diseaseDetail:data=>request(ApiConfig.pathParams(ApiConfig.diseaseDetailApi,data),"","GET"),
+        diseaseParent:data=>request(ApiConfig.diseaseParentApi,data,"get"),
+        diseaseTree:data=>request(ApiConfig.diseaseTreeApi,data,"get"),
+        diseaseAll:data=>request(ApiConfig.diseaseAllApi,data,"get"),
+
     };
     exports('Api', api);
 });

@@ -46,11 +46,12 @@
 </script>
 <script type="text/javascript">
     var tableReload;
-    layui.use(['table','Api','ApiConfig','jquery'], function(){
+    layui.use(['table','Api','ApiConfig','jquery'],async function(){
         var table = layui.table
             , Api = layui.Api
             , $ = layui.jquery
             , ApiConfig = layui.ApiConfig;
+        let diseases = await Api.diseaseAll({});
         //方法级渲染
         table.render({
             elem: '#information_table'
@@ -74,9 +75,9 @@
                     ,{field:'name', title: '姓名'}
                     ,{field:'recordNo', title: '病历号码'}
                     ,{field:'phone', title: '手机号码'}
-                    ,{field:'type', title: '病种',templet: function(d){
-                        let types = ["肝脏肿瘤-HCC","肝脏肿瘤-ICC","肝脏肿瘤-其他","肝道肿瘤-肝门","肝道肿瘤-肝门","肝道肿瘤-其他","胰腺肿瘤-胰腺","胰腺肿瘤-其他","其他"];
-                        return types[d.type];
+                    ,{field:'type', title: '病种',templet:function(d){
+                        let otherType = d.otherType?'-'+d.otherType:'';
+                        return diseases.data.find(disease=>disease.id==d.type).title + otherType;
                         }
                     }
                     , {

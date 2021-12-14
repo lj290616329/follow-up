@@ -1,9 +1,8 @@
 package com.tsingtec.follow.entity.mini;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.collect.Lists;
 import com.tsingtec.follow.entity.BaseEntity;
-import com.tsingtec.follow.entity.Examine;
+import com.tsingtec.follow.entity.Examination;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,8 +21,8 @@ import java.util.List;
  */
 @Data
 @Entity
-@DynamicInsert(true)
-@DynamicUpdate(true)
+@DynamicInsert
+@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 @Proxy(lazy = false)
@@ -44,14 +43,14 @@ public class Information extends BaseEntity {
     private String recordNo;//病历号码
     private String phone;//手机号码
     private Integer type;//病种
+    private String otherType;//其他病种
 
     @Type(type = "json")
-    @Column(columnDefinition = "json comment '病理'")
-    private List<String> pathology= Lists.newArrayList();//病理
-
-    @Type(type = "json")
-    @Column(columnDefinition = "json comment '个人病历信息'")
-    private Examine examine = new Examine();//病历
+    @Column(columnDefinition = "json comment '复查结果信息'")
+    private List<Examination> examination;//病历
 
     private String other;
+
+    @Transient
+    private List<Check> checks;
 }

@@ -35,7 +35,6 @@ public class InformationController {
         return DataResult.success(informationService.findAll(vo));
     }
 
-
     @GetMapping("information/{id}")
     public DataResult detail(@PathVariable("id")Integer id){
         return DataResult.success(informationService.findById(id));
