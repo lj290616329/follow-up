@@ -2,39 +2,20 @@
 const util = require("../../../utils/util");
 const api = require("../../../config/api")
 var that;
-const app = getApp();
 Page({
   data: {
     code:0,
-    compare:app.globalData.compare,
     change:false,
     explainStatus:false,
     delStatus:false,
-    readEnd:wx.getStorageSync('readEnd')||0,
-    information:{
-      other:'',
-      examine:{
-        "cbc":[],
-        "biochemistry":[],
-        "dic":[],
-        "swelling":[],
-        "bmode":[],
-        "ct":[],
-        "mri":[]
-      }  
-    }
+    readEnd:wx.getStorageSync('readEnd')||0
   },
-  onLoad: function (options) {
+  onLoad:async function (options) {
     that = this;
-    let information = wx.getStorageSync('formData');
-    if(information){
-      that.setData({
-        information:information
-      })
-    }
+    let res = await api.reviewPlanDetail({id:options.id});
     that.setData({
-      ['information.id']:options.id
-    });
+      reviewPlan:res.data
+    })
   },
   checkChange(e){
     let readEnd = e.detail.value.indexOf("1")>-1?1:0;    
@@ -46,24 +27,23 @@ Page({
   otherChange(e){
     that.setData({
       change:true,
-      ['information.other']:e.detail.value
+      ['reviewPlan.other']:e.detail.value
     })
   },
   async uploadPic(e){    
     let key = e.currentTarget.dataset.key;
-    let pics = that.data.information.examine[key];
+    let pics = that.data.reviewPlan.examination[key].pics;
     let res = await wx.chooseImage({
       count: 1,
       sizeType:['original', 'compressed'],
       sourceType:['album', 'camera']
     });
-    console.log(res)
     let data = await api.uploadFile(res.tempFilePaths[0]);
     if(data.code==0){
       pics = pics.concat(data.data.src);
+      let set_val = 'reviewPlan.examination['+key+'].pics';
       that.setData({
-        change:true,
-        ['information.examine.'+key]:pics
+        [set_val]:pics
       })      
     }else{
       util.prompt(that,res.msg);
@@ -72,14 +52,14 @@ Page({
   delImg(e){
     let key = e.currentTarget.dataset.key;
     let index = e.currentTarget.dataset.index;
-    let pics = that.data.information.examine[key];
+    let pics = that.data.reviewPlan.examination[key].pics;
     that.delModal();
     that.yes =()=>{
       pics.splice(index,1);
+      let set_val = 'reviewPlan.examination['+key+'].pics';
       that.setData({
-        change:true,
-        ['information.examine.'+key]:pics
-      })
+        [set_val]:pics
+      })  
       that.delModal();
     }
   },
@@ -94,39 +74,23 @@ Page({
     })
   },
   async submit(){
-    let data = that.data.information.examine;
-    let pics = Object.values(data).some(item=>{
-      console.log(item)
-      return item.length>0;
-    });
-
-    if(!pics){
+    let data = that.data.reviewPlan.examination;
+    let pics = data.filter(item => {
+      return item.pics.length>0;
+    })
+    if(pics.length<=0){
       return util.prompt(that,'请至少在一个类目下上传检测结果!');
     }
     if(!that.data.readEnd){
       return util.prompt(that,'请同意隐私协议再进行提交!');
     }
-
-    let res = await api.addReview(that.data.information);
+    let res = await api.reviewPlanUpdate(that.data.reviewPlan);
     if(res.code==0){
-      wx.removeStorageSync('formData');
-      that.setData({
-        change:false
-      });
       wx.reLaunch({
         url: '/pages/personal/index',
       });
     }else{
       util.prompt(that,res.msg);
     }
-  },
-  draft(){
-    wx.setStorageSync('formData', that.data.information);
-    wx.navigateBack();
-  },
-  onUnload(){
-    if(that.data.change){
-      wx.setStorageSync('formData', that.data.information);
-    }
-  },
+  }
 })

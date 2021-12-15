@@ -10,7 +10,7 @@
     <view class="content">      
       <text class="text-black">{{item.information.name}}</text>
       <text class="text-grey margin-left">({{item.information.recordNo}})</text>
-      <view class='cu-tag round bg-red sm margin-left' wx:if="{{!item.review.reply}}">new</view>
+      <view class='cu-tag round bg-red sm margin-left' wx:if="{{!item.reply}}">new</view>
     </view>
     <view class="action">
       <text class="text-grey text-sm">{{item.updateTime}}</text>

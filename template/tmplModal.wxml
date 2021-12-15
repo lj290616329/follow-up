@@ -1,0 +1,16 @@
+<view class="cu-modal {{tmplModal ? 'show':''}}">
+  <view class="cu-dialog sm">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">温馨提示</view>
+    </view>
+    <view class="padding-xl">
+      {{tmplMsg}}
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="tmplModel">拒绝</button>
+        <button class="cu-btn bg-green margin-left" bindtap="subscribeMessage">同意</button>
+      </view>
+    </view>
+  </view>
+</view>

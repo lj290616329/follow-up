@@ -40,7 +40,7 @@
 
   <navigator url="/pages/doctor/patient/edit?id={{information.id}}" class="cu-item  text-blue cuIcon-roundcheckfill">
     <view class="content bg-blue shadow-blur ">
-      <text>术后病历</text>
+      <text>历史病历</text>
     </view>
   </navigator>  
 </view>

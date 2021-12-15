@@ -6,13 +6,12 @@
   </view>
 </view>
 
-<template is="formData" data="{{information,compare}}"/>
+<template is="formData" data="{{examination:reviewPlan.examination}}"/>
 <view class="cu-form-group align-start">
-  <view class="title">其他</view>
-  <textarea placeholder="请输入其他内容" value="{{information.other}}" bindblur="otherChange"></textarea>
+  <view class="title">用药情况</view>
+  <textarea placeholder="请输入用药情况" value="{{reviewPlan.other}}" bindblur="otherChange"></textarea>
 </view>
 <view class="padding flex align-center bg-white safe-bottom">
-  <button class="cu-btn line-grey lg flex-sub margin" bindtap="draft">存草稿</button>
   <button class="cu-btn bg-blue lg flex-sub margin" bindtap="explainModal">保存</button>
 </view>
 

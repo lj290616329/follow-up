@@ -12,11 +12,14 @@ Page({
   async onLoad(options) {
     that = this;
     let res =await api.informationDetail({id:options.id});
+    let diseases = app.globalData.diseases;
+    let disease = diseases.find(d=>d.id==res.data.type);  
     that.setData({
       code:res.code,
       msg:res.msg,
       information:res.data.information,
-      reviewPlans:res.data.reviewPlans
+      reviewPlans:res.data.reviewPlans,
+      disease:disease
     })
   },
   detail(e){

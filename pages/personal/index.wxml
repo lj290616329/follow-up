@@ -1,6 +1,6 @@
 
 <include src ="/template/error.wxml"/>
-
+<include src ="/template/tmplModal.wxml"/>
 <view class="flex text-center bg-white">
   
   <navigator url="/pages/news/list" class="flex-sub padding solids-right">
@@ -62,7 +62,7 @@
   <view class="cu-list menu">
     <view class="cu-item">
       <view class="content padding-bottom-xl padding-top-xl">
-        <text class="text-black">{{reply.review.reply}}</text>
+        <text class="text-black">{{reply.reply}}</text>
       </view>
     </view>
   </view>

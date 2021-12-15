@@ -17,7 +17,7 @@ Page({
       code:res.code,
       msg:res.msg,
       plan:res.data,
-      information:res.data.review
+      id:options.id
     });
   },
   showpic(e){
@@ -52,7 +52,6 @@ Page({
     if(params.reply==""){
       return util.prompt(that,"请输入回复内容后提交");
     }
-    params.examine = that.data.information.examine;
     let res = await api.reply(params);
     if(res.code==0){
       util.prompt(that,"提交成功");

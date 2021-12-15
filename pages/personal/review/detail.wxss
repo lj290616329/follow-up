@@ -1,0 +1,4 @@
+.user-avatar{
+  overflow: hidden;
+  align-items: baseline;
+}

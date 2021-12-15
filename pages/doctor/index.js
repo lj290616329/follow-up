@@ -8,9 +8,10 @@ Page({
     showModal:false,
     replyStatus:false,
     lists:[],
-    compare:app.globalData.compare,
     replys: [], 
-    quickReply:app.globalData.quickReply
+    tmplModal:false,
+    quickReply:app.globalData.quickReply,
+    tmplMsg:"为了能更好、更方便的与患者进行交流，小程序需要在复查后对您发送消息。"
   },
   switchUser(){
     wx.reLaunch({
@@ -32,6 +33,42 @@ Page({
       url: '/pages/doctor/info',
     })
   },
+  async onShow(){
+    let accept = await util.checkTmplId('iNbbQStWha87QupCzPHTmNmXvedPSmbKuAz7M4rJwt4');
+    console.log(accept)
+    if(!accept){
+      that.setData({
+        tmplModal:true
+      })
+    }
+  },
+  tmplModel(){
+    that.setData({
+      tmplModal:!that.data.tmplModal
+    })
+  },
+  subscribeMessage(){
+    that.tmplModel();
+    wx.requestSubscribeMessage({
+      tmplIds:['iNbbQStWha87QupCzPHTmNmXvedPSmbKuAz7M4rJwt4'],
+      success(res){
+        console.log(res);
+        api.subscription({
+          tmplId:'iNbbQStWha87QupCzPHTmNmXvedPSmbKuAz7M4rJwt4',
+          accept:res['iNbbQStWha87QupCzPHTmNmXvedPSmbKuAz7M4rJwt4']==="accept"?true:false
+        })
+      },
+      fail(err){
+        console.log("err"+err)
+        console.log(err)
+      },
+      complete(com){
+        console.log("com")
+        console.log(com)
+      }
+    })
+  },
+
   quickReply(e){
     console.log(e);
     that.setData({
@@ -58,14 +95,13 @@ Page({
     })
   },
   async submitForm(e) {
+    console.log(e)
     let replys = that.data.replys;
-    let index = that.data.index;
     console.log(e)
     let params = e.detail.value;
     if(params.reply==""){
       return util.prompt(that,"请输入回复内容后提交");
     }
-    params.examine = replys[index].review.examine;
     let res = await api.reply(params);
     if(res.code==0){
       util.prompt(that,"提交成功");
@@ -87,5 +123,5 @@ Page({
     wx.navigateTo({
       url: url
     })
-  }
+  },
 })

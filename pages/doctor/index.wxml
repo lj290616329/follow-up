@@ -1,4 +1,5 @@
 <include src ="/template/error.wxml"/>
+<include src ="/template/tmplModal.wxml"/>
 <view class="cu-card dynamic no-card margin-top">
   <view class="cu-list menu-avatar">
     <view class="cu-item arrow" bindtap="userInfo">
@@ -50,23 +51,26 @@
 
 <view class="cu-list menu-avatar comment" style="margin-top:0;">
   <view class="cu-item" wx:for="{{replys}}" wx:for-item="reply" wx:for-index="index" wx:key="index">
-    <view class="cu-avatar round" style="background-image:url({{reply.information.maUser.avatarUrl||'/images/headimg.png'}});"></view>
+    <view class="cu-avatar round" style="background-image:url({{reply.information.maUser.avatarUrl||'/images/headimg.png'}})"></view>
     <view class="content">
-      <view class="text-grey">{{reply.information.maUser.nickName||reply.information.name}}</view>
+      <view class="text-grey">{{reply.information.name||reply.information.maUser.nickName}}</view>
       <view class='flex flex-wrap'>
-        <view class="padding-xs" wx:for="{{reply.review.examine}}" wx:for-index='key' wx:for-item="pics" wx:key="pics">
-          <view class='cu-tag' bindtap="showpic" data-pics="{{pics}}" wx:if="{{pics.length>0}}">{{compare[key]}}</view>
+        <view class="margin-xs" wx:for="{{reply.examination}}" wx:for-index='key' wx:for-item="item" wx:key="pics" wx:if="{{item.pics.length>0}}">
+          <view class='cu-tag' bindtap="showpic" data-pics="{{item.pics}}" >{{item.name}}</view>
         </view>
       </view>      
       <view class="margin-top-sm flex justify-between">
         <view class="text-gray text-df">{{reply.review.updateTime}}</view>
-        <view data-id="{{reply.review.id}}" data-index="{{index}}">          
-          <text class="cuIcon-messagefill text-gray margin-left-sm" bindtap="replyModal">回复</text>
+        <view data-id="{{reply.id}}" data-index="{{index}}" bindtap="replyModal">          
+          <text class="cuIcon-messagefill text-gray margin-left-sm">回复</text>
         </view>
       </view>
     </view>
   </view>
 </view>
+
+
+
 
 <view class="cu-modal {{replyStatus ? 'show':''}}">
   <form bindsubmit="submitForm">

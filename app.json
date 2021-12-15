@@ -1,5 +1,6 @@
 {
-  "pages": [    
+  "pages": [
+    
     "pages/index/index",
     "pages/auth/index",
     "pages/test/personal/index",
@@ -25,7 +26,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "肝胆胰肿瘤随访小程序",
+    "navigationBarTitleText": "肝胆全程照护",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json"

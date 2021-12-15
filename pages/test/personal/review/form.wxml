@@ -1,11 +1,12 @@
 <import src ="/template/form.wxml"/>
+<include src ="/template/error.wxml"/>
 <view class="cu-bar bg-white solid-bottom  margin-top">
   <view class="action">
     <text class="cuIcon-titles text-orange"></text> 输入复查结果
   </view>
 </view>
 
-<template is="formData" data="{{information,compare}}"/>
+<template is="formData" data="{{examination:examination}}"/>
 
 <view class="padding flex flex-direction bg-white safe-bottom">
   <button class="cu-btn bg-blue lg" bindtap="submit">保存</button>

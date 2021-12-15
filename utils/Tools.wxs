@@ -113,9 +113,20 @@ function indexOf(arr, value) {
   }
   return true;  
 }
+function include(examination,enName){
+  if(examination==null || examination.length==0) {
+    return false;
+  };
+  return examination.some(function(e){    
+    return e.enName == enName;
+  })
+}
+
+
 module.exports = {
   dateFormat: dateFormat,
   timeago: timeago,
   indexOf:indexOf,
-  timeAfter:timeAfter
+  timeAfter:timeAfter,
+  include:include
 };

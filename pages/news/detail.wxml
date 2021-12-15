@@ -1,5 +1,5 @@
 <include src ="/template/error.wxml"/>
-<view class="main">
+<view class="main padding safe-bottom bg-white">
   <view class="article-title" wx:if="{{article.ifShowTitle}}">{{article.title}}</view>
   <rich-text nodes="{{article.content}}"></rich-text>
 </view>

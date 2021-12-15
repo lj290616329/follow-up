@@ -28,7 +28,24 @@ function prompt(that, msg) {
   }, 1500);
 };
 
+function checkTmplId(tmplId){
+  return new Promise((resolve, reject)=>{
+    wx.getSetting({
+      withSubscriptions: true,
+    }).then(res=>{
+      console.log(res)      
+      if(res.subscriptionsSetting && res.subscriptionsSetting.itemSettings && res.subscriptionsSetting.itemSettings[tmplId]==='accept'){
+        resolve(true);
+      }else{
+        resolve(false);
+      }
+    })
+  })  
+};
+
+
 module.exports = {
   formatTime,
-  prompt,  
+  prompt,
+  checkTmplId  
 }

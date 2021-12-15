@@ -28,7 +28,7 @@
       <text class="text-black">病种</text>
     </view>
     <view class="action">
-      <text class="text-grey text-sm">{{types[information.type]}}</text>
+      <text class="text-grey text-sm">{{disease.title}}{{information.otherType?'-'+information.otherType:''}}</text>
     </view>
   </view>
 </view>
@@ -81,27 +81,22 @@
   </view>
 </view>
 
-<view class="cu-bar bg-white solid-bottom  margin-top">
+<view class="cu-bar bg-white solid-bottom  margin-top" wx:if="{{information.examination}}">
   <view class="action">
     <text class="cuIcon-titles text-orange"></text> 病历
   </view>
 </view>
-<view class="cu-bar bg-white">
-  <view class="action">
-    病历图片
-  </view>
-</view>
-<view class="cu-form-group">
-  <view class="grid col-4 grid-square flex-sub">
-    <view class="bg-img" wx:for="{{information.pathology}}" wx:key="index">
-      <image src="{{item}}"  mode="aspectFill" bindtap="showpic" data-urls="{{information.pathology}}" data-current="{{item}}"></image>
+
+<template is="detail" data="{{examination:information.examination}}"/>
+
+
+<view class="cu-list menu" wx:if="{{information.other}}">
+  <view class="cu-item">
+    <view class="content">
+      <text class="text-black">用药情况</text>
+    </view>
+    <view class="action">      
+        <text class="text-grey">{{information.other}}</text>     
     </view>
   </view>
-</view>
-
-<template is="detail" data="{{information,compare}}"/>
-
-<view class="cu-form-group align-start" wx:if="{{information.other}}">
-  <view class="title">其他</view>
-  <textarea value="{{information.other}}" disabled='true'></textarea>
 </view>

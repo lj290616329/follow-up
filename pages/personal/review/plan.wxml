@@ -9,14 +9,14 @@
       展示更多<text class="text-grey text-sm cuIcon-right"></text>				
     </view>
   </view>
-  <view wx:for="{{reviewPlans}}" wx:key="index" class="cu-item {{item.review?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.review?'detail':'prompt'}}" data-id="{{item.id}}" wx:if="{{item.show || more}}">
-    <view class="padding-sm {{item.review?'bg-blue':'bg-grey'}}">
+  <view wx:for="{{reviewPlans}}" wx:key="index" class="cu-item {{item.examination?'text-blue cuIcon-loading':'text-grey'}}" bindtap="{{item.examination?'detail':'prompt'}}" data-id="{{item.id}}" wx:if="{{item.show || more}}">
+    <view class="padding-sm {{item.examination?'bg-blue':'bg-grey'}}">
       <view class="cu-list radius">
         <view class="cu-item">
           <view class="content">
             <view>{{item.reviewTime}}({{tools.timeAfter(item.reviewTime)}})</view>
             <view class="text-gray text-sm">
-              <view class='cu-tag bg-white sm' wx:for="{{item.examine}}" wx:key="check">{{compare[item]}}</view>
+              <view class='cu-tag bg-white sm margin-xs' wx:for="{{item.checks}}" wx:key="check">{{item.name}}</view>
             </view>
           </view>
         </view>

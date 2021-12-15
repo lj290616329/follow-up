@@ -2,23 +2,24 @@
 <import src ="/template/form.wxml"/>
 <view class="cu-list menu-avatar comment">
   <view class="cu-item">
-    <view class="cu-avatar round lg" style="background-image:url({{plan.information.maUser.avatarUrl||'/images/headimg.png'}});"></view>
+
+    <open-data class="cu-avatar user-avatar round lg" type="userAvatarUrl"></open-data>
+    
     <view class="content padding-left">
-      <view class="text-black">{{plan.information.maUser.nickName||plan.information.name}}</view>      
-      <view class="text-gray text-content text-df" wx:if="{{plan.review.other}}">
-        其他:{{plan.review.other}}
+      <view class="text-black">{{reviewPlan.information.maUser.nickName||reviewPlan.information.name}}</view>      
+      <view class="text-gray text-content text-df" wx:if="{{reviewPlan.other}}">
+        用药情况:{{reviewPlan.other}}
       </view>
-      <view class="bg-grey padding-sm radius margin-top-sm  text-sm" wx:if="{{plan.review.reply}}">
+      <view class="bg-grey padding-sm radius margin-top-sm  text-sm" wx:if="{{reviewPlan.reply}}">
         <view class="flex">
           <view>回复信息:</view>
-          <view class="flex-sub">{{plan.review.reply}}</view>
+          <view class="flex-sub">{{reviewPlan.reply}}</view>
         </view>
       </view>      
       <view class="margin-top-sm flex justify-between">
-        <view class="text-gray text-df">{{plan.updateTime}}</view>
-              
+        <view class="text-gray text-df">{{reviewPlan.updateTime}}</view>
       </view>
     </view>
   </view>
 </view>
-<template is="detail" data="{{information,compare}}"/>
+<template is="detail" data="{{examination:reviewPlan.examination}}"/>

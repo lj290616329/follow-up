@@ -1,5 +1,6 @@
 <import src ="/template/form.wxml"/>
 <include src ="/template/error.wxml"/>
+<wxs src="../../../utils/Tools.wxs" module="tools"/>
 <view class="cu-bar bg-white solid-bottom  margin-top">
   <view class="action">
     <text class="cuIcon-titles text-orange"></text> 个人信息
@@ -20,46 +21,39 @@
     </view>
   </view>
 </view>
-<view class="cu-bar bg-white solid-bottom  margin-top">
+<view class="cu-bar bg-white solid-bottom  margin-top"  bindtap="showTips">
   <view class="action">
     <text class="cuIcon-titles text-orange"></text> 病种
   </view>
-  <view class="action">
-    <picker mode="multiSelector" bindchange="bindPickerChange"  bindcolumnchange="bindColumnChange" range="{{multiArray}}" range-key="name" value="{{type}}">
-      {{types[type2[type[0]][type[1]].value]}}
+  <view class="action">    
+      {{disease.title}}
       <text class="lg text-gray cuIcon-right"></text>
-    </picker>
+  </view>
+</view>
+<view class="cu-bar bg-white solid-bottom" wx:if="{{disease.optional}}"  bindtap="showTips">
+  <view class="action">
+    <text class="cuIcon-titles text-red"></text> 其他病种
+  </view>
+  <view class="action">
+    {{information.otherType}}
+    <!-- <input class="text-right" placeholder="请输入具体病种" bindblur="otherTypeChange" name="otherType" value="{{information.otherType}}"></input> -->
+  </view>
+</view>
+<view class="cu-bar bg-white solid-bottom">
+  <view class="action">
+    <text class="cuIcon-titles text-orange"></text> 病历信息
+  </view>
+  <view class="action" bindtap="examinationModal">
+    编辑<text class="lg text-blue cuIcon-edit margin-left-xs"></text>
   </view>
 </view>
 
-<view class="cu-bar bg-white solid-bottom  margin-top">
-  <view class="action">
-    <text class="cuIcon-titles text-orange"></text> 病历
-  </view>
-</view>
-<view class="cu-bar bg-white">
-  <view class="action">
-    病理图片
-  </view>
-  <view class="action">
-    {{information.pathology.length}}/4
-  </view>
-</view>
-<view class="cu-form-group">
-  <view class="grid col-4 grid-square flex-sub">
-    <view class="bg-img" wx:for="{{information.pathology}}" wx:for-index="index" wx:key="index">
-      <image src="{{item}}"  mode="aspectFill" bindtap="showpic" data-urls="{{information.pathology}}" data-current="{{item}}"></image>
-      <view class="cu-tag bg-red"  bindtap="delPic" data-index="{{index}}">
-        <text class='cuIcon-close'></text>
-      </view>
-    </view>
-    <view class="solids" wx:if="{{information.pathology.length<4}}" bindtap="uploadCover">
-      <text class='cuIcon-cameraadd'></text>
-    </view>
-  </view>
+<template is="formData" data="{{examination:information.examination}}"/>
+
+<view class="padding flex flex-direction bg-white safe-bottom"> 
+  <button class="cu-btn bg-blue lg" bindtap="submit">保存</button> 
 </view>
 
-<template is="formData" data="{{information,compare}}"/>
 <view class="cu-modal bottom-modal {{delStatus?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white">
@@ -72,6 +66,25 @@
   </view>
 </view>
 
-<view class="padding flex flex-direction bg-white safe-bottom">
-  <button class="cu-btn bg-blue lg" bindtap="submit">保存</button>
+
+
+
+<view class="cu-modal drawer-modal justify-end  {{examinationStatus?'show':''}}" bindtap="examinationModal">
+  <view class="cu-dialog basis-xl">
+    <scroll-view style="width: 100%;height: 100vh;" scroll-y="true">
+      <view class="cu-list menu text-left padding-top safe-bottom">
+        <view class="cu-item" wx:for="{{checks}}" wx:for-item="check"> 
+          <view class="content">
+            <text class="text-grey">{{check.name}}</text>
+          </view>
+          <view class="action">
+            <switch bindchange="checkChange"  data-enname="{{check.enName}}" data-name="{{check.name}}" class="{{tools.include(information.examination,check.enName)}}?'checked':''" checked="{{tools.include(information.examination,check.enName)}}"></switch>
+          </view>
+        </view>
+      </view>
+    </scroll-view>    
+  </view>
 </view>
+
+
+

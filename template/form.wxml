@@ -1,22 +1,22 @@
-<template name="formData">
-  <block wx:for="{{information.examine}}" wx:for-index='key'  wx:key="index">
-    <view class="cu-bar bg-white">
-      <view class="action">
-        {{compare[key]}}
-      </view>
-      <view class="action">
-        {{item.length}}/4
-      </view>
-    </view>
+<template name="formData"> 
+  <block wx:for="{{examination}}" wx:for-index='key'  wx:key="index"> 
+    <view class="cu-bar bg-white"> 
+      <view class="action"> 
+        {{item.name}} 
+      </view> 
+      <view class="action"> 
+        {{item.pics.length}}/4
+      </view> 
+    </view> 
     <view class="cu-form-group">
       <view class="grid col-4 grid-square flex-sub">
-        <view class="bg-img" wx:for="{{item}}" wx:key="pic" wx:for-item="pic">
-          <image src="{{pic}}"  mode="aspectFill" bindtap="showpic" data-urls="{{item}}" data-current="{{pic}}"></image>
+        <view class="bg-img" wx:for="{{item.pics}}" wx:key="pic" wx:for-item="pic">
+          <image src="{{pic}}"  mode="aspectFill" bindtap="showpic" data-urls="{{item.pics}}" data-current="{{pic}}"></image>
           <view class="cu-tag bg-red" bindtap="delImg" data-key="{{key}}" data-index="{{index}}">
             <text class='cuIcon-close'></text>
           </view>
         </view>
-        <view class="solids" wx:if="{{item.length<4}}" data-key="{{key}}" bindtap="uploadPic">
+        <view class="solids" wx:if="{{item.pics.length<4}}" data-key="{{key}}" bindtap="uploadPic">
           <text class='cuIcon-cameraadd'></text>
         </view>
       </view>
@@ -25,16 +25,16 @@
 </template>
 
 <template name="detail">
-  <block wx:for="{{information.examine}}" wx:for-index='key' wx:if="{{item.length>0}}" wx:key="index">
+  <block wx:for="{{examination}}" wx:for-index='key' wx:key="index" wx:if="{{item.pics.length>0}}">
     <view class="cu-bar bg-white">
       <view class="action">
-        {{compare[key]}}
+        {{item.name}}
       </view>      
     </view>
     <view class="cu-form-group">
       <view class="grid col-4 grid-square flex-sub">
-        <view class="bg-img" wx:for="{{item}}" wx:key="pic" wx:for-item="pic">
-          <image src="{{pic}}"  mode="aspectFill"  bindtap="showpic" data-urls="{{item}}" data-current="{{pic}}"></image>
+        <view class="bg-img" wx:for="{{item.pics}}" wx:key="pic" wx:for-item="pic">
+          <image src="{{pic}}"  mode="aspectFill"  bindtap="showpic" data-urls="{{item.pics}}" data-current="{{pic}}"></image>
         </view>        
       </view>
     </view>

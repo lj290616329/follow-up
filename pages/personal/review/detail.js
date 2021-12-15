@@ -12,10 +12,7 @@ Page({
     let res = await api.reviewPlanDetail({id:options.id});
     console.log(res);
     that.setData({
-      code:res.code,
-      msg:res.msg,
-      plan:res.data,
-      information:res.data.review
+      reviewPlan:res.data
     });
   },
   
