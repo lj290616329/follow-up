@@ -16,7 +16,7 @@
       </view>      
       <view class="margin-top-sm flex justify-between">
         <view class="text-gray text-df">{{plan.updateTime}}</view>
-        <view wx:if="{{!plan.reply}}" bindtap="replyModal"  data-id="{{plan.review.id}}">          
+        <view wx:if="{{!plan.reply}}" bindtap="replyModal"  data-id="{{plan.id}}">          
           <text class="cuIcon-messagefill text-gray margin-left-sm">回复</text>
         </view>        
       </view>

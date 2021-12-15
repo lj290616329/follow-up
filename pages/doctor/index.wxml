@@ -60,7 +60,7 @@
         </view>
       </view>      
       <view class="margin-top-sm flex justify-between">
-        <view class="text-gray text-df">{{reply.review.updateTime}}</view>
+        <view class="text-gray text-df">{{reply.updateTime}}</view>
         <view data-id="{{reply.id}}" data-index="{{index}}" bindtap="replyModal">          
           <text class="cuIcon-messagefill text-gray margin-left-sm">回复</text>
         </view>
