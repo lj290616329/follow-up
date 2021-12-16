@@ -14,3 +14,20 @@
     </view>
   </view>
 </view>
+
+<view class="cu-modal {{settingModal ? 'show':''}}">
+  <view class="cu-dialog sm">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">温馨提示</view>
+    </view>
+    <view class="padding-xl">
+      {{settingMsg}}
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="settingModel">拒绝</button>
+        <button class="cu-btn bg-green margin-left" bindtap="openSetting">同意</button>
+      </view>
+    </view>
+  </view>
+</view>

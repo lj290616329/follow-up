@@ -11,6 +11,7 @@ App({
     });    
   },
   globalData: {
+    showModal:false,
     userInfo: null,
     quickReply:[
       '感谢上传最新复查报告，谢谢！ 如最近进入新的治疗阶段请及时反馈于个案管理师，便于调整随访计划。',

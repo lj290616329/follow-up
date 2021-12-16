@@ -31,14 +31,25 @@ function prompt(that, msg) {
 function checkTmplId(tmplId){
   return new Promise((resolve, reject)=>{
     wx.getSetting({
-      withSubscriptions: true,
+      withSubscriptions: true
     }).then(res=>{
-      console.log(res)      
-      if(res.subscriptionsSetting && res.subscriptionsSetting.itemSettings && res.subscriptionsSetting.itemSettings[tmplId]==='accept'){
-        resolve(true);
-      }else{
-        resolve(false);
+      console.log(res);
+      //拒绝
+      if(res.subscriptionsSetting && res.subscriptionsSetting.mainSwitch && !res.subscriptionsSetting[tmplId]){
+        //直接进行申请,
+        resolve({flag:false,setting:false,msg:"开始订阅吧~"});
       }
+
+      /**
+       * 已经确认订阅了
+       */
+      if(res.subscriptionsSetting && res.subscriptionsSetting.mainSwitch && res.subscriptionsSetting.itemSettings && res.subscriptionsSetting[tmplId]==='accept'){
+        resolve({flag:true});
+      }
+
+      //打开主开关
+      resolve({flag:false,setting:true});
+
     })
   })  
 };
