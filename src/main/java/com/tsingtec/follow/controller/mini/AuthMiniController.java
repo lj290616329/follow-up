@@ -56,7 +56,7 @@ public class AuthMiniController {
         String token = HttpContextUtils.getToken();
         MaUser maUser = maUserService.get(jwtUtil.getClaim(token,"id"));
         Information information = informationService.findByPhone(vo.getPhone());
-        if(information != null){
+        if(null != information && null == information.getMaUser()){
             information.setMaUser(maUser);
             informationService.save(information);
             return DataResult.success(false);
@@ -64,7 +64,7 @@ public class AuthMiniController {
 
         Doctor doctor = doctorService.findByPhone(vo.getPhone());
 
-        if(doctor != null){
+        if(null != doctor && null == doctor.getMaUser()){
             doctor.setMaUser(maUser);
             doctorService.save(doctor);
             return DataResult.success(true);

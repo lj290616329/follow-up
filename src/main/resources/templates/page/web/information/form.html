@@ -222,19 +222,17 @@
             var information = data.field;
             let examination = [];
             $(".value-input").each(function () {
-                console.log($(this));
                 let enName = $(this).data("enname");
                 let name = $(this).data("name");
                 let val = $(this).val();
-                console.log(val)
                 examination.push({
                     enName:enName,
                     name:name,
                     pics:val.split(",")
                 })
             });
-            console.log(examination);
             information.examination = examination;
+            information.doctor = {id:information.did};
             if(information.id){
                 Api.updateInformation(JSON.stringify(information)).then(res=>{
                     back();

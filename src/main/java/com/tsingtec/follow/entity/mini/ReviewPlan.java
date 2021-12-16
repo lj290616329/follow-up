@@ -46,7 +46,7 @@ public class ReviewPlan extends BaseEntity{
 
     @Type(type = "json")
     @Column(columnDefinition = "json comment '复查结果信息'")
-    private List<Examination> examination = Lists.newArrayList();
+    private List<Examination> examination;
 
     private String other;//其他
 

@@ -69,6 +69,7 @@ public class WxPortalRestController {
             } else {//xml
                 inMessage = WxMaMessage.fromXml(requestBody);
             }
+            logger.error(inMessage.toJson());
             router.route(inMessage);
             return "success";
         }

@@ -62,8 +62,6 @@ public class ReviewAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         //执行方法
         Object result = point.proceed();
-        log.error("jinru");
-        //保存日志
         try {
             sendUniformMsg(point);
         } catch (Exception e) {
@@ -75,7 +73,7 @@ public class ReviewAspect {
 
     private void sendUniformMsg(ProceedingJoinPoint joinPoint) {
         if(null==joinPoint.getArgs()) return;
-        System.out.println("come ");
+        log.info("进入向医生发送通知");
         final String tmplId = "iNbbQStWha87QupCzPHTmNmXvedPSmbKuAz7M4rJwt4";
 
         Integer uid = jwtUtil.getClaim(HttpContextUtils.getToken(),"id");
@@ -83,8 +81,14 @@ public class ReviewAspect {
         Information information = informationService.findByUid(uid);
 
         Doctor doctor = information.getDoctor();
+        /**
+         * 医生被删除
+         */
+        if(null == doctor) return;
 
         MaUser maUser = doctor.getMaUser();
+
+        if(null == maUser) return;
 
         Subscription subscription = subscriptionService.findByUidAndTmplId(maUser.getId(),tmplId);
 

@@ -41,7 +41,6 @@ public class MenuService {
 
 	@Transactional
 	public void deleteById(Integer id) {
-		Menu menu = menuRepository.getOne(id);
 		/**
 		 * step1
 		 * 判断是否有下级元素
@@ -142,7 +141,6 @@ public class MenuService {
 		for(Role role:roles){
 			menus.addAll(role.getMenus());
 		}
-		System.out.println(menus.size());
 		return menus;
 	}
 
