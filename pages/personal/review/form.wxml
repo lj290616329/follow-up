@@ -11,8 +11,18 @@
   <view class="title">用药情况</view>
   <textarea placeholder="请输入用药情况" value="{{reviewPlan.other}}" bindblur="otherChange"></textarea>
 </view>
+
+<view class="cu-bar bg-white">
+  <view class="action">
+    <checkbox-group bindchange="checkChange">
+      <checkbox class="margin-right-sm blue" checked="{{readEnd}}" value="1"></checkbox><text class="text-black" bindtap="explainModal">同意此<text class="text-blue">隐私协议</text></text>
+    </checkbox-group>    
+  </view>  
+</view>
+
+
 <view class="padding flex align-center bg-white safe-bottom">
-  <button class="cu-btn bg-blue lg flex-sub margin" bindtap="explainModal">保存</button>
+  <button class="cu-btn bg-blue lg flex-sub" bindtap="submit">保存</button>
 </view>
 
 <view class="cu-modal bottom-modal {{delStatus?'show':''}}">
@@ -65,12 +75,11 @@
     <view class="cu-bar bg-white">
       <view class="action">
         <checkbox-group bindchange="checkChange">
-          <checkbox class="margin-right-sm" checked="{{readEnd}}" value="1"></checkbox>同意此隐私协议
+          <checkbox class="margin-right-sm blue" checked="{{readEnd}}" value="1"></checkbox>同意此隐私协议
         </checkbox-group>
       </view>
       <view class="action">
-        <button class="cu-btn line-green text-green" bindtap="explainModal">取消</button>
-        <button class="cu-btn bg-green margin-left" bindtap="submit">确定</button>
+        <button class="cu-btn bg-blue margin-left" bindtap="explainModal">确定</button>
       </view>
     </view>
   </view>
