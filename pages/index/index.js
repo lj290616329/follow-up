@@ -46,7 +46,7 @@ Page({
     let messages = {     
       name:{
         required: '请填写姓名',
-        minlength:'请输入正确的名称'
+        minlength:'请输入正确的姓名'
       },
       phone:{
         required:'请授权获取手机号'

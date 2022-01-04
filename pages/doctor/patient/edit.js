@@ -37,19 +37,23 @@ Page({
     let res = await api.informationDetail({id:options.id});
     let checks = await api.checkAll({});
     let information = res.data.information;
-    let diseaseTree = app.globalData.diseaseTree;
+    // let diseaseTree = app.globalData.diseaseTree;
     
-    let typeArray = searchTree(diseaseTree,information.type);
-    console.log(typeArray);
+    // let typeArray = searchTree(diseaseTree,information.type);
+
+    let diseases = app.globalData.diseases;
+    let disease = diseases.find(d=>d.id==information.type);  
+
+    //console.log(typeArray);
     that.setData({
       checks:checks.data,
       information:information,
-      diseaseTree:diseaseTree,
-      type:typeArray.type,
-      type1:typeArray.type1,
-      type2:typeArray.type2,
-      multiArray:typeArray.multiArray,
-      disease:typeArray.disease
+      //diseaseTree:diseaseTree,
+      // type:typeArray.type,
+      // type1:typeArray.type1,
+      // type2:typeArray.type2,
+      // multiArray:typeArray.multiArray,
+      disease:disease
     })
   },
   async uploadPic(e){    

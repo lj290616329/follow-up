@@ -27,10 +27,9 @@
   </view>
   <view class="action">    
       {{disease.title}}
-      <text class="lg text-gray cuIcon-right"></text>
   </view>
 </view>
-<view class="cu-bar bg-white solid-bottom" wx:if="{{disease.optional}}"  bindtap="showTips">
+<view class="cu-bar bg-white solid-bottom" wx:if="{{disease.optional && information.otherType}}"  bindtap="showTips">
   <view class="action">
     <text class="cuIcon-titles text-red"></text> 其他病种
   </view>
